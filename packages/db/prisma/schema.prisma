@@ -9,7 +9,6 @@ generator client {
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -50,6 +49,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Journal       Journal[]
+  Setup         Setup[]
 }
 
 model VerificationToken {
@@ -58,4 +59,66 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum BrewMethod {
+  AEROPRESS
+  BIALETTI
+  COLD_BREW
+  ESPRESSO
+  FRENCH_PRESS
+  PHIN
+  POUR_OVER
+  SIPHON
+}
+
+enum Rating {
+  VERY_BAD
+  BAD
+  AVERAGE
+  GOOD
+  VERY_GOOD
+}
+
+model Bean {
+  id           String    @id @default(cuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  roaster      String
+  roast        String
+  singleOrigin Boolean
+  state        String?
+  countryCode  String
+  rating       Rating?
+  Journal      Journal[]
+  Setup        Setup[]
+}
+
+model Journal {
+  id                         String     @id @default(cuid())
+  createdAt                  DateTime   @default(now())
+  updatedAt                  DateTime   @updatedAt
+  userId                     String
+  beanId                     String
+  brewMethod                 BrewMethod
+  rating                     Rating
+  grinder                    String
+  grindDescription           String
+  waterTemperatureFahrenheit Int
+  note                       String     @db.LongText
+  bean                       Bean       @relation(fields: [beanId], references: [id])
+  user                       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Setup {
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userId     String
+  brewMethod BrewMethod
+  grinder    String
+  beanId     String
+  default    Boolean
+  bean       Bean       @relation(fields: [beanId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
 }
