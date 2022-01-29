@@ -111,14 +111,14 @@ model Journal {
 }
 
 model Setup {
-  id         String     @id @default(cuid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id         String      @id @default(cuid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   userId     String
-  brewMethod BrewMethod
-  grinder    String
-  beanId     String
-  default    Boolean
-  bean       Bean       @relation(fields: [beanId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
+  brewMethod BrewMethod?
+  grinder    String?
+  beanId     String?
+  default    Boolean?    @default(false)
+  bean       Bean?       @relation(fields: [beanId], references: [id])
+  user       User        @relation(fields: [userId], references: [id])
 }

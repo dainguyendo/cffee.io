@@ -2,7 +2,16 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "../critical.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function App({
   Component,
@@ -15,7 +24,9 @@ export default function App({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </SessionProvider>
     </>
   );
