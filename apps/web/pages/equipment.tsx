@@ -1,5 +1,7 @@
+import { BrewMethod } from "db";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
+import { Coffee } from "react-feather";
 import {
   Box,
   styled,

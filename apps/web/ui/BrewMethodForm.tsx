@@ -4,15 +4,17 @@ import { useForm } from "react-hook-form";
 import { BrewMethodFormData } from "types";
 import { Box, Button } from "ui";
 import { updateBrewMethod, useSetup } from "../api";
+import { BrewMethodFields } from "./BrewMethodFields";
 
 export const BrewMethodForm = () => {
   const { data, refetch } = useSetup();
 
-  const { register, handleSubmit, reset } = useForm<BrewMethodFormData>({
-    defaultValues: {
-      brewMethod: data?.brewMethod ?? "POUR_OVER",
-    },
-  });
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<BrewMethodFormData>({
+      defaultValues: {
+        brewMethod: data?.brewMethod ?? "POUR_OVER",
+      },
+    });
 
   React.useEffect(() => {
     if (data) {
@@ -30,20 +32,15 @@ export const BrewMethodForm = () => {
     refetch();
   }
 
+  const brewMethod = watch("brewMethod");
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Box css={{ display: "flex", fd: "column" }}>
-        <label htmlFor="brewMethod">Brew method</label>
-        <select {...register("brewMethod")}>
-          <option value={BrewMethod.AEROPRESS}>Aeropress</option>
-          <option value={BrewMethod.BIALETTI}>Bialetti</option>
-          <option value={BrewMethod.COLD_BREW}>Cold Brew</option>
-          <option value={BrewMethod.ESPRESSO}>Espresso</option>
-          <option value={BrewMethod.FRENCH_PRESS}>French Press</option>
-          <option value={BrewMethod.PHIN}>Phin</option>
-          <option value={BrewMethod.POUR_OVER}>Pour over</option>
-          <option value={BrewMethod.SIPHON}>Siphon</option>
-        </select>
+        <BrewMethodFields
+          selected={brewMethod}
+          onBrewMethodChanged={(m) => setValue("brewMethod", m)}
+        />
 
         <Button type="submit">Update</Button>
       </Box>

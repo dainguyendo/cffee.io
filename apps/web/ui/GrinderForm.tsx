@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { GrinderFormData } from "types";
 import { Box, Button } from "ui";
 import { updateSetupGrinder, useSetup } from "../api";
+import { GrinderFields } from "./GrinderFields";
 
 export const GrinderForm = () => {
   const { data, refetch } = useSetup();
@@ -32,8 +33,7 @@ export const GrinderForm = () => {
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Box css={{ display: "flex", fd: "column" }}>
-        <label htmlFor="grinder">Grinder</label>
-        <input {...register("grinder")} />
+        <GrinderFields register={register} />
         <Button type="submit">Update</Button>
       </Box>
     </form>

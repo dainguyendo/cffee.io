@@ -6,60 +6,68 @@ import { Maximize2, XCircle } from "react-feather";
 import { useForm } from "react-hook-form";
 import {
   Box,
+  Button,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
   Flex,
+  Input,
+  Label,
   styled,
   Text,
+  Textarea,
   VisuallyHidden,
 } from "ui";
-import { useSetup } from "../api";
-import { BeanForm } from "../ui/BeanForm";
-import { BrewMethodForm } from "../ui/BrewMethodForm";
-import { GrinderForm } from "../ui/GrinderForm";
+import { createJournalEntry, useSetup } from "../api";
+import { Field } from "../form/Field";
+import { FieldGroupRow } from "../form/FieldGroupRow";
+import { FieldLabel } from "../form/FieldLabel";
+import { BrewMethodFields } from "../ui/BrewMethodFields";
+import { EmojiRating } from "../ui/EmojiRating";
+import { FullBleedLayout } from "../ui/FullBleedLayout";
 import { Page } from "../ui/Page";
 import { RadioZedStack } from "../ui/RadioZedStack";
+import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { BREW_METHOD_TO_STRING } from "../utils/brew";
-
-const Input = styled("input", {
-  appearance: "none",
-});
+import { INITIAL_FAHRENHEIT } from "../utils/constants";
 
 interface JournalFormData {
   beanId: string | null;
   bean: Pick<
     Bean,
-    "roast" | "roaster" | "singleOrigin" | "state" | "countryCode"
+    "roast" | "roaster" | "singleOrigin" | "state" | "countryCode" | "rating"
   > | null;
   brewMethod: BrewMethod | null;
   rating: Rating;
   grinder: string;
   grindDescription: string;
   waterTemperatureFahrenheit: number;
+  note: string;
 }
 
 export default function Equipment() {
-  const [expandBean, setExpandBean] = React.useState(false);
-  const [expandGrinder, setExpandGrinder] = React.useState(false);
-  const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
+  const [expandBean, setExpandBean] = React.useState(true);
+  const [expandGrinder, setExpandGrinder] = React.useState(true);
+  const [expandBrewMethod, setExpandBrewMethod] = React.useState(true);
 
   const { data: setup } = useSetup();
 
-  const { register, reset, watch } = useForm<JournalFormData>({
-    defaultValues: {
-      beanId: "",
-      bean: null,
-      brewMethod: null,
-      grinder: "",
-      grindDescription: "",
-      waterTemperatureFahrenheit: 0,
-    },
-  });
+  const { register, reset, watch, setValue, getValues, handleSubmit } =
+    useForm<JournalFormData>({
+      defaultValues: {
+        beanId: "",
+        bean: null,
+        brewMethod: null,
+        grinder: "",
+        grindDescription: "",
+        waterTemperatureFahrenheit: INITIAL_FAHRENHEIT,
+      },
+    });
 
   React.useEffect(() => {
     if (setup) {
       reset({
+        ...getValues(),
         ...(setup.beanId && {
           beanId: setup.beanId,
           bean: null,
@@ -68,16 +76,23 @@ export default function Equipment() {
         ...(setup.brewMethod && { brewMethod: setup.brewMethod }),
       });
     }
-  }, [setup, reset]);
+  }, [setup, reset, getValues]);
 
   const grinder = watch("grinder");
   const brewMethod = watch("brewMethod");
   const rating = watch("rating");
+  const beanRating = watch("bean.rating");
+  const fahrenheit = watch("waterTemperatureFahrenheit");
+
+  const submit = async (data: JournalFormData) => {
+    console.log(data);
+    const entry = await createJournalEntry(data);
+  };
 
   return (
     <Page>
       <Box css={{ p: "$8" }}>
-        <form>
+        <form onSubmit={handleSubmit(submit)}>
           <Collapsible open={expandBean} onOpenChange={setExpandBean}>
             <Flex
               css={{ alignItems: "center", justifyContent: "space-between" }}
@@ -92,8 +107,37 @@ export default function Equipment() {
             </Flex>
 
             <CollapsibleContent>
-              <Text>Overwrite with beans on the fly</Text>
-              <BeanForm />
+              <Flex direction="column">
+                <Text>Overwrite with beans on the fly</Text>
+                <Field>
+                  <Label htmlFor="roast">Roast</Label>
+                  <Input {...register("bean.roast")} />
+                </Field>
+                <Label htmlFor="roaster">Roaster</Label>
+                <Input {...register("bean.roaster")} />
+                <Field variant="row">
+                  <Input type="checkbox" {...register("bean.singleOrigin")} />
+                  <Label htmlFor="roast">Single origin?</Label>
+                </Field>
+                <FieldGroupRow>
+                  <Field>
+                    <Label htmlFor="roast">State</Label>
+                    <Input {...register("bean.state")} />
+                  </Field>
+                  <Field>
+                    <Label htmlFor="roast">Country</Label>
+                    <Input {...register("bean.countryCode")} />
+                  </Field>
+                </FieldGroupRow>
+                <Label htmlFor="roast">General feelings for the bean</Label>
+
+                <Box role="radiogroup" css={{ display: "flex" }}>
+                  <EmojiRating
+                    rating={rating}
+                    onRatingChanged={(value) => setValue("bean.rating", value)}
+                  />
+                </Box>
+              </Flex>
             </CollapsibleContent>
           </Collapsible>
 
@@ -106,19 +150,22 @@ export default function Equipment() {
               <CollapsibleTrigger type="button">
                 {expandBean ? <XCircle /> : <Maximize2 />}
               </CollapsibleTrigger>
-              <label htmlFor="grindDescription">
-                <Text>Grind description</Text>
-                <Text>E.g. grind size like number or setting on equipment</Text>
-              </label>
-              <input
+            </Flex>
+            <Field>
+              <Label htmlFor="grindDescription">Grind description</Label>
+              <Input
                 id="grindDescription"
                 type="text"
+                placeholder="Example: 9,or coarse"
                 {...register("grindDescription")}
               />
-            </Flex>
+            </Field>
 
             <CollapsibleContent>
-              <GrinderForm />
+              <Field>
+                <Label htmlFor="grinder">Grinder</Label>
+                <Input {...register("grinder")} />
+              </Field>
             </CollapsibleContent>
           </Collapsible>
 
@@ -137,76 +184,37 @@ export default function Equipment() {
             </Flex>
 
             <CollapsibleContent>
-              <BrewMethodForm />
+              <BrewMethodFields
+                selected={brewMethod}
+                onBrewMethodChanged={(method) => setValue("brewMethod", method)}
+              />
             </CollapsibleContent>
           </Collapsible>
 
-          <Box css={{ display: "flex" }}>
-            <RadioZedStack selected={rating === Rating.VERY_BAD}>
-              <label htmlFor={Rating.VERY_BAD}>
-                🤮
-                <VisuallyHidden>{Rating.VERY_BAD}</VisuallyHidden>
-              </label>
-              <Input
-                {...register("rating")}
-                id={Rating.VERY_BAD}
-                type="radio"
-                value={Rating.VERY_BAD}
-              />
-            </RadioZedStack>
+          <Field>
+            <Label htmlFor="note">Brew notes</Label>
+            <Textarea
+              id="note"
+              {...register("note")}
+              placeholder="Best brew yet!"
+            />
+          </Field>
 
-            <RadioZedStack selected={rating === Rating.BAD}>
-              <label htmlFor={Rating.BAD}>
-                🙁
-                <VisuallyHidden>{Rating.BAD}</VisuallyHidden>
-              </label>
-              <Input
-                {...register("rating")}
-                id={Rating.BAD}
-                type="radio"
-                value={Rating.BAD}
-              />
-            </RadioZedStack>
-
-            <RadioZedStack selected={rating === Rating.AVERAGE}>
-              <label htmlFor={Rating.AVERAGE}>
-                😐
-                <VisuallyHidden>{Rating.AVERAGE}</VisuallyHidden>
-              </label>
-              <Input
-                {...register("rating")}
-                id={Rating.AVERAGE}
-                type="radio"
-                value={Rating.AVERAGE}
-              />
-            </RadioZedStack>
-
-            <RadioZedStack selected={rating === Rating.GOOD}>
-              <label htmlFor={Rating.GOOD}>
-                🙂
-                <VisuallyHidden>{Rating.GOOD}</VisuallyHidden>
-              </label>
-              <Input
-                {...register("rating")}
-                id={Rating.GOOD}
-                type="radio"
-                value={Rating.GOOD}
-              />
-            </RadioZedStack>
-
-            <RadioZedStack selected={rating === Rating.VERY_GOOD}>
-              <label htmlFor={Rating.VERY_GOOD}>
-                😍
-                <VisuallyHidden>{Rating.VERY_GOOD}</VisuallyHidden>
-              </label>
-              <Input
-                {...register("rating")}
-                id={Rating.VERY_GOOD}
-                type="radio"
-                value={Rating.VERY_GOOD}
-              />
-            </RadioZedStack>
+          <Box role="radiogroup" css={{ display: "flex" }}>
+            <EmojiRating
+              rating={rating}
+              onRatingChanged={(value) => setValue("rating", value)}
+            />
           </Box>
+
+          <TemperatureSlider
+            fahrenheit={fahrenheit}
+            onTemperatureChange={(value) =>
+              setValue("waterTemperatureFahrenheit", value)
+            }
+          />
+
+          <Button type="submit">Log brew</Button>
         </form>
       </Box>
     </Page>
