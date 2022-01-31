@@ -9,6 +9,7 @@ export * from "./Flex";
 export * from "./Input";
 export * from "./Label";
 export * from "./List";
+export * from "./RadioGroup";
 export * from "./Separator";
 export * from "./Select";
 export * from "./Slider";

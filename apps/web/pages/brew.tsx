@@ -13,20 +13,16 @@ import {
   Flex,
   Input,
   Label,
-  styled,
+  RadioGroup,
   Text,
   Textarea,
-  VisuallyHidden,
 } from "ui";
 import { createJournalEntry, useSetup } from "../api";
 import { Field } from "../form/Field";
 import { FieldGroupRow } from "../form/FieldGroupRow";
-import { FieldLabel } from "../form/FieldLabel";
 import { BrewMethodFields } from "../ui/BrewMethodFields";
-import { EmojiRating } from "../ui/EmojiRating";
-import { FullBleedLayout } from "../ui/FullBleedLayout";
+import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
-import { RadioZedStack } from "../ui/RadioZedStack";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { BREW_METHOD_TO_STRING } from "../utils/brew";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
@@ -46,9 +42,9 @@ interface JournalFormData {
 }
 
 export default function Equipment() {
-  const [expandBean, setExpandBean] = React.useState(true);
-  const [expandGrinder, setExpandGrinder] = React.useState(true);
-  const [expandBrewMethod, setExpandBrewMethod] = React.useState(true);
+  const [expandBean, setExpandBean] = React.useState(false);
+  const [expandGrinder, setExpandGrinder] = React.useState(false);
+  const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
 
   const { data: setup } = useSetup();
 
@@ -131,12 +127,38 @@ export default function Equipment() {
                 </FieldGroupRow>
                 <Label htmlFor="roast">General feelings for the bean</Label>
 
-                <Box role="radiogroup" css={{ display: "flex" }}>
-                  <EmojiRating
-                    rating={rating}
-                    onRatingChanged={(value) => setValue("bean.rating", value)}
-                  />
-                </Box>
+                <RadioGroup
+                  value={rating}
+                  onValueChange={(value) =>
+                    setValue("bean.rating", (value as Rating)!)
+                  }
+                  css={{ display: "flex", gap: "$1" }}
+                >
+                  <EmojiRadio id="bean-rating-very-bad" value={Rating.VERY_BAD}>
+                    <EmojiIndicator>😢</EmojiIndicator>
+                    <label htmlFor="bean-rating-very-bad">😢</label>
+                  </EmojiRadio>
+
+                  <EmojiRadio id="bean-rating-bad" value={Rating.BAD}>
+                    <EmojiIndicator>🙁</EmojiIndicator>
+                    <label htmlFor="bean-rating-bad">🙁</label>
+                  </EmojiRadio>
+                  <EmojiRadio id="bean-rating-average" value={Rating.AVERAGE}>
+                    <EmojiIndicator>😐</EmojiIndicator>
+                    <label htmlFor="bean-rating-average">😐</label>
+                  </EmojiRadio>
+                  <EmojiRadio id="bean-rating-good" value={Rating.GOOD}>
+                    <EmojiIndicator>🙂</EmojiIndicator>
+                    <label htmlFor="bean-rating-good">🙂</label>
+                  </EmojiRadio>
+                  <EmojiRadio
+                    id="bean-rating-very-good"
+                    value={Rating.VERY_GOOD}
+                  >
+                    <EmojiIndicator>😍</EmojiIndicator>
+                    <label htmlFor="bean-rating-very-good">😍</label>
+                  </EmojiRadio>
+                </RadioGroup>
               </Flex>
             </CollapsibleContent>
           </Collapsible>
@@ -200,12 +222,33 @@ export default function Equipment() {
             />
           </Field>
 
-          <Box role="radiogroup" css={{ display: "flex" }}>
-            <EmojiRating
-              rating={rating}
-              onRatingChanged={(value) => setValue("rating", value)}
-            />
-          </Box>
+          <RadioGroup
+            value={rating}
+            onValueChange={(value) => setValue("rating", (value as Rating)!)}
+            css={{ display: "flex", gap: "$1" }}
+          >
+            <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
+              <EmojiIndicator>😢</EmojiIndicator>
+              <label htmlFor="rating-very-bad">😢</label>
+            </EmojiRadio>
+
+            <EmojiRadio id="rating-bad" value={Rating.BAD}>
+              <EmojiIndicator>🙁</EmojiIndicator>
+              <label htmlFor="rating-bad">🙁</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-average" value={Rating.AVERAGE}>
+              <EmojiIndicator>😐</EmojiIndicator>
+              <label htmlFor="rating-average">😐</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-good" value={Rating.GOOD}>
+              <EmojiIndicator>🙂</EmojiIndicator>
+              <label htmlFor="rating-good">🙂</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-very-good" value={Rating.VERY_GOOD}>
+              <EmojiIndicator>😍</EmojiIndicator>
+              <label htmlFor="rating-very-good">😍</label>
+            </EmojiRadio>
+          </RadioGroup>
 
           <TemperatureSlider
             fahrenheit={fahrenheit}
