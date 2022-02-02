@@ -1,7 +1,7 @@
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-import { Anchor, Button, List, styled } from "ui";
+import { Anchor, Button, List, styled, Text } from "ui";
 import { UserDropdownMenu } from "./UserDropdownMenu";
 
 const Navigation = styled("nav", {
@@ -31,6 +31,7 @@ export const AppHeader = () => {
   if (status === "authenticated" && session?.user) {
     return (
       <Navigation>
+        <Text>cffee</Text>
         <List>
           <li>
             <Link href="/home" passHref>
@@ -45,6 +46,7 @@ export const AppHeader = () => {
 
   return (
     <Navigation>
+      <Text>cffee</Text>
       <List>
         <li>
           <Link href="/about" passHref>

@@ -128,7 +128,7 @@ export default function Equipment() {
                 <Label htmlFor="roast">General feelings for the bean</Label>
 
                 <RadioGroup
-                  value={rating}
+                  value={beanRating as string}
                   onValueChange={(value) =>
                     setValue("bean.rating", (value as Rating)!)
                   }
