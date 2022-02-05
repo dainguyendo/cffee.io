@@ -1,26 +1,12 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { BookOpen, Tool, Watch } from "react-feather";
-import { Anchor, Box, Button, List, Separator, styled, Text } from "ui";
+import { BookOpen, Plus, Tool, Watch } from "react-feather";
+import { Box, Flex, List, Separator, styled, Text, theme } from "ui";
 import { UserDropdownMenu } from "../ui/UserDropdownMenu";
-import { getFirstName } from "../utils/user";
 import { FullBleedLayout } from "./FullBleedLayout";
-import { SimpleSidebarLayout } from "./SimpleSidebarLayout";
-
-const Greeting = styled(Text, {
-  fontSize: "$4",
-});
-
-const Title = styled(Text, {
-  fontWeight: "$bold",
-  fontSize: "$3",
-});
-
-const Description = styled(Text, {
-  fontSize: "$1",
-  color: "$gray400",
-  fontWeight: "$semiBold",
-});
+import { NavigationText } from "../ui/NavigationText";
+import { BottomNavigation } from "./BottomNavigation";
+import { usePathnameMatch } from "./usePathnameMatch";
 
 const ListItem = styled("li", {
   display: "flex",
@@ -28,84 +14,139 @@ const ListItem = styled("li", {
   alignItems: "center",
 });
 
-const ListItemContent = styled("div", {
+const Container = styled("div", {
   display: "flex",
-  flexDirection: "column",
+  gap: "$3",
+  alignItems: "center",
+  padding: "$2",
+  borderRadius: "$medium",
+
+  "@bp2": {
+    padding: "$4",
+  },
+
+  variants: {
+    outline: {
+      true: {
+        background: "$purple100",
+      },
+    },
+  },
+  defaultVariants: {
+    outline: false,
+  },
 });
 
-const FullBleedPage = styled(FullBleedLayout, {
-  gridTemplateColumns: "1fr min(75%, 100%) 1fr",
+const SideNavigation = styled("nav", {
+  display: "none",
+  "@bp1": {
+    display: "block",
+  },
 });
 
 export const Page: React.FC = ({ children }) => {
   const { data: session } = useSession();
 
-  const name = session?.user?.name;
+  const { isHomeActive, isEquipmentActive, isTimerActive } = usePathnameMatch();
 
   return (
-    <FullBleedPage>
-      <SimpleSidebarLayout>
-        <Box css={{ p: "$4" }}>
-          <nav>
-            {name ? (
-              <Greeting>☕ for {getFirstName(name)}?</Greeting>
-            ) : (
-              <Greeting>☕ Welcome ☕</Greeting>
-            )}
+    <>
+      <FullBleedLayout>
+        <Flex css={{ gap: "$5" }}>
+          <SideNavigation css={{ p: "$4", flexGrow: 0, flexShrink: "99999" }}>
+            <Text bold css={{ fontSize: "$4" }}>
+              cffee
+            </Text>
+
             <Separator css={{ my: "$4", backgroundColor: "$gray100" }} />
 
             <Link href="/brew" passHref>
-              <Anchor>New brew</Anchor>
+              <a>
+                <Container outline>
+                  <Plus size={24} color={theme.colors.purple600.value} />
+                  <NavigationText bold color="$purple600">
+                    New log
+                  </NavigationText>
+                </Container>
+              </a>
             </Link>
 
             <Separator decorative css={{ my: "$2" }} />
 
-            <List css={{ gap: "$2" }}>
+            <List css={{ gap: "$2", "@bp2": { gap: "$4" } }}>
               <ListItem>
                 <Link href="/home">
                   <a>
-                    <BookOpen size={32} />
-                    <ListItemContent>
-                      <Title>Journal</Title>
-                      <Description>Overview of your sweet brews.</Description>
-                    </ListItemContent>
+                    <Container>
+                      <BookOpen
+                        size={24}
+                        color={
+                          isHomeActive
+                            ? theme.colors.purple600.value
+                            : theme.colors.gray500.value
+                        }
+                      />
+                      <NavigationText
+                        color={isHomeActive ? "$purple600" : "$gray500"}
+                      >
+                        Journal
+                      </NavigationText>
+                    </Container>
                   </a>
                 </Link>
               </ListItem>
               <ListItem>
                 <Link href="/equipment">
                   <a>
-                    <Tool size={32} />
-                    <ListItemContent>
-                      <Title>Equipment</Title>
-                      <Description>
-                        Make changes to regular set up. Jot future entries with
-                        ease.
-                      </Description>
-                    </ListItemContent>
+                    <Container>
+                      <Tool
+                        size={24}
+                        color={
+                          isEquipmentActive
+                            ? theme.colors.purple600.value
+                            : theme.colors.gray500.value
+                        }
+                      />
+                      <NavigationText
+                        color={isEquipmentActive ? "$purple600" : "$gray500"}
+                      >
+                        Equipment
+                      </NavigationText>
+                    </Container>
                   </a>
                 </Link>
               </ListItem>
               <ListItem>
                 <Link href="/timer">
                   <a>
-                    <Watch size={32} />
-                    <ListItemContent>
-                      <Title>Timer</Title>
-                      <Description>
-                        Brewing in real time? No problem, log straight away.
-                      </Description>
-                    </ListItemContent>
+                    <Container>
+                      <Watch
+                        size={24}
+                        color={
+                          isTimerActive
+                            ? theme.colors.purple600.value
+                            : theme.colors.gray500.value
+                        }
+                      />
+                      <NavigationText
+                        color={isTimerActive ? "$purple600" : "$gray500"}
+                      >
+                        Timer
+                      </NavigationText>
+                    </Container>
                   </a>
                 </Link>
               </ListItem>
             </List>
             <Separator css={{ my: "$4", backgroundColor: "$gray100" }} />
-            <UserDropdownMenu user={session!.user!} />
-          </nav>
-        </Box>
-        <div>{children}</div>
-      </SimpleSidebarLayout>
-    </FullBleedPage>
+            <Box css={{ px: "$4" }}>
+              <UserDropdownMenu user={session!.user!} displayName />
+            </Box>
+          </SideNavigation>
+          <Box css={{ flexGrow: 1 }}>{children}</Box>
+        </Flex>
+      </FullBleedLayout>
+      <BottomNavigation />
+    </>
   );
 };

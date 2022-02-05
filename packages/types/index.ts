@@ -1,4 +1,4 @@
-import { BrewMethod, Rating } from "db";
+import { Bean, BrewMethod, Journal, Rating } from "db";
 
 export interface BeanFormData {
   roaster: string;
@@ -15,4 +15,19 @@ export interface BrewMethodFormData {
 
 export interface GrinderFormData {
   grinder: string;
+}
+
+export interface JournalEntryData {
+  id: Journal["id"];
+  updatedAt: Journal["updatedAt"];
+  brewMethod: Journal["brewMethod"];
+  rating: Journal["rating"];
+  grinder: Journal["grinder"];
+  grindDescription: Journal["grindDescription"];
+  waterTemperatureFahrenheit: Journal["waterTemperatureFahrenheit"];
+  note: Journal["note"];
+  bean: {
+    roast: Bean["roast"];
+    roaster: Bean["roaster"];
+  };
 }

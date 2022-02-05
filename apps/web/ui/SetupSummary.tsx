@@ -1,6 +1,6 @@
 import { Box, styled, Text } from "ui";
 import { useSetup } from "../api";
-import { BREW_METHOD_TO_STRING } from "../utils/brew";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 
 const SectionTitle = styled(Text, {
   textTransform: "lowercase",

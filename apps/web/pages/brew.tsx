@@ -24,8 +24,10 @@ import { BrewMethodFields } from "../ui/BrewMethodFields";
 import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
-import { BREW_METHOD_TO_STRING } from "../utils/brew";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
+import { useRouter } from "next/router";
+// import { RichEditor } from "../ui/RichEditor";
 
 interface JournalFormData {
   beanId: string | null;
@@ -41,7 +43,15 @@ interface JournalFormData {
   note: string;
 }
 
-export default function Equipment() {
+interface Props {
+  timer: {
+    time: number;
+    laps: number[];
+  } | null;
+}
+
+export default function Equipment({ timer }: Props) {
+  const router = useRouter();
   const [expandBean, setExpandBean] = React.useState(false);
   const [expandGrinder, setExpandGrinder] = React.useState(false);
   const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
@@ -57,6 +67,7 @@ export default function Equipment() {
         grinder: "",
         grindDescription: "",
         waterTemperatureFahrenheit: INITIAL_FAHRENHEIT,
+        note: timer ? `${timer.time}, ${timer.laps.join(",")}` : "",
       },
     });
 
@@ -81,8 +92,8 @@ export default function Equipment() {
   const fahrenheit = watch("waterTemperatureFahrenheit");
 
   const submit = async (data: JournalFormData) => {
-    console.log(data);
-    const entry = await createJournalEntry(data);
+    await createJournalEntry(data);
+    router.push("/home");
   };
 
   return (
@@ -250,6 +261,8 @@ export default function Equipment() {
             </EmojiRadio>
           </RadioGroup>
 
+          {/* <RichEditor /> */}
+
           <TemperatureSlider
             fahrenheit={fahrenheit}
             onTemperatureChange={(value) =>
@@ -276,9 +289,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const fromTimer = context.query.time;
+  const laps = (Array.isArray(context.query.laps) && context.query.laps) || [];
+
   return {
     props: {
       session: await getSession(context),
+      timer: fromTimer
+        ? {
+            time: Number(context.query.time),
+            laps: laps.map(Number).sort((a, b) => a - b),
+          }
+        : null,
     },
   };
 };

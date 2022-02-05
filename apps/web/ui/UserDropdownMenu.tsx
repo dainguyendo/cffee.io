@@ -16,12 +16,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  Flex,
   Separator,
   Spacer,
   styled,
   Text,
   theme,
 } from "ui";
+import { NavigationText } from "./NavigationText";
 
 const MenuLabelRow = styled(DropdownMenuLabel, {
   display: "flex",
@@ -30,25 +32,32 @@ const MenuLabelRow = styled(DropdownMenuLabel, {
 
 interface Props {
   user: DefaultSession["user"];
+  displayName?: boolean;
 }
 
-export const UserDropdownMenu = ({ user }: Props) => {
+export const UserDropdownMenu = ({ user, displayName = false }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar size="medium">
-          <AvatarImage src={user?.image} alt={user.name ?? "User"} />
-          <AvatarFallback>
-            <BoringAvatar
-              name={user.name}
-              variant="marble"
-              colors={[
-                theme.colors.primary.value,
-                theme.colors.secondary.value,
-              ]}
+        <Flex css={{ alignItems: "center", gap: "$2" }}>
+          <Avatar size="small">
+            <AvatarImage
+              src={user?.image ?? undefined}
+              alt={user?.name ?? "User"}
             />
-          </AvatarFallback>
-        </Avatar>
+            <AvatarFallback>
+              <BoringAvatar
+                name={user?.name ?? ""}
+                variant="marble"
+                colors={[
+                  theme.colors.primary.value,
+                  theme.colors.secondary.value,
+                ]}
+              />
+            </AvatarFallback>
+          </Avatar>
+          {displayName && <NavigationText bold>{user?.name}</NavigationText>}
+        </Flex>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent sideOffset={4}>

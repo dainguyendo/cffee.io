@@ -1,6 +1,11 @@
-import type { Bean, BrewMethod, Journal, Setup } from "db";
+import type { Bean, Journal, Setup } from "db";
 import { useQuery } from "react-query";
-import { BeanFormData, BrewMethodFormData, GrinderFormData } from "types";
+import {
+  BeanFormData,
+  BrewMethodFormData,
+  GrinderFormData,
+  JournalEntryData,
+} from "types";
 import { get, post } from "./utils/fetch";
 
 export async function createBean(data: BeanFormData): Promise<Bean> {
@@ -40,4 +45,12 @@ export async function createJournalEntry(
 ): Promise<Journal> {
   const response = await post("/api/create-journal-entry", data);
   return response.json();
+}
+
+export function useJournalEntries() {
+  return useQuery<JournalEntryData[]>("use-journal-entries", async () => {
+    const response = await get("/api/get-journal-entries");
+    const data = await response.json();
+    return data;
+  });
 }

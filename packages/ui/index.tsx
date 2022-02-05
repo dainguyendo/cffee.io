@@ -6,6 +6,7 @@ export * from "./ButtonLink";
 export * from "./Collapsible";
 export * from "./DropdownMenu";
 export * from "./Flex";
+export * from "./Grid";
 export * from "./Input";
 export * from "./Label";
 export * from "./List";

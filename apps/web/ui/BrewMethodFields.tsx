@@ -2,7 +2,7 @@ import { BrewMethod } from "db";
 import React from "react";
 import { Coffee } from "react-feather";
 import { Box, Flex, styled, Text, theme } from "ui";
-import { BREW_METHOD_TO_STRING } from "../utils/brew";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import { Caption } from "./Caption";
 
 export type Props = {

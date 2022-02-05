@@ -1,6 +1,8 @@
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { Text } from "ui";
+import { Page } from "../ui/Page";
+import { Stopwatch } from "../ui/Stopwatch";
 
 export default function Timer() {
   const { data: session, status } = useSession();
@@ -8,9 +10,10 @@ export default function Timer() {
   const name = session?.user?.name;
 
   return (
-    <>
-      <Text>Timer page</Text>
-    </>
+    <Page>
+      {/* <Text>Timer page</Text> */}
+      <Stopwatch />
+    </Page>
   );
 }
 

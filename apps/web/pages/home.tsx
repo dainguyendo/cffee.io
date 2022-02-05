@@ -1,16 +1,18 @@
 import { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import { useJournalEntries } from "../api";
+import { JournalEntriesTable } from "../ui/JournalEntriesTable";
 import { Page } from "../ui/Page";
 import { SetupSummary } from "../ui/SetupSummary";
 
 export default function Home() {
-  const { data: session, status } = useSession();
-
-  const name = session?.user?.name;
+  const { data } = useJournalEntries();
 
   return (
     <Page>
       <SetupSummary />
+
+      <JournalEntriesTable data={data ?? []} />
     </Page>
   );
 }
