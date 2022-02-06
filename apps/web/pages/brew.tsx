@@ -29,6 +29,7 @@ import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { useRouter } from "next/router";
 import { RichEditor } from "../ui/RichEditor";
 import { Descendant } from "slate";
+import { Caption } from "../ui/Caption";
 
 interface JournalFormData {
   beanId: string | null;
@@ -101,134 +102,125 @@ export default function Equipment({ timer }: Props) {
 
   return (
     <Page>
+      <Text bold css={{ fontSize: "$4" }}>
+        How&apos;d it brew?
+      </Text>
+      <Caption as="p">Leave your thoughts, take your coffee</Caption>
       <RichEditor value={note} setValue={(value) => setValue("note", value)} />
-      <Box css={{ p: "$8" }}>
-        <form onSubmit={handleSubmit(submit)}>
-          <Collapsible open={expandBean} onOpenChange={setExpandBean}>
-            <Flex
-              css={{ alignItems: "center", justifyContent: "space-between" }}
-            >
-              <Text>Beans brewing:</Text>
-              <Text>
-                {setup?.bean?.roast}, {setup?.bean?.roaster}
-              </Text>
-              <CollapsibleTrigger type="button">
-                {expandBean ? <XCircle /> : <Maximize2 />}
-              </CollapsibleTrigger>
-            </Flex>
+      <form onSubmit={handleSubmit(submit)}>
+        <Collapsible open={expandBean} onOpenChange={setExpandBean}>
+          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
+            <Text>Beans brewing:</Text>
+            <Text>
+              {setup?.bean?.roast}, {setup?.bean?.roaster}
+            </Text>
+            <CollapsibleTrigger type="button">
+              {expandBean ? <XCircle /> : <Maximize2 />}
+            </CollapsibleTrigger>
+          </Flex>
 
-            <CollapsibleContent>
-              <Flex direction="column">
-                <Text>Overwrite with beans on the fly</Text>
-                <Field>
-                  <Label htmlFor="roast">Roast</Label>
-                  <Input {...register("bean.roast")} />
-                </Field>
-                <Label htmlFor="roaster">Roaster</Label>
-                <Input {...register("bean.roaster")} />
-                <Field variant="row">
-                  <Input type="checkbox" {...register("bean.singleOrigin")} />
-                  <Label htmlFor="roast">Single origin?</Label>
-                </Field>
-                <FieldGroupRow>
-                  <Field>
-                    <Label htmlFor="roast">State</Label>
-                    <Input {...register("bean.state")} />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="roast">Country</Label>
-                    <Input {...register("bean.countryCode")} />
-                  </Field>
-                </FieldGroupRow>
-                <Label htmlFor="roast">General feelings for the bean</Label>
-
-                <RadioGroup
-                  value={beanRating as string}
-                  onValueChange={(value) =>
-                    setValue("bean.rating", (value as Rating)!)
-                  }
-                  css={{ display: "flex", gap: "$1" }}
-                >
-                  <EmojiRadio id="bean-rating-very-bad" value={Rating.VERY_BAD}>
-                    <EmojiIndicator>😢</EmojiIndicator>
-                    <label htmlFor="bean-rating-very-bad">😢</label>
-                  </EmojiRadio>
-
-                  <EmojiRadio id="bean-rating-bad" value={Rating.BAD}>
-                    <EmojiIndicator>🙁</EmojiIndicator>
-                    <label htmlFor="bean-rating-bad">🙁</label>
-                  </EmojiRadio>
-                  <EmojiRadio id="bean-rating-average" value={Rating.AVERAGE}>
-                    <EmojiIndicator>😐</EmojiIndicator>
-                    <label htmlFor="bean-rating-average">😐</label>
-                  </EmojiRadio>
-                  <EmojiRadio id="bean-rating-good" value={Rating.GOOD}>
-                    <EmojiIndicator>🙂</EmojiIndicator>
-                    <label htmlFor="bean-rating-good">🙂</label>
-                  </EmojiRadio>
-                  <EmojiRadio
-                    id="bean-rating-very-good"
-                    value={Rating.VERY_GOOD}
-                  >
-                    <EmojiIndicator>😍</EmojiIndicator>
-                    <label htmlFor="bean-rating-very-good">😍</label>
-                  </EmojiRadio>
-                </RadioGroup>
-              </Flex>
-            </CollapsibleContent>
-          </Collapsible>
-
-          <Collapsible open={expandGrinder} onOpenChange={setExpandGrinder}>
-            <Flex
-              css={{ alignItems: "center", justifyContent: "space-between" }}
-            >
-              <Text>Grinding with:</Text>
-              <Text>{grinder}</Text>
-              <CollapsibleTrigger type="button">
-                {expandBean ? <XCircle /> : <Maximize2 />}
-              </CollapsibleTrigger>
-            </Flex>
-            <Field>
-              <Label htmlFor="grindDescription">Grind description</Label>
-              <Input
-                id="grindDescription"
-                type="text"
-                placeholder="Example: 9,or coarse"
-                {...register("grindDescription")}
-              />
-            </Field>
-
-            <CollapsibleContent>
+          <CollapsibleContent>
+            <Flex direction="column">
+              <Text>Overwrite with beans on the fly</Text>
               <Field>
-                <Label htmlFor="grinder">Grinder</Label>
-                <Input {...register("grinder")} />
+                <Label htmlFor="roast">Roast</Label>
+                <Input {...register("bean.roast")} />
               </Field>
-            </CollapsibleContent>
-          </Collapsible>
+              <Label htmlFor="roaster">Roaster</Label>
+              <Input {...register("bean.roaster")} />
+              <Field variant="row">
+                <Input type="checkbox" {...register("bean.singleOrigin")} />
+                <Label htmlFor="roast">Single origin?</Label>
+              </Field>
+              <FieldGroupRow>
+                <Field>
+                  <Label htmlFor="roast">State</Label>
+                  <Input {...register("bean.state")} />
+                </Field>
+                <Field>
+                  <Label htmlFor="roast">Country</Label>
+                  <Input {...register("bean.countryCode")} />
+                </Field>
+              </FieldGroupRow>
+              <Label htmlFor="roast">General feelings for the bean</Label>
 
-          <Collapsible
-            open={expandBrewMethod}
-            onOpenChange={setExpandBrewMethod}
-          >
-            <Flex
-              css={{ alignItems: "center", justifyContent: "space-between" }}
-            >
-              <Text>Brew method</Text>
-              <Text>{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
-              <CollapsibleTrigger type="button">
-                {expandBean ? <XCircle /> : <Maximize2 />}
-              </CollapsibleTrigger>
+              <RadioGroup
+                value={beanRating as string}
+                onValueChange={(value) =>
+                  setValue("bean.rating", (value as Rating)!)
+                }
+                css={{ display: "flex", gap: "$1" }}
+              >
+                <EmojiRadio id="bean-rating-very-bad" value={Rating.VERY_BAD}>
+                  <EmojiIndicator>😢</EmojiIndicator>
+                  <label htmlFor="bean-rating-very-bad">😢</label>
+                </EmojiRadio>
+
+                <EmojiRadio id="bean-rating-bad" value={Rating.BAD}>
+                  <EmojiIndicator>🙁</EmojiIndicator>
+                  <label htmlFor="bean-rating-bad">🙁</label>
+                </EmojiRadio>
+                <EmojiRadio id="bean-rating-average" value={Rating.AVERAGE}>
+                  <EmojiIndicator>😐</EmojiIndicator>
+                  <label htmlFor="bean-rating-average">😐</label>
+                </EmojiRadio>
+                <EmojiRadio id="bean-rating-good" value={Rating.GOOD}>
+                  <EmojiIndicator>🙂</EmojiIndicator>
+                  <label htmlFor="bean-rating-good">🙂</label>
+                </EmojiRadio>
+                <EmojiRadio id="bean-rating-very-good" value={Rating.VERY_GOOD}>
+                  <EmojiIndicator>😍</EmojiIndicator>
+                  <label htmlFor="bean-rating-very-good">😍</label>
+                </EmojiRadio>
+              </RadioGroup>
             </Flex>
+          </CollapsibleContent>
+        </Collapsible>
 
-            <CollapsibleContent>
-              <BrewMethodFields
-                selected={brewMethod}
-                onBrewMethodChanged={(method) => setValue("brewMethod", method)}
-              />
-            </CollapsibleContent>
-          </Collapsible>
+        <Collapsible open={expandGrinder} onOpenChange={setExpandGrinder}>
+          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
+            <Text>Grinding with:</Text>
+            <Text>{grinder}</Text>
+            <CollapsibleTrigger type="button">
+              {expandBean ? <XCircle /> : <Maximize2 />}
+            </CollapsibleTrigger>
+          </Flex>
+          <Field>
+            <Label htmlFor="grindDescription">Grind description</Label>
+            <Input
+              id="grindDescription"
+              type="text"
+              placeholder="Example: 9,or coarse"
+              {...register("grindDescription")}
+            />
+          </Field>
 
-          {/* <Field>
+          <CollapsibleContent>
+            <Field>
+              <Label htmlFor="grinder">Grinder</Label>
+              <Input {...register("grinder")} />
+            </Field>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Collapsible open={expandBrewMethod} onOpenChange={setExpandBrewMethod}>
+          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
+            <Text>Brew method</Text>
+            <Text>{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
+            <CollapsibleTrigger type="button">
+              {expandBean ? <XCircle /> : <Maximize2 />}
+            </CollapsibleTrigger>
+          </Flex>
+
+          <CollapsibleContent>
+            <BrewMethodFields
+              selected={brewMethod}
+              onBrewMethodChanged={(method) => setValue("brewMethod", method)}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* <Field>
             <Label htmlFor="note">Brew notes</Label>
             <Textarea
               id="note"
@@ -237,46 +229,45 @@ export default function Equipment({ timer }: Props) {
             />
           </Field> */}
 
-          <RadioGroup
-            value={rating}
-            onValueChange={(value) => setValue("rating", (value as Rating)!)}
-            css={{ display: "flex", gap: "$1" }}
-          >
-            <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
-              <EmojiIndicator>😢</EmojiIndicator>
-              <label htmlFor="rating-very-bad">😢</label>
-            </EmojiRadio>
+        <RadioGroup
+          value={rating}
+          onValueChange={(value) => setValue("rating", (value as Rating)!)}
+          css={{ display: "flex", gap: "$1" }}
+        >
+          <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
+            <EmojiIndicator>😢</EmojiIndicator>
+            <label htmlFor="rating-very-bad">😢</label>
+          </EmojiRadio>
 
-            <EmojiRadio id="rating-bad" value={Rating.BAD}>
-              <EmojiIndicator>🙁</EmojiIndicator>
-              <label htmlFor="rating-bad">🙁</label>
-            </EmojiRadio>
-            <EmojiRadio id="rating-average" value={Rating.AVERAGE}>
-              <EmojiIndicator>😐</EmojiIndicator>
-              <label htmlFor="rating-average">😐</label>
-            </EmojiRadio>
-            <EmojiRadio id="rating-good" value={Rating.GOOD}>
-              <EmojiIndicator>🙂</EmojiIndicator>
-              <label htmlFor="rating-good">🙂</label>
-            </EmojiRadio>
-            <EmojiRadio id="rating-very-good" value={Rating.VERY_GOOD}>
-              <EmojiIndicator>😍</EmojiIndicator>
-              <label htmlFor="rating-very-good">😍</label>
-            </EmojiRadio>
-          </RadioGroup>
+          <EmojiRadio id="rating-bad" value={Rating.BAD}>
+            <EmojiIndicator>🙁</EmojiIndicator>
+            <label htmlFor="rating-bad">🙁</label>
+          </EmojiRadio>
+          <EmojiRadio id="rating-average" value={Rating.AVERAGE}>
+            <EmojiIndicator>😐</EmojiIndicator>
+            <label htmlFor="rating-average">😐</label>
+          </EmojiRadio>
+          <EmojiRadio id="rating-good" value={Rating.GOOD}>
+            <EmojiIndicator>🙂</EmojiIndicator>
+            <label htmlFor="rating-good">🙂</label>
+          </EmojiRadio>
+          <EmojiRadio id="rating-very-good" value={Rating.VERY_GOOD}>
+            <EmojiIndicator>😍</EmojiIndicator>
+            <label htmlFor="rating-very-good">😍</label>
+          </EmojiRadio>
+        </RadioGroup>
 
-          {/* <RichEditor /> */}
+        {/* <RichEditor /> */}
 
-          <TemperatureSlider
-            fahrenheit={fahrenheit}
-            onTemperatureChange={(value) =>
-              setValue("waterTemperatureFahrenheit", value)
-            }
-          />
+        <TemperatureSlider
+          fahrenheit={fahrenheit}
+          onTemperatureChange={(value) =>
+            setValue("waterTemperatureFahrenheit", value)
+          }
+        />
 
-          <Button type="submit">Log brew</Button>
-        </form>
-      </Box>
+        <Button type="submit">Log brew</Button>
+      </form>
     </Page>
   );
 }

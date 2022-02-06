@@ -9,11 +9,12 @@ import {
   Transforms,
 } from "slate";
 import { withHistory } from "slate-history";
-import { Editable, Slate, withReact } from "slate-react";
-import { Flex, Separator } from "ui";
+import { Slate, withReact } from "slate-react";
+import { Flex, Separator, styled } from "ui";
 import { Format } from "../types/slate";
 import { toggleMark } from "../utils/editor";
 import { MarkButton } from "./MarkButton";
+import { Editable } from "./Editable";
 
 const HOTKEYS = {
   "mod+b": "bold",
@@ -37,9 +38,6 @@ export const RichEditor = ({ value, setValue }: Props) => {
     editorRef.current = withHistory(withReact(createEditor()));
   const editor = editorRef.current;
   // const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-
-  console.log({ value });
-
   return (
     <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
       <Flex>
@@ -76,7 +74,7 @@ export const RichEditor = ({ value, setValue }: Props) => {
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
+        placeholder="Taste like magic ✨"
         spellCheck
         autoFocus
         onKeyDown={(event) => {

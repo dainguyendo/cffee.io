@@ -5,7 +5,7 @@ import { JournalEntryData } from "types";
 import { styled, Text } from "ui";
 import { BREW_METHOD_TO_STRING, RATING_TO_EMOJI } from "../utils/copy";
 import { Badge } from "./Badge";
-import { RichEditor } from "./RichEditor";
+import { ReadonlyEditor } from "./ReadonlyEditor";
 
 interface Props {
   data: JournalEntryData[];
@@ -93,7 +93,7 @@ export const JournalEntriesTable = ({ data }: Props) => {
 
           if (!entry?.note) return null;
 
-          return <RichEditor value={entry?.note} setValue={() => {}} />;
+          return <ReadonlyEditor value={entry?.note} />;
         },
         // onExpand,
         expandedRowKeys,
