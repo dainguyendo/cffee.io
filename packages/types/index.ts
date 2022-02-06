@@ -25,7 +25,7 @@ export interface JournalEntryData {
   grinder: Journal["grinder"];
   grindDescription: Journal["grindDescription"];
   waterTemperatureFahrenheit: Journal["waterTemperatureFahrenheit"];
-  note: Journal["note"];
+  note: any;
   bean: {
     roast: Bean["roast"];
     roaster: Bean["roaster"];

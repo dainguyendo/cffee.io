@@ -27,7 +27,8 @@ import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { useRouter } from "next/router";
-// import { RichEditor } from "../ui/RichEditor";
+import { RichEditor } from "../ui/RichEditor";
+import { Descendant } from "slate";
 
 interface JournalFormData {
   beanId: string | null;
@@ -40,7 +41,7 @@ interface JournalFormData {
   grinder: string;
   grindDescription: string;
   waterTemperatureFahrenheit: number;
-  note: string;
+  note: Descendant[];
 }
 
 interface Props {
@@ -67,7 +68,8 @@ export default function Equipment({ timer }: Props) {
         grinder: "",
         grindDescription: "",
         waterTemperatureFahrenheit: INITIAL_FAHRENHEIT,
-        note: timer ? `${timer.time}, ${timer.laps.join(",")}` : "",
+        note: [{ type: "paragraph", children: [{ text: "" }] }],
+        // note: timer ? `${timer.time}, ${timer.laps.join(",")}` : "",
       },
     });
 
@@ -90,6 +92,7 @@ export default function Equipment({ timer }: Props) {
   const rating = watch("rating");
   const beanRating = watch("bean.rating");
   const fahrenheit = watch("waterTemperatureFahrenheit");
+  const note = watch("note");
 
   const submit = async (data: JournalFormData) => {
     await createJournalEntry(data);
@@ -98,6 +101,7 @@ export default function Equipment({ timer }: Props) {
 
   return (
     <Page>
+      <RichEditor value={note} setValue={(value) => setValue("note", value)} />
       <Box css={{ p: "$8" }}>
         <form onSubmit={handleSubmit(submit)}>
           <Collapsible open={expandBean} onOpenChange={setExpandBean}>
@@ -224,14 +228,14 @@ export default function Equipment({ timer }: Props) {
             </CollapsibleContent>
           </Collapsible>
 
-          <Field>
+          {/* <Field>
             <Label htmlFor="note">Brew notes</Label>
             <Textarea
               id="note"
               {...register("note")}
               placeholder="Best brew yet!"
             />
-          </Field>
+          </Field> */}
 
           <RadioGroup
             value={rating}

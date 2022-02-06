@@ -1,17 +1,19 @@
-import React, { LegacyRef, useCallback, useMemo, useState } from "react";
 import isHotkey from "is-hotkey";
-import { Editable, withReact, useSlate, Slate } from "slate-react";
+import React, { useCallback } from "react";
+import { Bold, Code, Italic, List, Underline } from "react-feather";
 import {
-  Editor,
-  Transforms,
   createEditor,
   Descendant,
+  Editor,
   Element as SlateElement,
+  Transforms,
 } from "slate";
 import { withHistory } from "slate-history";
-
-import { PropsWithChildren } from "react";
-import { Ref } from "react";
+import { Editable, Slate, withReact } from "slate-react";
+import { Flex, Separator } from "ui";
+import { Format } from "../types/slate";
+import { toggleMark } from "../utils/editor";
+import { MarkButton } from "./MarkButton";
 
 const HOTKEYS = {
   "mod+b": "bold",
@@ -22,31 +24,55 @@ const HOTKEYS = {
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
-export const RichEditor = () => {
-  const [value, setValue] = useState<Descendant[]>([]);
-  const renderElement = useCallback(
-    (props) => <Element {...props.attributes}>{props.children}</Element>,
-    []
-  );
-  const renderLeaf = useCallback(
-    (props) => <Leaf {...props.attributes}>{props.children}</Leaf>,
-    []
-  );
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+interface Props {
+  value: Descendant[];
+  setValue: (v: Descendant[]) => void;
+}
+
+export const RichEditor = ({ value, setValue }: Props) => {
+  const renderElement = useCallback((props) => <Element {...props} />, []);
+  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+  const editorRef = React.useRef<Editor>();
+  if (!editorRef.current)
+    editorRef.current = withHistory(withReact(createEditor()));
+  const editor = editorRef.current;
+  // const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+
+  console.log({ value });
 
   return (
     <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
-      {/* <Toolbar>
-        <MarkButton format="bold" icon="format_bold" />
-        <MarkButton format="italic" icon="format_italic" />
-        <MarkButton format="underline" icon="format_underlined" />
-        <MarkButton format="code" icon="code" />
-        <BlockButton format="heading-one" icon="looks_one" />
+      <Flex>
+        <MarkButton label="Toggle bold" format="bold">
+          <Bold size={14} />
+        </MarkButton>
+        <MarkButton label="Toggle italic" format="italic">
+          <Italic size={14} />
+        </MarkButton>
+        <MarkButton label="Toggle underline" format="underline">
+          <Underline size={14} />
+        </MarkButton>
+        <Separator
+          orientation="vertical"
+          css={{ mx: "$2", backgroundColor: "$gray200" }}
+        />
+        <MarkButton label="Toggle code" format="code">
+          <Code size={14} />
+        </MarkButton>
+        <Separator
+          orientation="vertical"
+          css={{ mx: "$2", backgroundColor: "$gray200" }}
+        />
+        {/* <BlockButton format="heading-one" icon="looks_one" />
         <BlockButton format="heading-two" icon="looks_two" />
-        <BlockButton format="block-quote" icon="format_quote" />
-        <BlockButton format="numbered-list" icon="format_list_numbered" />
-        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-      </Toolbar> */}
+        <BlockButton format="block-quote" icon="format_quote" /> */}
+        {/* <BlockButton format="numbered-list">
+          <List />
+        </BlockButton> */}
+        <MarkButton label="Toggle bullet list" format="bulleted-list">
+          <List size={14} />
+        </MarkButton>
+      </Flex>
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
@@ -55,7 +81,7 @@ export const RichEditor = () => {
         autoFocus
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event)) {
+            if (isHotkey(hotkey, event as any)) {
               event.preventDefault();
               const mark = HOTKEYS[hotkey];
               toggleMark(editor, mark);
@@ -67,7 +93,9 @@ export const RichEditor = () => {
   );
 };
 
-const toggleBlock = (editor, format) => {
+const toggleBlock = (editor: Editor, format: Format) => {
+  console.log("toggleBlock", { format });
+
   const isActive = isBlockActive(editor, format);
   const isList = LIST_TYPES.includes(format);
 
@@ -89,17 +117,8 @@ const toggleBlock = (editor, format) => {
   }
 };
 
-const toggleMark = (editor, format) => {
-  const isActive = isMarkActive(editor, format);
-
-  if (isActive) {
-    Editor.removeMark(editor, format);
-  } else {
-    Editor.addMark(editor, format, true);
-  }
-};
-
-const isBlockActive = (editor, format) => {
+const isBlockActive = (editor: Editor, format: Format) => {
+  console.log("isBlockActive", { format });
   const { selection } = editor;
   if (!selection) return false;
 
@@ -112,11 +131,6 @@ const isBlockActive = (editor, format) => {
   );
 
   return !!match;
-};
-
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
 };
 
 const Element = ({ attributes, children, element }) => {
@@ -158,109 +172,16 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const BlockButton = ({ format, icon }) => {
-  const editor = useSlate();
-  return (
-    <Button
-      active={isBlockActive(editor, format)}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        toggleBlock(editor, format);
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
-  );
-};
-
-const MarkButton = ({ format, icon }) => {
-  const editor = useSlate();
-  return (
-    <Button
-      active={isMarkActive(editor, format)}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        toggleMark(editor, format);
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
-  );
-};
-
-interface BaseProps {
-  className: string;
-  [key: string]: unknown;
-}
-type OrNull<T> = T | undefined;
-
-export const Button = React.forwardRef(
-  (
-    {
-      className,
-      active,
-      reversed,
-      ...props
-    }: PropsWithChildren<
-      {
-        active: boolean;
-        reversed: boolean;
-      } & BaseProps
-    >,
-    ref: LegacyRef<HTMLSpanElement>
-  ) => <span {...props} ref={ref} />
-);
-
-export const EditorValue = React.forwardRef(
-  (
-    {
-      className,
-      value,
-      ...props
-    }: PropsWithChildren<
-      {
-        value: any;
-      } & BaseProps
-    >,
-    ref: LegacyRef<HTMLDivElement>
-  ) => {
-    const textLines = value.document.nodes
-      .map((node) => node.text)
-      .toArray()
-      .join("\n");
-    return (
-      <div ref={ref} {...props}>
-        <div>Slates value as text</div>
-        <div>{textLines}</div>
-      </div>
-    );
-  }
-);
-
-export const Icon = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: LegacyRef<HTMLSpanElement>
-  ) => <span {...props} ref={ref} />
-);
-
-export const Instruction = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: LegacyRef<HTMLDivElement>
-  ) => <div {...props} ref={ref} />
-);
-
-export const Menu = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: LegacyRef<HTMLDivElement>
-  ) => <div {...props} ref={ref} />
-);
-
-export const Toolbar = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: Ref<HTMLDivElement> | undefined
-  ) => <Menu {...props} ref={ref} />
-);
+// const BlockButton: React.FC<{ format: Format }> = ({ format, children }) => {
+//   const editor = useSlate();
+//   return (
+//     <Toggle
+//       onMouseDown={(event) => {
+//         event.preventDefault();
+//         toggleBlock(editor, format);
+//       }}
+//     >
+//       {children}
+//     </Toggle>
+//   );
+// };
