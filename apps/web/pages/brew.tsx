@@ -1,11 +1,12 @@
 import { Bean, BrewMethod, Rating } from "db";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { Maximize2, XCircle } from "react-feather";
 import { useForm } from "react-hook-form";
+import { Descendant } from "slate";
 import {
-  Box,
   Button,
   Collapsible,
   CollapsibleContent,
@@ -14,22 +15,22 @@ import {
   Input,
   Label,
   RadioGroup,
+  Separator,
   Text,
-  Textarea,
 } from "ui";
 import { createJournalEntry, useSetup } from "../api";
 import { Field } from "../form/Field";
 import { FieldGroupRow } from "../form/FieldGroupRow";
 import { BrewMethodFields } from "../ui/BrewMethodFields";
-import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
-import { Page } from "../ui/Page";
-import { TemperatureSlider } from "../ui/TemperatureSlider";
-import { BREW_METHOD_TO_STRING } from "../utils/copy";
-import { INITIAL_FAHRENHEIT } from "../utils/constants";
-import { useRouter } from "next/router";
-import { RichEditor } from "../ui/RichEditor";
-import { Descendant } from "slate";
 import { Caption } from "../ui/Caption";
+import { Center } from "../ui/Center";
+import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
+import { IconToggle } from "../ui/IconToggle";
+import { Page } from "../ui/Page";
+import { RichEditor } from "../ui/RichEditor";
+import { TemperatureSlider } from "../ui/TemperatureSlider";
+import { INITIAL_FAHRENHEIT } from "../utils/constants";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 
 interface JournalFormData {
   beanId: string | null;
@@ -55,7 +56,6 @@ interface Props {
 export default function Equipment({ timer }: Props) {
   const router = useRouter();
   const [expandBean, setExpandBean] = React.useState(false);
-  const [expandGrinder, setExpandGrinder] = React.useState(false);
   const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
 
   const { data: setup } = useSetup();
@@ -88,7 +88,6 @@ export default function Equipment({ timer }: Props) {
     }
   }, [setup, reset, getValues]);
 
-  const grinder = watch("grinder");
   const brewMethod = watch("brewMethod");
   const rating = watch("rating");
   const beanRating = watch("bean.rating");
@@ -102,22 +101,23 @@ export default function Equipment({ timer }: Props) {
 
   return (
     <Page>
-      <Text bold css={{ fontSize: "$4" }}>
-        How&apos;d it brew?
-      </Text>
-      <Caption as="p">Leave your thoughts, take your coffee</Caption>
-      <RichEditor value={note} setValue={(value) => setValue("note", value)} />
       <form onSubmit={handleSubmit(submit)}>
         <Collapsible open={expandBean} onOpenChange={setExpandBean}>
           <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Text>Beans brewing:</Text>
-            <Text>
-              {setup?.bean?.roast}, {setup?.bean?.roaster}
+            <Text bold css={{ fontSize: "$4" }}>
+              Beans
             </Text>
-            <CollapsibleTrigger type="button">
-              {expandBean ? <XCircle /> : <Maximize2 />}
+
+            <CollapsibleTrigger asChild>
+              <IconToggle>
+                {expandBean ? <XCircle /> : <Maximize2 />}
+              </IconToggle>
             </CollapsibleTrigger>
           </Flex>
+
+          <Text as="p">
+            {setup?.bean?.roast}, {setup?.bean?.roaster}
+          </Text>
 
           <CollapsibleContent>
             <Flex direction="column">
@@ -143,7 +143,6 @@ export default function Equipment({ timer }: Props) {
                 </Field>
               </FieldGroupRow>
               <Label htmlFor="roast">General feelings for the bean</Label>
-
               <RadioGroup
                 value={beanRating as string}
                 onValueChange={(value) =>
@@ -155,7 +154,6 @@ export default function Equipment({ timer }: Props) {
                   <EmojiIndicator>😢</EmojiIndicator>
                   <label htmlFor="bean-rating-very-bad">😢</label>
                 </EmojiRadio>
-
                 <EmojiRadio id="bean-rating-bad" value={Rating.BAD}>
                   <EmojiIndicator>🙁</EmojiIndicator>
                   <label htmlFor="bean-rating-bad">🙁</label>
@@ -177,40 +175,41 @@ export default function Equipment({ timer }: Props) {
           </CollapsibleContent>
         </Collapsible>
 
-        <Collapsible open={expandGrinder} onOpenChange={setExpandGrinder}>
-          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Text>Grinding with:</Text>
-            <Text>{grinder}</Text>
-            <CollapsibleTrigger type="button">
-              {expandBean ? <XCircle /> : <Maximize2 />}
-            </CollapsibleTrigger>
-          </Flex>
-          <Field>
-            <Label htmlFor="grindDescription">Grind description</Label>
-            <Input
-              id="grindDescription"
-              type="text"
-              placeholder="Example: 9,or coarse"
-              {...register("grindDescription")}
-            />
-          </Field>
+        <Separator css={{ my: "$4" }} />
 
-          <CollapsibleContent>
-            <Field>
-              <Label htmlFor="grinder">Grinder</Label>
-              <Input {...register("grinder")} />
-            </Field>
-          </CollapsibleContent>
-        </Collapsible>
+        <Text bold css={{ fontSize: "$4" }}>
+          Grind
+        </Text>
+        <Field>
+          <Label htmlFor="grinder">Grinder</Label>
+          <Input {...register("grinder")} />
+        </Field>
+        <Field>
+          <Label htmlFor="grindDescription">Grind description</Label>
+          <Input
+            id="grindDescription"
+            type="text"
+            placeholder="Example: 9,or coarse"
+            {...register("grindDescription")}
+          />
+        </Field>
+
+        <Separator css={{ my: "$4" }} />
 
         <Collapsible open={expandBrewMethod} onOpenChange={setExpandBrewMethod}>
           <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Text>Brew method</Text>
-            <Text>{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
-            <CollapsibleTrigger type="button">
-              {expandBean ? <XCircle /> : <Maximize2 />}
+            <Text bold css={{ fontSize: "$4" }}>
+              Brew method
+            </Text>
+
+            <CollapsibleTrigger asChild>
+              <IconToggle>
+                {expandBrewMethod ? <XCircle /> : <Maximize2 />}
+              </IconToggle>
             </CollapsibleTrigger>
           </Flex>
+
+          <Text as="p">{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
 
           <CollapsibleContent>
             <BrewMethodFields
@@ -220,44 +219,7 @@ export default function Equipment({ timer }: Props) {
           </CollapsibleContent>
         </Collapsible>
 
-        {/* <Field>
-            <Label htmlFor="note">Brew notes</Label>
-            <Textarea
-              id="note"
-              {...register("note")}
-              placeholder="Best brew yet!"
-            />
-          </Field> */}
-
-        <RadioGroup
-          value={rating}
-          onValueChange={(value) => setValue("rating", (value as Rating)!)}
-          css={{ display: "flex", gap: "$1" }}
-        >
-          <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
-            <EmojiIndicator>😢</EmojiIndicator>
-            <label htmlFor="rating-very-bad">😢</label>
-          </EmojiRadio>
-
-          <EmojiRadio id="rating-bad" value={Rating.BAD}>
-            <EmojiIndicator>🙁</EmojiIndicator>
-            <label htmlFor="rating-bad">🙁</label>
-          </EmojiRadio>
-          <EmojiRadio id="rating-average" value={Rating.AVERAGE}>
-            <EmojiIndicator>😐</EmojiIndicator>
-            <label htmlFor="rating-average">😐</label>
-          </EmojiRadio>
-          <EmojiRadio id="rating-good" value={Rating.GOOD}>
-            <EmojiIndicator>🙂</EmojiIndicator>
-            <label htmlFor="rating-good">🙂</label>
-          </EmojiRadio>
-          <EmojiRadio id="rating-very-good" value={Rating.VERY_GOOD}>
-            <EmojiIndicator>😍</EmojiIndicator>
-            <label htmlFor="rating-very-good">😍</label>
-          </EmojiRadio>
-        </RadioGroup>
-
-        {/* <RichEditor /> */}
+        <Separator css={{ my: "$4" }} />
 
         <TemperatureSlider
           fahrenheit={fahrenheit}
@@ -265,6 +227,47 @@ export default function Equipment({ timer }: Props) {
             setValue("waterTemperatureFahrenheit", value)
           }
         />
+
+        <Separator css={{ my: "$4" }} />
+
+        <Text bold css={{ fontSize: "$4" }}>
+          How&apos;d it brew?
+        </Text>
+        <Caption as="p">Leave your thoughts, take your coffee</Caption>
+        <RichEditor
+          value={note}
+          setValue={(value) => setValue("note", value)}
+        />
+
+        <Center>
+          <RadioGroup
+            value={rating}
+            onValueChange={(value) => setValue("rating", (value as Rating)!)}
+            css={{ display: "flex", gap: "$1" }}
+          >
+            <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
+              <EmojiIndicator>😢</EmojiIndicator>
+              <label htmlFor="rating-very-bad">😢</label>
+            </EmojiRadio>
+
+            <EmojiRadio id="rating-bad" value={Rating.BAD}>
+              <EmojiIndicator>🙁</EmojiIndicator>
+              <label htmlFor="rating-bad">🙁</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-average" value={Rating.AVERAGE}>
+              <EmojiIndicator>😐</EmojiIndicator>
+              <label htmlFor="rating-average">😐</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-good" value={Rating.GOOD}>
+              <EmojiIndicator>🙂</EmojiIndicator>
+              <label htmlFor="rating-good">🙂</label>
+            </EmojiRadio>
+            <EmojiRadio id="rating-very-good" value={Rating.VERY_GOOD}>
+              <EmojiIndicator>😍</EmojiIndicator>
+              <label htmlFor="rating-very-good">😍</label>
+            </EmojiRadio>
+          </RadioGroup>
+        </Center>
 
         <Button type="submit">Log brew</Button>
       </form>
