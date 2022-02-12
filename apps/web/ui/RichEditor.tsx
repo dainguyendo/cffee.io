@@ -1,20 +1,14 @@
 import isHotkey from "is-hotkey";
 import React, { useCallback } from "react";
 import { Bold, Code, Italic, List, Underline } from "react-feather";
-import {
-  createEditor,
-  Descendant,
-  Editor,
-  Element as SlateElement,
-  Transforms,
-} from "slate";
+import { createEditor, Descendant, Editor } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, withReact } from "slate-react";
-import { Flex, Separator, styled } from "ui";
-import { Format } from "../types/slate";
+import { Flex, Separator } from "ui";
 import { toggleMark } from "../utils/editor";
-import { MarkButton } from "./MarkButton";
+import { BlockButton } from "./BlockButton";
 import { Editable } from "./Editable";
+import { MarkButton } from "./MarkButton";
 
 const HOTKEYS = {
   "mod+b": "bold",
@@ -67,9 +61,9 @@ export const RichEditor = ({ value, setValue }: Props) => {
         {/* <BlockButton format="numbered-list">
           <List />
         </BlockButton> */}
-        <MarkButton label="Toggle bullet list" format="bulleted-list">
+        <BlockButton label="Toggle bullet list" format="bulleted-list">
           <List size={14} />
-        </MarkButton>
+        </BlockButton>
       </Flex>
       <Editable
         renderElement={renderElement}
@@ -89,46 +83,6 @@ export const RichEditor = ({ value, setValue }: Props) => {
       />
     </Slate>
   );
-};
-
-const toggleBlock = (editor: Editor, format: Format) => {
-  console.log("toggleBlock", { format });
-
-  const isActive = isBlockActive(editor, format);
-  const isList = LIST_TYPES.includes(format);
-
-  Transforms.unwrapNodes(editor, {
-    match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type),
-    split: true,
-  });
-  const newProperties: Partial<SlateElement> = {
-    type: isActive ? "paragraph" : isList ? "list-item" : format,
-  };
-  Transforms.setNodes<SlateElement>(editor, newProperties);
-
-  if (!isActive && isList) {
-    const block = { type: format, children: [] };
-    Transforms.wrapNodes(editor, block);
-  }
-};
-
-const isBlockActive = (editor: Editor, format: Format) => {
-  console.log("isBlockActive", { format });
-  const { selection } = editor;
-  if (!selection) return false;
-
-  const [match] = Array.from(
-    Editor.nodes(editor, {
-      at: Editor.unhangRange(editor, selection),
-      match: (n) =>
-        !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
-    })
-  );
-
-  return !!match;
 };
 
 const Element = ({ attributes, children, element }) => {
@@ -169,17 +123,3 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   return <span {...attributes}>{children}</span>;
 };
-
-// const BlockButton: React.FC<{ format: Format }> = ({ format, children }) => {
-//   const editor = useSlate();
-//   return (
-//     <Toggle
-//       onMouseDown={(event) => {
-//         event.preventDefault();
-//         toggleBlock(editor, format);
-//       }}
-//     >
-//       {children}
-//     </Toggle>
-//   );
-// };

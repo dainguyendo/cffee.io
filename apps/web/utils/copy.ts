@@ -1,6 +1,6 @@
 import { BrewMethod, Rating } from "db";
-
-export const test = "fds";
+import { formatDuration } from "date-fns";
+import { msToTime } from "./time";
 
 export const RATING_TO_EMOJI: { [key in Rating]: string } = {
   VERY_BAD: "😢",
@@ -28,3 +28,7 @@ export const BREW_METHOD_TO_STRING: Record<BrewMethod, string> = {
   POUR_OVER: "Pour over",
   SIPHON: "Siphon",
 };
+
+export function msToDuration(ms: number): string {
+  return formatDuration(msToTime(ms));
+}

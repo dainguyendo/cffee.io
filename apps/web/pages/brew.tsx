@@ -31,6 +31,7 @@ import { RichEditor } from "../ui/RichEditor";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
+import { toTimerBlocks } from "../utils/editor";
 
 interface JournalFormData {
   beanId: string | null;
@@ -53,6 +54,8 @@ interface Props {
   } | null;
 }
 
+const EMPTY_NOTE = [{ type: "paragraph", children: [{ text: "" }] }];
+
 export default function Equipment({ timer }: Props) {
   const router = useRouter();
   const [expandBean, setExpandBean] = React.useState(false);
@@ -69,8 +72,7 @@ export default function Equipment({ timer }: Props) {
         grinder: "",
         grindDescription: "",
         waterTemperatureFahrenheit: INITIAL_FAHRENHEIT,
-        note: [{ type: "paragraph", children: [{ text: "" }] }],
-        // note: timer ? `${timer.time}, ${timer.laps.join(",")}` : "",
+        note: timer ? toTimerBlocks(timer) : EMPTY_NOTE,
       },
     });
 
@@ -90,7 +92,6 @@ export default function Equipment({ timer }: Props) {
 
   const brewMethod = watch("brewMethod");
   const rating = watch("rating");
-  const beanRating = watch("bean.rating");
   const fahrenheit = watch("waterTemperatureFahrenheit");
   const note = watch("note");
 
@@ -261,7 +262,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const fromTimer = context.query.time;
-  const laps = (Array.isArray(context.query.laps) && context.query.laps) || [];
+
+  const laps = Array.isArray(context.query.laps)
+    ? context.query.laps
+    : context.query.laps
+    ? [context.query.laps]
+    : [];
 
   return {
     props: {

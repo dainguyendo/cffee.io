@@ -86,7 +86,6 @@ export const JournalEntriesTable = ({ data }: Props) => {
       expandable={{
         expandRowByClick: true,
         expandedRowRender: (record, idx, indent, expanded) => {
-          console.log(record, idx, indent, expanded);
           if (!expanded) return null;
 
           const entry = data.find((e) => e.id === record.key);

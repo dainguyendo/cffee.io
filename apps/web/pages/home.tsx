@@ -1,6 +1,8 @@
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import { Box, Flex } from "ui";
 import { useJournalEntries } from "../api";
+import { Center } from "../ui/Center";
 import { JournalEntriesTable } from "../ui/JournalEntriesTable";
 import { Page } from "../ui/Page";
 import { SetupSummary } from "../ui/SetupSummary";
@@ -10,9 +12,19 @@ export default function Home() {
 
   return (
     <Page>
-      <SetupSummary />
+      <Flex
+        css={{
+          fd: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "$6",
+          height: "100%",
+        }}
+      >
+        <SetupSummary />
 
-      <JournalEntriesTable data={data ?? []} />
+        <JournalEntriesTable data={data ?? []} />
+      </Flex>
     </Page>
   );
 }

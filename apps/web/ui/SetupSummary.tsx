@@ -1,59 +1,83 @@
 import { Box, styled, Text } from "ui";
 import { useSetup } from "../api";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
+import Avatar from "boring-avatars";
 
 const SectionTitle = styled(Text, {
-  textTransform: "lowercase",
   fontSize: "$1",
-  color: "$pink500",
   fontWeight: "$semiBold",
+  color: "$gray300",
 });
 
 const Value = styled(Text, {
-  textTransform: "uppercase",
-  fontSize: "$3",
-  color: "$pink600",
   fontWeight: "$bold",
 });
 
 const Cell = styled(Box, {
   display: "flex",
   fd: "column",
-  ai: "center",
   jc: "center",
   width: "100%",
   height: "100%",
 });
 
+const SetupAvatar = ({ name }: { name: string }) => (
+  <div style={{ alignSelf: "center" }}>
+    <Avatar
+      size={64}
+      square
+      variant="marble"
+      name={name}
+      colors={[
+        "hsla(240, 35%, 87%, 1)",
+        "hsla(240, 35%, 75%, 1)",
+        "hsla(240, 50%, 68%, 1)",
+        "hsla(240, 60%, 65%, 1)",
+        "hsla(250, 65%, 60%, 1)",
+        "hsla(250, 80%, 60%, 1)",
+        "hsla(338, 24%, 91%, 1)",
+        "hsla(340, 33%, 88%, 1)",
+        "hsla(345, 52%, 86%, 1)",
+        "hsla(348, 74%, 84%, 1)",
+        "hsla(351, 81%, 82%, 1)",
+        "hsla(351, 84%, 70%, 1)",
+      ]}
+    />
+  </div>
+);
+
 export const SetupSummary = () => {
   const { data } = useSetup();
 
   return (
-    <Box
-      css={{
-        p: "$3",
-        backgroundColor: "$pink200",
-        br: "$large",
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        placeItems: "center",
-      }}
-    >
-      <Cell css={{ borderRight: "2px solid $pink500" }}>
-        <SectionTitle>Grinder</SectionTitle>
-        <Value>{data?.grinder}</Value>
-      </Cell>
-      {data?.brewMethod && (
+    <>
+      <Box
+        css={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          placeItems: "center",
+        }}
+      >
         <Cell>
-          <SectionTitle>Brew method</SectionTitle>
-          <Value>{BREW_METHOD_TO_STRING[data?.brewMethod]}</Value>
+          <SetupAvatar name={data?.grinder ?? "Grinder"} />
+          <Value>{data?.grinder}</Value>
+          <SectionTitle>Grinder</SectionTitle>
         </Cell>
-      )}
-      <Cell css={{ borderLeft: "2px solid $pink500" }}>
-        <SectionTitle>Beans</SectionTitle>
-        <Value>{data?.bean?.roast}</Value>
-        <Value css={{ fontSize: "$2" }}>{data?.bean?.roaster}</Value>
-      </Cell>
-    </Box>
+        {data?.brewMethod && (
+          <Cell>
+            <SetupAvatar name={BREW_METHOD_TO_STRING[data?.brewMethod]} />
+            <Value>{BREW_METHOD_TO_STRING[data?.brewMethod]}</Value>
+            <SectionTitle>Brew method</SectionTitle>
+          </Cell>
+        )}
+        <Cell>
+          <SetupAvatar name={data?.bean?.roast ?? "Beans"} />
+          <Value>
+            {data?.bean?.roast}, {data?.bean?.roaster}
+          </Value>
+          <SectionTitle>Beans</SectionTitle>
+        </Cell>
+      </Box>
+    </>
   );
 };

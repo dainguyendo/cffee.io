@@ -12,6 +12,7 @@ import {
   ScrollAreaViewport,
   Text,
 } from "ui";
+import { msToTime } from "../utils/time";
 import { Caption } from "./Caption";
 import { useCycle } from "./useCycle";
 
@@ -126,7 +127,11 @@ export const Stopwatch = () => {
           )}
         </div>
         <div>
-          <Button onClick={() => nextState()}>
+          <Button
+            onClick={() => {
+              nextState();
+            }}
+          >
             {isActive ? "Pause" : time ? "Resume" : "Start"}
           </Button>
         </div>
@@ -162,16 +167,4 @@ function millisecondsToTime(milli: number) {
   const minutes = Math.floor((milli / (60 * 1000)) % 60);
 
   return minutes + ":" + seconds + "." + milliseconds;
-}
-
-function msToTime(ms: number) {
-  const milliseconds = (ms % 1000) * 0.1;
-  const seconds = Math.floor((ms / 1000) % 60);
-  const minutes = Math.floor((ms / (60 * 1000)) % 60);
-
-  return {
-    milliseconds,
-    seconds,
-    minutes,
-  };
 }
