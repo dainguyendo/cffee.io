@@ -27,13 +27,14 @@ export async function updateSetupGrinder(
   return response.json();
 }
 
+export type UseSetupData =
+  | (Setup & {
+      bean: Bean | null;
+    })
+  | null;
+
 export function useSetup() {
-  return useQuery<
-    | (Setup & {
-        bean: Bean | null;
-      })
-    | null
-  >("use-setup", async () => {
+  return useQuery<UseSetupData>("use-setup", async () => {
     const response = await get("/api/get-setup");
     const data = await response.json();
     return data;

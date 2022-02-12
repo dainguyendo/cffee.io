@@ -51,7 +51,7 @@ export const Page: React.FC = ({ children }) => {
 
   return (
     <>
-      <FullBleedLayout>
+      <FullBleedLayout css={{ minHeight: "100vh" }}>
         <Flex css={{ gap: "$5" }}>
           <SideNavigation css={{ p: "$4", flexGrow: 0, flexShrink: "99999" }}>
             <Text bold css={{ fontSize: "$4" }}>

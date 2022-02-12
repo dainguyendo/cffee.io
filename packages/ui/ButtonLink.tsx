@@ -1,6 +1,5 @@
 import React, { ButtonHTMLAttributes } from "react";
 import { linkCss } from "./Anchor";
-import { CSS } from "./stitches.config";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 

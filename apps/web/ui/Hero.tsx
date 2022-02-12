@@ -33,7 +33,7 @@ export const Hero = (props: Props) => {
           width: "55%",
         }}
       >
-        <Canvas dpr={[1, 2]} camera={{ fov: 35 }}>
+        {/* <Canvas dpr={[1, 2]} camera={{ fov: 35 }}>
           <Suspense fallback={null}>
             <Stage
               controls={ref}
@@ -45,7 +45,7 @@ export const Hero = (props: Props) => {
             </Stage>
           </Suspense>
           <OrbitControls ref={ref} autoRotate />
-        </Canvas>
+        </Canvas> */}
       </div>
       <Text
         as="h1"

@@ -1,5 +1,5 @@
-import { HTMLProps } from "react";
-import { css } from "./stitches.config";
+import React from "react";
+import { css, styled } from "./stitches.config";
 
 export const linkCss = css({
   color: "$primary",
@@ -17,6 +17,8 @@ export const linkCss = css({
   },
 });
 
-export const Anchor = (props: HTMLProps<HTMLAnchorElement>) => {
-  return <a className={linkCss()} {...props}></a>;
+const StyledAnchor = styled("a");
+
+export const Anchor = (props: React.ComponentProps<typeof StyledAnchor>) => {
+  return <StyledAnchor className={linkCss()} {...props}></StyledAnchor>;
 };

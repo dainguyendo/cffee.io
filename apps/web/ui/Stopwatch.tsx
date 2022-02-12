@@ -1,6 +1,17 @@
 import Link from "next/link";
 import React from "react";
-import { Button, ButtonLink, Flex, Grid, Text } from "ui";
+import {
+  Anchor,
+  Box,
+  Button,
+  Grid,
+  ScrollArea,
+  ScrollAreaCorner,
+  ScrollAreaScrollBar,
+  ScrollAreaThumb,
+  ScrollAreaViewport,
+  Text,
+} from "ui";
 import { Caption } from "./Caption";
 import { useCycle } from "./useCycle";
 
@@ -31,82 +42,117 @@ export const Stopwatch = () => {
 
   const isActive = state === "active";
   const hasTime = time > 0;
+  const { milliseconds, seconds, minutes } = msToTime(time);
 
   return (
-    <>
-      <Flex direction="column" css={{ alignItems: "center" }}>
-        <Text css={{ fontSize: "$7", fontWeight: "$bold" }}>
-          {millisecondsToTime(time)}
+    <Grid
+      css={{
+        height: "100%",
+        gridTemplateRows: "1fr 1fr auto",
+      }}
+    >
+      <Grid
+        css={{
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          placeSelf: "center",
+          flexGrow: 1,
+          alignItems: "baseline",
+        }}
+      >
+        <Text bold css={{ fontSize: "$7", "&::after": { content: ":" } }}>
+          {minutes}
         </Text>
+        <Text bold css={{ fontSize: "$7" }}>
+          {seconds}
+        </Text>
+        <Text bold css={{ fontSize: "$5", color: "$gray400" }}>
+          {milliseconds}
+        </Text>
+      </Grid>
 
-        {laps && laps.length
-          ? laps.map((l, i) => {
-              const display = millisecondsToTime(l);
-              return (
-                <Grid
-                  key={i}
-                  css={{
-                    gap: "$2",
-                    gridTemplateColumns: "repeat(3, minmax(50px, 1fr))",
-                  }}
-                >
-                  <Caption>#{i}</Caption>
-                  <Caption>{display}</Caption>
-                  <Caption>
-                    {i === 0 ? display : millisecondsToTime(l - laps[i - 1])}
-                  </Caption>
-                </Grid>
-              );
-            })
-          : null}
-        <Grid
-          css={{
-            gap: "$2",
-            gridTemplateColumns: "repeat(3, minmax(50px, 1fr))",
-          }}
-        >
-          <div>
-            {hasTime && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setTime(0);
-                  nextState(0);
-                  setLaps([]);
-                }}
-              >
-                Reset
-              </Button>
-            )}
-          </div>
-          <div>
-            <Button onClick={() => nextState()}>
-              {isActive ? "Pause" : "Start"}
+      <Box css={{ justifySelf: "center", p: "$5" }}>
+        <ScrollArea css={{ overflow: "hidden", height: 225 }}>
+          <ScrollAreaViewport>
+            {laps && laps.length
+              ? laps.map((l, i) => {
+                  const display = millisecondsToTime(l);
+                  return (
+                    <Grid
+                      key={i}
+                      css={{
+                        gap: "$2",
+                        gridTemplateColumns: "repeat(3, minmax(50px, 1fr))",
+                      }}
+                    >
+                      <Caption>#{i}</Caption>
+                      <Caption>{display}</Caption>
+                      <Caption>
+                        {i === 0
+                          ? display
+                          : millisecondsToTime(l - laps[i - 1])}
+                      </Caption>
+                    </Grid>
+                  );
+                })
+              : null}
+          </ScrollAreaViewport>
+          <ScrollAreaScrollBar orientation="vertical">
+            <ScrollAreaThumb />
+          </ScrollAreaScrollBar>
+          <ScrollAreaCorner />
+        </ScrollArea>
+      </Box>
+
+      <Grid
+        css={{
+          gap: "$2",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          placeSelf: "center",
+          p: "$7 $4",
+        }}
+      >
+        <div>
+          {hasTime && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setTime(0);
+                nextState(0);
+                setLaps([]);
+              }}
+            >
+              Reset
             </Button>
-          </div>
-          <div>
-            {isActive && (
-              <Button onClick={() => setLaps((prev) => [...prev, time])}>
-                Lap
-              </Button>
-            )}
-            {!isActive && hasTime && (
-              <Link
-                href={{
-                  pathname: "/brew",
-                  query: {
-                    time,
-                    laps,
-                  },
-                }}
-              >
-                <a>Create brew entry</a>
-              </Link>
-            )}
-          </div>
-        </Grid>
-      </Flex>
-    </>
+          )}
+        </div>
+        <div>
+          <Button onClick={() => nextState()}>
+            {isActive ? "Pause" : time ? "Resume" : "Start"}
+          </Button>
+        </div>
+        <div style={{ placeSelf: "center" }}>
+          {isActive && (
+            <Button onClick={() => setLaps((prev) => [...prev, time])}>
+              Lap
+            </Button>
+          )}
+          {!isActive && hasTime && (
+            <Link
+              passHref
+              href={{
+                pathname: "/brew",
+                query: {
+                  time,
+                  laps,
+                },
+              }}
+            >
+              <Anchor>Create brew entry</Anchor>
+            </Link>
+          )}
+        </div>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -116,4 +162,16 @@ function millisecondsToTime(milli: number) {
   const minutes = Math.floor((milli / (60 * 1000)) % 60);
 
   return minutes + ":" + seconds + "." + milliseconds;
+}
+
+function msToTime(ms: number) {
+  const milliseconds = (ms % 1000) * 0.1;
+  const seconds = Math.floor((ms / 1000) % 60);
+  const minutes = Math.floor((ms / (60 * 1000)) % 60);
+
+  return {
+    milliseconds,
+    seconds,
+    minutes,
+  };
 }

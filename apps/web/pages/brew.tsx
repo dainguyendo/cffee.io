@@ -142,35 +142,6 @@ export default function Equipment({ timer }: Props) {
                   <Input {...register("bean.countryCode")} />
                 </Field>
               </FieldGroupRow>
-              <Label htmlFor="roast">General feelings for the bean</Label>
-              <RadioGroup
-                value={beanRating as string}
-                onValueChange={(value) =>
-                  setValue("bean.rating", (value as Rating)!)
-                }
-                css={{ display: "flex", gap: "$1" }}
-              >
-                <EmojiRadio id="bean-rating-very-bad" value={Rating.VERY_BAD}>
-                  <EmojiIndicator>😢</EmojiIndicator>
-                  <label htmlFor="bean-rating-very-bad">😢</label>
-                </EmojiRadio>
-                <EmojiRadio id="bean-rating-bad" value={Rating.BAD}>
-                  <EmojiIndicator>🙁</EmojiIndicator>
-                  <label htmlFor="bean-rating-bad">🙁</label>
-                </EmojiRadio>
-                <EmojiRadio id="bean-rating-average" value={Rating.AVERAGE}>
-                  <EmojiIndicator>😐</EmojiIndicator>
-                  <label htmlFor="bean-rating-average">😐</label>
-                </EmojiRadio>
-                <EmojiRadio id="bean-rating-good" value={Rating.GOOD}>
-                  <EmojiIndicator>🙂</EmojiIndicator>
-                  <label htmlFor="bean-rating-good">🙂</label>
-                </EmojiRadio>
-                <EmojiRadio id="bean-rating-very-good" value={Rating.VERY_GOOD}>
-                  <EmojiIndicator>😍</EmojiIndicator>
-                  <label htmlFor="bean-rating-very-good">😍</label>
-                </EmojiRadio>
-              </RadioGroup>
             </Flex>
           </CollapsibleContent>
         </Collapsible>
@@ -180,19 +151,21 @@ export default function Equipment({ timer }: Props) {
         <Text bold css={{ fontSize: "$4" }}>
           Grind
         </Text>
-        <Field>
-          <Label htmlFor="grinder">Grinder</Label>
-          <Input {...register("grinder")} />
-        </Field>
-        <Field>
-          <Label htmlFor="grindDescription">Grind description</Label>
-          <Input
-            id="grindDescription"
-            type="text"
-            placeholder="Example: 9,or coarse"
-            {...register("grindDescription")}
-          />
-        </Field>
+        <FieldGroupRow>
+          <Field>
+            <Label htmlFor="grinder">Grinder</Label>
+            <Input {...register("grinder")} />
+          </Field>
+          <Field>
+            <Label htmlFor="grindDescription">Grind description</Label>
+            <Input
+              id="grindDescription"
+              type="text"
+              placeholder="Example: 9,or coarse"
+              {...register("grindDescription")}
+            />
+          </Field>
+        </FieldGroupRow>
 
         <Separator css={{ my: "$4" }} />
 

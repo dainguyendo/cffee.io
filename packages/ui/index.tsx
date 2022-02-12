@@ -1,3 +1,4 @@
+export * from "./Accordion";
 export * from "./Anchor";
 export * from "./Avatar";
 export * from "./Box";
@@ -11,6 +12,7 @@ export * from "./Input";
 export * from "./Label";
 export * from "./List";
 export * from "./RadioGroup";
+export * from "./ScrollArea";
 export * from "./Select";
 export * from "./Separator";
 export * from "./Slider";

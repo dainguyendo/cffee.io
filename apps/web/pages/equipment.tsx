@@ -1,61 +1,197 @@
-import { BrewMethod } from "db";
+import { BrewMethod, Rating } from "db";
 import { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/react";
-import { Coffee } from "react-feather";
+import { getSession } from "next-auth/react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
+import { BeanFormData } from "types";
 import {
-  Box,
-  styled,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Text,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+  Flex,
+  Input,
+  Label,
+  RadioGroup,
 } from "ui";
+import {
+  createBean,
+  updateBrewMethod,
+  updateSetupGrinder,
+  useSetup,
+  UseSetupData,
+} from "../api";
+import { Field } from "../form/Field";
+import { FieldGroupRow } from "../form/FieldGroupRow";
 import { BeanForm } from "../ui/BeanForm";
-import { BrewMethodForm } from "../ui/BrewMethodForm";
-import { GrinderForm } from "../ui/GrinderForm";
+import { BrewMethodFields } from "../ui/BrewMethodFields";
+import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
-import { SetupSummary } from "../ui/SetupSummary";
+import { useDebounce } from "../ui/useDebounce";
+
+type Accordions = "method" | "grinder" | "bean";
 
 export default function Equipment() {
-  const { data: session, status } = useSession();
+  const queryClient = useQueryClient();
+  const { data } = useSetup();
 
-  const name = session?.user?.name;
+  const [expanded, expand] = React.useState<Accordions | undefined>();
+
+  const [grinder, setGrinder] = React.useState<string>(data?.grinder ?? "");
+  const debouncedGrinder: string = useDebounce<string>(grinder, 500);
+
+  const { mutate: updateGrinder } = useMutation((value: string) => {
+    return updateSetupGrinder({ grinder: value });
+  });
+
+  React.useEffect(() => {
+    if (debouncedGrinder) {
+      updateGrinder(debouncedGrinder);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedGrinder]);
+
+  const { mutate } = useMutation(
+    (brewMethod: BrewMethod) => {
+      return updateBrewMethod({ brewMethod });
+    },
+    {
+      onMutate: async (brewMethod) => {
+        await queryClient.cancelQueries("use-setup");
+        const previous = queryClient.getQueryData<UseSetupData>("use-setup");
+        queryClient.setQueryData<UseSetupData>("use-setup", (old) =>
+          old ? { ...old, brewMethod } : null
+        );
+        return { previous };
+      },
+      onError: (err, brewMethod, context: any) => {
+        queryClient.setQueryData<UseSetupData>("use-setup", context?.previous);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("use-setup");
+      },
+    }
+  );
+
+  const {
+    register,
+    reset,
+    watch,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState,
+  } = useForm<BeanFormData>({
+    defaultValues: {
+      roast: "",
+      roaster: "",
+      singleOrigin: false,
+      state: "",
+      countryCode: "",
+      rating: null,
+    },
+  });
+
+  React.useEffect(() => {
+    if (data) {
+      reset({
+        roast: data.bean?.roast ?? "",
+        roaster: data.bean?.roaster ?? "",
+        singleOrigin: data.bean?.singleOrigin ?? false,
+        state: data.bean?.state ?? "",
+        countryCode: data.bean?.countryCode ?? "",
+        rating: data.bean?.rating ?? null,
+      });
+    }
+  }, [data, reset, getValues]);
+
+  const submit = async (data: BeanFormData) => {
+    await createBean(data);
+  };
+
+  const toggle = (accordion: Accordions) => {
+    if (accordion === expanded) {
+      expand(undefined);
+      return;
+    }
+
+    expand(accordion);
+  };
+
+  const beanRating = watch("rating");
 
   return (
     <Page>
-      <Box css={{ p: "$8" }}>
-        <Text>Equipment</Text>
+      <Accordion
+        type="single"
+        value={expanded}
+        onValueChange={toggle}
+        collapsible
+      >
+        <AccordionItem value="method">
+          <AccordionTrigger>Brew method</AccordionTrigger>
+          <AccordionContent>
+            <BrewMethodFields
+              selected={data?.brewMethod ?? null}
+              onBrewMethodChanged={mutate}
+            />
+          </AccordionContent>
+        </AccordionItem>
 
-        <SetupSummary />
+        <AccordionItem value="grinder">
+          <AccordionTrigger>Grinder</AccordionTrigger>
+          <AccordionContent>
+            <Field>
+              <Label htmlFor="equipment-grinder">Grinder</Label>
+              <Input
+                id="equipment-grinder"
+                placeholder="LAGOM mini"
+                defaultValue={data?.grinder ?? undefined}
+                onChange={(evt) => setGrinder(evt.currentTarget.value)}
+              />
+            </Field>
+          </AccordionContent>
+        </AccordionItem>
 
-        <Tabs defaultValue="beans">
-          <TabsList>
-            <TabsTrigger value="brew-method">
-              <Text>Brew method</Text>
-            </TabsTrigger>
-            <TabsTrigger value="grinder">
-              <Text>Grinder</Text>
-            </TabsTrigger>
-            <TabsTrigger value="beans">
-              <Text>Beans</Text>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="brew-method">
-            <Text>Feeling different? Save your current brew style!</Text>
-            <BrewMethodForm />
-          </TabsContent>
-          <TabsContent value="grinder">
-            <Text>New grinder?!</Text>
-            <GrinderForm />
-          </TabsContent>
-          <TabsContent value="beans">
-            <Text>BEAAAANNNNS WTF</Text>
+        <AccordionItem value="bean">
+          <AccordionTrigger>Coffee beans</AccordionTrigger>
+          <AccordionContent>
+            <form onSubmit={handleSubmit(submit)}>
+              <Flex direction="column" css={{ gap: "$4" }}>
+                <Field>
+                  <Label htmlFor="roast">Roast</Label>
+                  <Input {...register("roast")} />
+                </Field>
+                <Label htmlFor="roaster">Roaster</Label>
+                <Input {...register("roaster")} />
+                <Field variant="row">
+                  <Input type="checkbox" {...register("singleOrigin")} />
+                  <Label htmlFor="roast">Single origin?</Label>
+                </Field>
+                <FieldGroupRow>
+                  <Field>
+                    <Label htmlFor="roast">State</Label>
+                    <Input {...register("state")} />
+                  </Field>
+                  <Field>
+                    <Label htmlFor="roast">Country</Label>
+                    <Input {...register("countryCode")} />
+                  </Field>
+                </FieldGroupRow>
 
-            <BeanForm />
-          </TabsContent>
-        </Tabs>
-      </Box>
+                <Button
+                  type="submit"
+                  disabled={!formState.isDirty || formState.isSubmitting}
+                >
+                  Update
+                </Button>
+              </Flex>
+            </form>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </Page>
   );
 }

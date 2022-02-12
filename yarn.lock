@@ -246,6 +246,21 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@radix-ui/react-accordion@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-accordion/-/react-accordion-0.1.5.tgz#96ebabc6f852588e8b61e5e53ea746f99935887d"
+  integrity sha512-NlI12e1R56/WwOjj255R4EjdSmtmpLvTFq1vpuF63r9uB7C3uzDpBBnupi6V1uGVE3zA8b0sy1US0OaqWpdyEA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-collapsible" "0.1.5"
+    "@radix-ui/react-collection" "0.1.3"
+    "@radix-ui/react-compose-refs" "0.1.0"
+    "@radix-ui/react-context" "0.1.1"
+    "@radix-ui/react-id" "0.1.4"
+    "@radix-ui/react-primitive" "0.1.3"
+    "@radix-ui/react-use-controllable-state" "0.1.0"
+
 "@radix-ui/react-arrow@0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-arrow/-/react-arrow-0.1.3.tgz#17f86eab216c48aff17b13b811569a9bbabaa44d"
@@ -265,7 +280,7 @@
     "@radix-ui/react-use-callback-ref" "0.1.0"
     "@radix-ui/react-use-layout-effect" "0.1.0"
 
-"@radix-ui/react-collapsible@^0.1.5":
+"@radix-ui/react-collapsible@0.1.5", "@radix-ui/react-collapsible@^0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-collapsible/-/react-collapsible-0.1.5.tgz#086ebc9fb6ee35035dc3e755fa6940bc5b1e5206"
   integrity sha512-jhj0h+gGc04D04mQW1zJgBxMJecYV21XaeyghjyXtp+ObM4EHkXnfOA5MyRMzSNB4u8wQ6P1zGtAbxHz1A4Vvg==
@@ -464,6 +479,22 @@
     "@radix-ui/react-primitive" "0.1.3"
     "@radix-ui/react-use-callback-ref" "0.1.0"
     "@radix-ui/react-use-controllable-state" "0.1.0"
+
+"@radix-ui/react-scroll-area@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-scroll-area/-/react-scroll-area-0.1.3.tgz#d9ef1625d06346cda7eb71e21947fe726c800144"
+  integrity sha512-wn5FdX5pU8N6ygqIad4clrhyiLo3LWCdscIee2nKe2bu7AijtUs/VAqmLEoDLIi2gpkS5RclxHbiHRkaxVvccw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/number" "0.1.0"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-compose-refs" "0.1.0"
+    "@radix-ui/react-context" "0.1.1"
+    "@radix-ui/react-presence" "0.1.1"
+    "@radix-ui/react-primitive" "0.1.3"
+    "@radix-ui/react-use-callback-ref" "0.1.0"
+    "@radix-ui/react-use-direction" "0.1.0"
+    "@radix-ui/react-use-layout-effect" "0.1.0"
 
 "@radix-ui/react-separator@^0.1.3":
   version "0.1.3"
