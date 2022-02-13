@@ -25,7 +25,6 @@ const SetupAvatar = ({ name }: { name: string }) => (
   <div style={{ alignSelf: "center" }}>
     <Avatar
       size={64}
-      square
       variant="marble"
       name={name}
       colors={[

@@ -4,6 +4,7 @@ import { Box, Flex } from "ui";
 import { useJournalEntries } from "../api";
 import { Center } from "../ui/Center";
 import { JournalEntriesTable } from "../ui/JournalEntriesTable";
+import { JournalEntryCard } from "../ui/JournalEntryCard";
 import { Page } from "../ui/Page";
 import { SetupSummary } from "../ui/SetupSummary";
 
@@ -23,7 +24,11 @@ export default function Home() {
       >
         <SetupSummary />
 
-        <JournalEntriesTable data={data ?? []} />
+        <Flex direction="column">
+          {data?.map((entry) => {
+            return <JournalEntryCard key={entry.id} journalEntry={entry} />;
+          })}
+        </Flex>
       </Flex>
     </Page>
   );

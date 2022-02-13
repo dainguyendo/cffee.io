@@ -3,10 +3,34 @@ import { styled } from "ui";
 export const Badge = styled("div", {
   display: "inline-grid",
   placeItems: "center",
-  borderRadius: "$pill",
+  borderRadius: "$medium",
   padding: "$1 $2",
-  background: "$purple100",
-  color: "$purple600",
+
   fontWeight: "$bold",
-  fontSize: "$1",
+  fontSize: ".75rem",
+
+  variants: {
+    variant: {
+      purple: {
+        background: "$purple100",
+        color: "$purple600",
+      },
+      pink: {
+        background: "$pink100",
+        color: "$pink600",
+      },
+      gray: {
+        background: "$gray100",
+        color: "$gray600",
+      },
+      ghost: {
+        background: "inherit",
+        color: "$gray500",
+      },
+    },
+  },
+
+  defaultVariants: {
+    variant: "purple",
+  },
 });

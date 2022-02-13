@@ -10,6 +10,7 @@ import {
   Toggle,
   VisuallyHidden,
 } from "ui";
+import { Unit } from "../types/temperature";
 import { MAX_FAHRENHEIT, MIN_FAHRENHEIT } from "../utils/constants";
 import { round } from "../utils/number";
 import { useCycle } from "./useCycle";
@@ -74,9 +75,6 @@ const UnitToggle = styled(Toggle, {
 const TemperatureRange = styled(SliderRange, {
   background: "$pink600",
 });
-
-type Unit = "fahrenheit" | "celsius";
-
 interface Props {
   fahrenheit: number;
   onTemperatureChange?: (fahrenheit: number) => void;

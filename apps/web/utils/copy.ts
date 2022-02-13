@@ -1,6 +1,7 @@
 import { BrewMethod, Rating } from "db";
 import { formatDuration } from "date-fns";
 import { msToTime } from "./time";
+import { Unit } from "../types/temperature";
 
 export const RATING_TO_EMOJI: { [key in Rating]: string } = {
   VERY_BAD: "😢",
@@ -31,4 +32,8 @@ export const BREW_METHOD_TO_STRING: Record<BrewMethod, string> = {
 
 export function msToDuration(ms: number): string {
   return formatDuration(msToTime(ms));
+}
+
+export function withDegreeUnit(value: number, unit: Unit): string {
+  return `${value}°${unit === "celsius" ? "C" : "F"}`;
 }

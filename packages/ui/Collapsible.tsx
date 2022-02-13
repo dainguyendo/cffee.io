@@ -11,8 +11,8 @@ const close = keyframes({
   to: { height: 0 },
 });
 
-export const Collapsible = RadixCollapsible.Root;
-export const CollapsibleTrigger = RadixCollapsible.Trigger;
+export const Collapsible = styled(RadixCollapsible.Root);
+export const CollapsibleTrigger = styled(RadixCollapsible.Trigger);
 export const CollapsibleContent = styled(RadixCollapsible.Content, {
   overflow: "hidden",
   '&[data-state="open"]': { animation: `${open} 300ms ease-out` },
