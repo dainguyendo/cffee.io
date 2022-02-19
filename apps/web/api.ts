@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import {
   BeanFormData,
   BrewMethodFormData,
+  FeedbackFormData,
   GrinderFormData,
   JournalEntryData,
 } from "types";
@@ -54,4 +55,9 @@ export function useJournalEntries() {
     const data = await response.json();
     return data;
   });
+}
+
+export async function postFeedback(data: FeedbackFormData) {
+  const response = await post("/api/feedback", data);
+  return response.json();
 }

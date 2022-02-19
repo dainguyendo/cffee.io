@@ -1,12 +1,13 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { BookOpen, Plus, Tool, Watch } from "react-feather";
-import { Box, Flex, List, Separator, styled, Text, theme } from "ui";
+import { Box, Button, Flex, List, Separator, styled, Text, theme } from "ui";
 import { UserDropdownMenu } from "../ui/UserDropdownMenu";
 import { FullBleedLayout } from "./FullBleedLayout";
 import { NavigationText } from "../ui/NavigationText";
-import { BottomNavigation } from "./BottomNavigation";
 import { usePathnameMatch } from "./usePathnameMatch";
+import { MenuNavigation } from "./MenuNavigation";
+import { FeedbackDialog } from "./FeedbackDialog";
 
 const ListItem = styled("li", {
   display: "flex",
@@ -54,7 +55,7 @@ export const Page: React.FC = ({ children }) => {
       <FullBleedLayout css={{ minHeight: "100vh" }}>
         <Flex css={{ gap: "$5" }}>
           <SideNavigation css={{ p: "$4", flexGrow: 0, flexShrink: "99999" }}>
-            <Text bold css={{ fontSize: "$4" }}>
+            <Text bold css={{ fontSize: "$7" }}>
               cffee
             </Text>
 
@@ -139,14 +140,31 @@ export const Page: React.FC = ({ children }) => {
               </ListItem>
             </List>
             <Separator css={{ my: "$4", backgroundColor: "$gray100" }} />
+
             <Box css={{ px: "$4" }}>
               <UserDropdownMenu user={session!.user!} displayName />
             </Box>
           </SideNavigation>
-          <Box css={{ flexGrow: 1 }}>{children}</Box>
+          <Box css={{ flexGrow: 1, px: "$2", "@bp1": { px: 0 } }}>
+            <Flex
+              css={{
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                "@bp1": {
+                  display: "none",
+                },
+              }}
+            >
+              <Text as="h1" bold css={{ fontSize: "$7" }}>
+                cffee
+              </Text>
+              <MenuNavigation />
+            </Flex>
+
+            {children}
+          </Box>
         </Flex>
       </FullBleedLayout>
-      <BottomNavigation />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { RadioGroupIndicator, RadioGroupItem, styled } from "ui";
 
 export const EmojiRadio = styled(RadioGroupItem, {
   all: "unset",
+  position: "relative",
   display: "grid",
   placeItems: "center",
   background: "transparent",
@@ -23,6 +24,12 @@ export const EmojiIndicator = styled(RadioGroupIndicator, {
   borderRadius: "$large",
   width: "48px",
   height: "48px",
+
+  position: "absolute",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
 });
 
 export const EmojiBox = styled("div", {

@@ -1,6 +1,6 @@
 import { InferGetServerSidePropsType } from "next";
 import { getProviders, signIn } from "next-auth/react";
-import { Box, Button, Spacer, styled, Text } from "ui";
+import { Box, Button, Flex, Spacer, styled, Text } from "ui";
 
 const Page = styled("div", {
   width: "100vw",
@@ -35,20 +35,22 @@ export default function SignIn({
             cffee
           </Text>
           <Spacer direction="vertical" size="4" />
-          {Object.values(providers).map((provider) => (
-            <div key={provider.name}>
-              <Button
-                type="button"
-                onClick={() =>
-                  signIn(provider.id, {
-                    callbackUrl: location.origin + "/home",
-                  })
-                }
-              >
-                Sign in with {provider.name}
-              </Button>
-            </div>
-          ))}
+          <Flex direction="column" css={{ gap: "$2" }}>
+            {Object.values(providers).map((provider) => (
+              <div key={provider.name}>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    signIn(provider.id, {
+                      callbackUrl: location.origin + "/home",
+                    })
+                  }
+                >
+                  Sign in with {provider.name}
+                </Button>
+              </div>
+            ))}
+          </Flex>
         </div>
       </Main>
       <Box

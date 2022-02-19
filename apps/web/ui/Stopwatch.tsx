@@ -48,8 +48,11 @@ export const Stopwatch = () => {
   return (
     <Grid
       css={{
-        height: "100%",
+        height: "auto",
         gridTemplateRows: "1fr 1fr auto",
+        "@bp1": {
+          height: "100%",
+        },
       }}
     >
       <Grid

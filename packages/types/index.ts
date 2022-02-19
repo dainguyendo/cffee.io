@@ -31,3 +31,7 @@ export interface JournalEntryData {
     roaster: Bean["roaster"];
   };
 }
+
+export interface FeedbackFormData {
+  description: string;
+}

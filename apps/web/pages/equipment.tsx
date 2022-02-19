@@ -1,4 +1,4 @@
-import { BrewMethod, Rating } from "db";
+import { BrewMethod } from "db";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import React from "react";
@@ -14,7 +14,6 @@ import {
   Flex,
   Input,
   Label,
-  RadioGroup,
 } from "ui";
 import {
   createBean,
@@ -25,9 +24,7 @@ import {
 } from "../api";
 import { Field } from "../form/Field";
 import { FieldGroupRow } from "../form/FieldGroupRow";
-import { BeanForm } from "../ui/BeanForm";
 import { BrewMethodFields } from "../ui/BrewMethodFields";
-import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
 import { useDebounce } from "../ui/useDebounce";
 
@@ -119,8 +116,6 @@ export default function Equipment() {
 
     expand(accordion);
   };
-
-  const beanRating = watch("rating");
 
   return (
     <Page>

@@ -19,6 +19,7 @@ const Container = styled("div", {
   position: "relative",
   background: "$pink100",
   borderRadius: "$medium",
+  width: "100%",
   maxWidth: "500px",
   padding: "$2 $4",
   minHeight: 150,

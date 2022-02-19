@@ -9,6 +9,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Button,
   ButtonLink,
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ import {
   Text,
   theme,
 } from "ui";
+import { FeedbackDialog } from "./FeedbackDialog";
 import { NavigationText } from "./NavigationText";
 
 const MenuLabelRow = styled(DropdownMenuLabel, {
@@ -73,6 +75,11 @@ export const UserDropdownMenu = ({ user, displayName = false }: Props) => {
             <Anchor>View profile</Anchor>
           </Link>
         </DropdownMenuItem>
+        <FeedbackDialog>
+          <Button type="button" variant="outline">
+            Feedback
+          </Button>
+        </FeedbackDialog>
         <DropdownMenuSeparator asChild>
           <Separator css={{ backgroundColor: "$gray200", my: "$2" }} />
         </DropdownMenuSeparator>

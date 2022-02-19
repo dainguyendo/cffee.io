@@ -42,15 +42,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   Journal       Journal[]
   Setup         Setup[]
+  Feedback      Feedback[]
 }
 
 model VerificationToken {
@@ -121,4 +122,12 @@ model Setup {
   default    Boolean?    @default(false)
   bean       Bean?       @relation(fields: [beanId], references: [id])
   user       User        @relation(fields: [userId], references: [id])
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  description String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
 }

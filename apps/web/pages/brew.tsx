@@ -3,29 +3,28 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Maximize2, XCircle } from "react-feather";
 import { useForm } from "react-hook-form";
 import { Descendant } from "slate";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Button,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
   Flex,
   Input,
   Label,
   RadioGroup,
-  Separator,
+  Spacer,
   Text,
+  VerticalStack,
 } from "ui";
 import { createJournalEntry, useSetup } from "../api";
 import { Field } from "../form/Field";
 import { FieldGroupRow } from "../form/FieldGroupRow";
 import { BrewMethodFields } from "../ui/BrewMethodFields";
-import { Caption } from "../ui/Caption";
 import { Center } from "../ui/Center";
 import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
-import { IconToggle } from "../ui/IconToggle";
 import { Page } from "../ui/Page";
 import { RichEditor } from "../ui/RichEditor";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
@@ -33,6 +32,7 @@ import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import { toTimerBlocks } from "../utils/editor";
 
+type Accordions = "method" | "bean";
 interface JournalFormData {
   beanId: string | null;
   bean: Pick<
@@ -60,6 +60,7 @@ export default function Equipment({ timer }: Props) {
   const router = useRouter();
   const [expandBean, setExpandBean] = React.useState(false);
   const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
+  const [expanded, expand] = React.useState<Accordions | undefined>();
 
   const { data: setup } = useSetup();
 
@@ -100,59 +101,83 @@ export default function Equipment({ timer }: Props) {
     router.push("/home");
   };
 
+  const toggle = (accordion: Accordions) => {
+    if (accordion === expanded) {
+      expand(undefined);
+      return;
+    }
+
+    expand(accordion);
+  };
+
   return (
     <Page>
       <form onSubmit={handleSubmit(submit)}>
-        <Collapsible open={expandBean} onOpenChange={setExpandBean}>
-          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Text bold css={{ fontSize: "$4" }}>
-              Beans
-            </Text>
-
-            <CollapsibleTrigger asChild>
-              <IconToggle>
-                {expandBean ? <XCircle /> : <Maximize2 />}
-              </IconToggle>
-            </CollapsibleTrigger>
-          </Flex>
-
-          <Text as="p">
-            {setup?.bean?.roast}, {setup?.bean?.roaster}
-          </Text>
-
-          <CollapsibleContent>
-            <Flex direction="column">
-              <Text>Overwrite with beans on the fly</Text>
-              <Field>
-                <Label htmlFor="roast">Roast</Label>
-                <Input {...register("bean.roast")} />
-              </Field>
-              <Label htmlFor="roaster">Roaster</Label>
-              <Input {...register("bean.roaster")} />
-              <Field variant="row">
-                <Input type="checkbox" {...register("bean.singleOrigin")} />
-                <Label htmlFor="roast">Single origin?</Label>
-              </Field>
-              <FieldGroupRow>
-                <Field>
-                  <Label htmlFor="roast">State</Label>
-                  <Input {...register("bean.state")} />
+        <Accordion
+          type="single"
+          collapsible
+          value={expanded}
+          onValueChange={toggle}
+        >
+          <AccordionItem value="bean">
+            <AccordionTrigger>
+              <Text bold css={{ fontSize: "$3" }}>
+                Beans
+              </Text>
+              <Text as="p">
+                {setup?.bean?.roast}, {setup?.bean?.roaster}
+              </Text>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Flex direction="column" css={{ gap: "$2" }}>
+                <Text>Overwrite with beans on the fly</Text>
+                <FieldGroupRow>
+                  <Field>
+                    <Label htmlFor="roast">Roast</Label>
+                    <Input {...register("bean.roast")} />
+                  </Field>
+                  <Field>
+                    <Label htmlFor="roaster">Roaster</Label>
+                    <Input {...register("bean.roaster")} />
+                  </Field>
+                </FieldGroupRow>
+                <Field variant="row">
+                  <Input type="checkbox" {...register("bean.singleOrigin")} />
+                  <Label htmlFor="roast">Single origin?</Label>
                 </Field>
-                <Field>
-                  <Label htmlFor="roast">Country</Label>
-                  <Input {...register("bean.countryCode")} />
-                </Field>
-              </FieldGroupRow>
-            </Flex>
-          </CollapsibleContent>
-        </Collapsible>
+                <FieldGroupRow>
+                  <Field>
+                    <Label htmlFor="roast">State</Label>
+                    <Input {...register("bean.state")} />
+                  </Field>
+                  <Field>
+                    <Label htmlFor="roast">Country</Label>
+                    <Input {...register("bean.countryCode")} />
+                  </Field>
+                </FieldGroupRow>
+              </Flex>
+            </AccordionContent>
+          </AccordionItem>
 
-        <Separator css={{ my: "$4" }} />
+          <AccordionItem value="method">
+            <AccordionTrigger>
+              <Text bold css={{ fontSize: "$3" }}>
+                Brew method
+              </Text>
+              <Text as="p">
+                {brewMethod && BREW_METHOD_TO_STRING[brewMethod]}
+              </Text>
+            </AccordionTrigger>
+            <AccordionContent>
+              <BrewMethodFields
+                selected={brewMethod}
+                onBrewMethodChanged={(method) => setValue("brewMethod", method)}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
-        <Text bold css={{ fontSize: "$4" }}>
-          Grind
-        </Text>
-        <FieldGroupRow>
+        <VerticalStack size="$3">
           <Field>
             <Label htmlFor="grinder">Grinder</Label>
             <Input {...register("grinder")} />
@@ -166,58 +191,30 @@ export default function Equipment({ timer }: Props) {
               {...register("grindDescription")}
             />
           </Field>
-        </FieldGroupRow>
 
-        <Separator css={{ my: "$4" }} />
-
-        <Collapsible open={expandBrewMethod} onOpenChange={setExpandBrewMethod}>
-          <Flex css={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Text bold css={{ fontSize: "$4" }}>
-              Brew method
-            </Text>
-
-            <CollapsibleTrigger asChild>
-              <IconToggle>
-                {expandBrewMethod ? <XCircle /> : <Maximize2 />}
-              </IconToggle>
-            </CollapsibleTrigger>
-          </Flex>
-
-          <Text as="p">{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
-
-          <CollapsibleContent>
-            <BrewMethodFields
-              selected={brewMethod}
-              onBrewMethodChanged={(method) => setValue("brewMethod", method)}
+          <Center css={{ width: "100%" }}>
+            <TemperatureSlider
+              fahrenheit={fahrenheit}
+              onTemperatureChange={(value) =>
+                setValue("waterTemperatureFahrenheit", value)
+              }
             />
-          </CollapsibleContent>
-        </Collapsible>
+          </Center>
 
-        <Separator css={{ my: "$4" }} />
+          <div>
+            <Text bold css={{ fontSize: "$3" }}>
+              How&apos;d it brew?
+            </Text>
+            <RichEditor
+              value={note}
+              setValue={(value) => setValue("note", value)}
+            />
+          </div>
 
-        <TemperatureSlider
-          fahrenheit={fahrenheit}
-          onTemperatureChange={(value) =>
-            setValue("waterTemperatureFahrenheit", value)
-          }
-        />
-
-        <Separator css={{ my: "$4" }} />
-
-        <Text bold css={{ fontSize: "$4" }}>
-          How&apos;d it brew?
-        </Text>
-        <Caption as="p">Leave your thoughts, take your coffee</Caption>
-        <RichEditor
-          value={note}
-          setValue={(value) => setValue("note", value)}
-        />
-
-        <Center>
           <RadioGroup
             value={rating}
             onValueChange={(value) => setValue("rating", (value as Rating)!)}
-            css={{ display: "flex", gap: "$1" }}
+            css={{ display: "flex", gap: "$1", alignSelf: "center" }}
           >
             <EmojiRadio id="rating-very-bad" value={Rating.VERY_BAD}>
               <EmojiIndicator>😢</EmojiIndicator>
@@ -241,9 +238,10 @@ export default function Equipment({ timer }: Props) {
               <label htmlFor="rating-very-good">😍</label>
             </EmojiRadio>
           </RadioGroup>
-        </Center>
 
-        <Button type="submit">Log brew</Button>
+          <Spacer direction="vertical" size="2" />
+          <Button type="submit">Log brew</Button>
+        </VerticalStack>
       </form>
     </Page>
   );
