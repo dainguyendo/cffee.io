@@ -3,38 +3,42 @@ import { styled } from "./stitches.config";
 export const Button = styled(
   "button",
   {
+    border: "none",
     borderRadius: "$medium",
-    border: "solid 1px transparent",
-    fontWeight: "$semiBold",
+    px: "$2",
+    py: "$1",
 
     variants: {
       variant: {
         primary: {
           backgroundColor: "$primary",
-          color: "white",
+          color: "$paragraph",
+
+          "&:focus": {
+            outlineOffset: 2,
+            outline: "1px solid $primary",
+          },
         },
         secondary: {
-          backgroundColor: "$secondary",
-          color: "white",
+          backgroundColor: "hsl(230, 32%, 17%)",
+          color: "$paragraph",
+
+          "&:focus": {
+            outlineOffset: 2,
+            outline: "1px solid $primary",
+          },
         },
-        outline: {
-          backgroundColor: "white",
+        link: {
+          all: "unset",
+          padding: "unset",
           color: "$primary",
-          border: "2px solid currentColor",
-        },
-      },
-      size: {
-        small: {
-          padding: "$2 $4",
-          fontSize: "$2",
-        },
-        medium: {
-          padding: "$3 $6",
-          fontSize: "$3",
-        },
-        large: {
-          padding: "$4 $8",
-          fontSize: "$4",
+          textDecoration: "underline",
+          textDecorationThickness: "2px",
+          textUnderlineOffset: "2px",
+
+          "&:hover": {
+            textDecoration: "none",
+          },
         },
       },
     },
@@ -42,7 +46,6 @@ export const Button = styled(
   {
     defaultVariants: {
       variant: "primary",
-      size: "small",
     },
   }
 );

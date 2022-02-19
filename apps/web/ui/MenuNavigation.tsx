@@ -4,7 +4,6 @@ import { Menu } from "react-feather";
 import {
   Anchor,
   Button,
-  ButtonLink,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -75,7 +74,9 @@ export const MenuNavigation = () => {
         </DropdownMenuSeparator>
 
         <DropdownMenuItem>
-          <ButtonLink onClick={() => signOut()}>Sign out</ButtonLink>
+          <Button type="button" variant="link" onClick={() => signOut()}>
+            Sign out
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,13 +1,13 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { BookOpen, Plus, Tool, Watch } from "react-feather";
-import { Box, Button, Flex, List, Separator, styled, Text, theme } from "ui";
+import { Box, Flex, List, styled } from "ui";
 import { UserDropdownMenu } from "../ui/UserDropdownMenu";
+import { Cffee } from "./Cffee";
 import { FullBleedLayout } from "./FullBleedLayout";
-import { NavigationText } from "../ui/NavigationText";
-import { usePathnameMatch } from "./usePathnameMatch";
 import { MenuNavigation } from "./MenuNavigation";
-import { FeedbackDialog } from "./FeedbackDialog";
+import { NavigationAnchor } from "./NavigationAnchor";
+import { usePathnameMatch } from "./usePathnameMatch";
 
 const ListItem = styled("li", {
   display: "flex",
@@ -15,33 +15,13 @@ const ListItem = styled("li", {
   alignItems: "center",
 });
 
-const Container = styled("div", {
-  display: "flex",
-  gap: "$3",
-  alignItems: "center",
-  padding: "$2",
-  borderRadius: "$medium",
-
-  "@bp2": {
-    padding: "$4",
-  },
-
-  variants: {
-    outline: {
-      true: {
-        background: "$purple100",
-      },
-    },
-  },
-  defaultVariants: {
-    outline: false,
-  },
-});
-
 const SideNavigation = styled("nav", {
   display: "none",
   "@bp1": {
-    display: "block",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
   },
 });
 
@@ -54,96 +34,55 @@ export const Page: React.FC = ({ children }) => {
     <>
       <FullBleedLayout css={{ minHeight: "100vh" }}>
         <Flex css={{ gap: "$5" }}>
-          <SideNavigation css={{ p: "$4", flexGrow: 0, flexShrink: "99999" }}>
-            <Text bold css={{ fontSize: "$7" }}>
-              cffee
-            </Text>
-
-            <Separator css={{ my: "$4", backgroundColor: "$gray100" }} />
+          <SideNavigation
+            css={{
+              p: "$4",
+              flex: "0 99999 200px",
+            }}
+          >
+            <Cffee />
 
             <Link href="/brew" passHref>
-              <a>
-                <Container outline>
-                  <Plus size={24} color={theme.colors.purple600.value} />
-                  <NavigationText bold color="$purple600">
-                    New log
-                  </NavigationText>
-                </Container>
-              </a>
+              <NavigationAnchor active={true} css={{ width: "fit-content" }}>
+                <Plus size={24} />
+                {/* New log */}
+              </NavigationAnchor>
             </Link>
 
-            <Separator decorative css={{ my: "$2" }} />
-
-            <List css={{ gap: "$2", "@bp2": { gap: "$4" } }}>
+            <List
+              css={{
+                display: "flex",
+                fd: "column",
+                gap: "$2",
+              }}
+            >
               <ListItem>
-                <Link href="/home">
-                  <a>
-                    <Container>
-                      <BookOpen
-                        size={24}
-                        color={
-                          isHomeActive
-                            ? theme.colors.purple600.value
-                            : theme.colors.gray500.value
-                        }
-                      />
-                      <NavigationText
-                        color={isHomeActive ? "$purple600" : "$gray500"}
-                      >
-                        Journal
-                      </NavigationText>
-                    </Container>
-                  </a>
+                <Link href="/home" passHref>
+                  <NavigationAnchor active={isHomeActive}>
+                    <BookOpen size={24} />
+                    {/* Journal */}
+                  </NavigationAnchor>
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/equipment">
-                  <a>
-                    <Container>
-                      <Tool
-                        size={24}
-                        color={
-                          isEquipmentActive
-                            ? theme.colors.purple600.value
-                            : theme.colors.gray500.value
-                        }
-                      />
-                      <NavigationText
-                        color={isEquipmentActive ? "$purple600" : "$gray500"}
-                      >
-                        Equipment
-                      </NavigationText>
-                    </Container>
-                  </a>
+                <Link href="/equipment" passHref>
+                  <NavigationAnchor active={isEquipmentActive}>
+                    <Tool size={24} />
+                    {/* Equipment */}
+                  </NavigationAnchor>
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/timer">
-                  <a>
-                    <Container>
-                      <Watch
-                        size={24}
-                        color={
-                          isTimerActive
-                            ? theme.colors.purple600.value
-                            : theme.colors.gray500.value
-                        }
-                      />
-                      <NavigationText
-                        color={isTimerActive ? "$purple600" : "$gray500"}
-                      >
-                        Timer
-                      </NavigationText>
-                    </Container>
-                  </a>
+                <Link href="/timer" passHref>
+                  <NavigationAnchor active={isTimerActive}>
+                    <Watch size={24} />
+                    {/* Timer */}
+                  </NavigationAnchor>
                 </Link>
               </ListItem>
             </List>
-            <Separator css={{ my: "$4", backgroundColor: "$gray100" }} />
 
-            <Box css={{ px: "$4" }}>
-              <UserDropdownMenu user={session!.user!} displayName />
-            </Box>
+            <UserDropdownMenu user={session!.user!} />
           </SideNavigation>
           <Box css={{ flexGrow: 1, px: "$2", "@bp1": { px: 0 } }}>
             <Flex
@@ -155,9 +94,7 @@ export const Page: React.FC = ({ children }) => {
                 },
               }}
             >
-              <Text as="h1" bold css={{ fontSize: "$7" }}>
-                cffee
-              </Text>
+              <Cffee />
               <MenuNavigation />
             </Flex>
 

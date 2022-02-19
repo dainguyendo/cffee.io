@@ -19,12 +19,6 @@ export const {
       purple400: "hsla(240, 60%, 65%, 1)",
       purple500: "hsla(250, 65%, 60%, 1)",
       purple600: "hsla(250, 80%, 60%, 1)",
-      pink100: "hsla(338, 24%, 91%, 1)",
-      pink200: "hsla(340, 33%, 88%, 1)",
-      pink300: "hsla(345, 52%, 86%, 1)",
-      pink400: "hsla(348, 74%, 84%, 1)",
-      pink500: "hsla(351, 81%, 82%, 1)",
-      pink600: "hsla(351, 84%, 70%, 1)",
       gray100: "hsla(0, 0%, 93%, 1)",
       gray200: "hsla(0, 0%, 80%, 1)",
       gray300: "hsla(0, 0%, 60%, 1)",
@@ -32,8 +26,23 @@ export const {
       gray500: "hsla(0, 0%, 20%, 1)",
       gray600: "hsla(0, 0%, 0%, 1)",
 
-      primary: "$purple600",
-      secondary: "$pink600",
+      // primary: "$purple600",
+      // secondary: "$pink600",
+
+      black: "hsl(230, 33%, 21%)",
+      whitesmoke: "hsl(0, 0%, 96%)",
+      hotpink: "hsl(330, 72%, 67%)",
+      lightpink: "hsl(351, 100%, 86%)",
+      palepurple: "hsl(230, 58%, 82%)",
+
+      background: "$black",
+
+      heading: "$hotpink",
+      paragraph: "$whitesmoke",
+      caption: "$palepurple",
+
+      primary: "$hotpink",
+      secondary: "$lightpink",
     },
     fonts: {
       inter: '"Inter", sans-serif',

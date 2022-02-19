@@ -3,7 +3,6 @@ export * from "./Anchor";
 export * from "./Avatar";
 export * from "./Box";
 export * from "./Button";
-export * from "./ButtonLink";
 export * from "./Collapsible";
 export * from "./Dialog";
 export * from "./DropdownMenu";

@@ -4,10 +4,7 @@ import { styled } from "./stitches.config";
 const SCROLLBAR_SIZE = 10;
 
 export const ScrollArea = styled(RadixScrollArea.Root, {
-  width: 200,
-  borderRadius: 4,
   overflow: "hidden",
-  // boxShadow: `0 2px 10px ${blackA.blackA7}`,
 });
 
 export const ScrollAreaViewport = styled(RadixScrollArea.Viewport, {
@@ -23,7 +20,7 @@ export const ScrollAreaScrollBar = styled(RadixScrollArea.Scrollbar, {
   // disable browser handling of all panning and zooming gestures on touch devices
   touchAction: "none",
   padding: 2,
-  background: "$purple100",
+  background: "$secondary",
   transition: "background 160ms ease-out",
   "&:hover": { background: "$purple200" },
   '&[data-orientation="vertical"]': { width: SCROLLBAR_SIZE },
@@ -35,7 +32,7 @@ export const ScrollAreaScrollBar = styled(RadixScrollArea.Scrollbar, {
 
 export const ScrollAreaThumb = styled(RadixScrollArea.Thumb, {
   flex: 1,
-  background: "$purple500",
+  background: "$primary",
   borderRadius: SCROLLBAR_SIZE,
   // increase target size for touch devices https://www.w3.org/WAI/WCAG21/Understanding/target-size.html
   position: "relative",

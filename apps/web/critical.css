@@ -28,6 +28,7 @@ html {
 html,
 body {
   height: 100%;
+  background-color: hsl(230, 33%, 21%);
 }
 /*
   Typographic tweaks!

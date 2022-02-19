@@ -10,7 +10,6 @@ import {
   AvatarFallback,
   AvatarImage,
   Button,
-  ButtonLink,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -24,6 +23,7 @@ import {
   Text,
   theme,
 } from "ui";
+import { getFirstName } from "../utils/user";
 import { FeedbackDialog } from "./FeedbackDialog";
 import { NavigationText } from "./NavigationText";
 
@@ -58,7 +58,7 @@ export const UserDropdownMenu = ({ user, displayName = false }: Props) => {
               />
             </AvatarFallback>
           </Avatar>
-          {displayName && <NavigationText bold>{user?.name}</NavigationText>}
+          {displayName && getFirstName(user?.name ?? "")}
         </Flex>
       </DropdownMenuTrigger>
 
@@ -84,9 +84,9 @@ export const UserDropdownMenu = ({ user, displayName = false }: Props) => {
           <Separator css={{ backgroundColor: "$gray200", my: "$2" }} />
         </DropdownMenuSeparator>
         <DropdownMenuItem>
-          <ButtonLink onClick={() => signOut()}>
+          <Button variant="link" onClick={() => signOut()}>
             <Text css={{ fontSize: "$1", color: "$gray500" }}>Sign out</Text>
-          </ButtonLink>
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,6 +1,7 @@
 import { InferGetServerSidePropsType } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import { Box, Button, Flex, Spacer, styled, Text } from "ui";
+import { Cffee } from "../../ui/Cffee";
 
 const Page = styled("div", {
   width: "100vw",
@@ -31,9 +32,7 @@ export default function SignIn({
           <Text bold css={{ fontSize: "$3", color: "$gray400" }}>
             Let&apos;s brew
           </Text>
-          <Text as="h1" bold css={{ fontSize: "$7" }}>
-            cffee
-          </Text>
+          <Cffee />
           <Spacer direction="vertical" size="4" />
           <Flex direction="column" css={{ gap: "$2" }}>
             {Object.values(providers).map((provider) => (

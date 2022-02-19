@@ -1,24 +1,35 @@
-import React from "react";
-import { css, styled } from "./stitches.config";
+import { styled } from "./stitches.config";
 
-export const linkCss = css({
-  color: "$primary",
-  fontWeight: "$semiBold",
-  textDecoration: "underline",
-  textDecorationThickness: "4px",
-  textUnderlineOffset: "2px",
+export const Anchor = styled("a", {
+  variants: {
+    variant: {
+      default: {
+        color: "$primary",
+        textDecoration: "underline",
+        textDecorationThickness: "2px",
+        textUnderlineOffset: "2px",
 
-  padding: 0,
-  background: "inherit",
-  border: "none",
+        "&:hover": {
+          textDecoration: "none",
+        },
+      },
+      primaryButton: {
+        all: "unset",
+        border: "none",
+        borderRadius: "$medium",
+        px: "$2",
+        py: "$1",
+        backgroundColor: "$primary",
+        color: "$paragraph",
+        "&:focus": {
+          outlineOffset: 2,
+          outline: "1px solid $primary",
+        },
+      },
+    },
+  },
 
-  "&:hover": {
-    textDecoration: "none",
+  defaultVariants: {
+    variant: "default",
   },
 });
-
-const StyledAnchor = styled("a");
-
-export const Anchor = (props: React.ComponentProps<typeof StyledAnchor>) => {
-  return <StyledAnchor className={linkCss()} {...props}></StyledAnchor>;
-};

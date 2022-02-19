@@ -11,8 +11,8 @@ export const EmojiRadio = styled(RadioGroupItem, {
   width: "48px",
   height: "48px",
 
-  "&:hover": { border: "2px solid $pink600" },
-  // "&:focus": { boxShadow: `0 0 0 2px black` },
+  "&:hover": { border: "2px solid $primary" },
+  "&:focus": { boxShadow: `0 0 0 2px black` },
 });
 
 export const EmojiIndicator = styled(RadioGroupIndicator, {

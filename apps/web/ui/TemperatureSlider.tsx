@@ -17,7 +17,6 @@ import { useCycle } from "./useCycle";
 
 const Container = styled("div", {
   position: "relative",
-  background: "$pink100",
   borderRadius: "$medium",
   width: "100%",
   maxWidth: "500px",
@@ -33,7 +32,7 @@ const Container = styled("div", {
     borderRadius: "inherit",
     width: 170,
     content: "attr(data-content)",
-    color: "$pink500",
+    color: "$linkpink",
     background: "white",
     fontWeight: "$bold",
     fontSize: "$7",
@@ -44,7 +43,7 @@ const Container = styled("div", {
     right: "$4",
     bottom: 0,
     content: "attr(data-after)",
-    color: "$pink400",
+    color: "$linkpink",
     fontWeight: "$bold",
     fontSize: "$5",
   },
@@ -54,14 +53,14 @@ const TemperatureThumb = styled(SliderThumb, {
   width: 45,
   height: 45,
   borderRadius: "$circle",
-  border: "3px solid $pink600",
+  border: "2px solid $primary",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
 });
 
 const TemperatureTrack = styled(SliderTrack, {
-  backgroundColor: "$pink300",
+  backgroundColor: "$lightpink",
 });
 
 const UnitToggle = styled(Toggle, {
@@ -74,7 +73,7 @@ const UnitToggle = styled(Toggle, {
 });
 
 const TemperatureRange = styled(SliderRange, {
-  background: "$pink600",
+  background: "$primary",
 });
 interface Props {
   fahrenheit: number;
@@ -100,7 +99,7 @@ export const TemperatureSlider = ({
       data-after={unit}
     >
       <UnitToggle pressed={isFahrenheit} onPressedChange={() => nextUnit()}>
-        <Text css={{ color: "$pink600", fontWeight: "$bold" }}>
+        <Text variant="heading">
           {appendDegree(isFahrenheit ? "F" : "C", "pre")}
         </Text>
         <VisuallyHidden>

@@ -74,7 +74,7 @@ export const Stopwatch = () => {
         </Text>
       </Grid>
 
-      <Box css={{ justifySelf: "center", p: "$5" }}>
+      <Box css={{ justifySelf: "center", p: "$5", width: "100%" }}>
         <ScrollArea css={{ overflow: "hidden", height: 225 }}>
           <ScrollAreaViewport>
             {laps && laps.length
@@ -118,7 +118,7 @@ export const Stopwatch = () => {
         <div>
           {hasTime && (
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={() => {
                 setTime(0);
                 nextState(0);
@@ -155,7 +155,7 @@ export const Stopwatch = () => {
                 },
               }}
             >
-              <Anchor>Create brew entry</Anchor>
+              <Anchor variant="primaryButton">Create brew entry</Anchor>
             </Link>
           )}
         </div>

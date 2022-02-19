@@ -15,10 +15,6 @@ export const Badge = styled("div", {
         background: "$purple100",
         color: "$purple600",
       },
-      pink: {
-        background: "$pink100",
-        color: "$pink600",
-      },
       gray: {
         background: "$gray100",
         color: "$gray600",

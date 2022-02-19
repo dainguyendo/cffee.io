@@ -80,7 +80,7 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
       <CollapsibleTrigger asChild>
         <Flex role="button" direction="column" css={{ gap: "$3" }}>
           <Box css={{ flexGrow: 1 }}>
-            <Text bold css={{ color: "$pink600", fontSize: "$3" }}>
+            <Text variant="heading" bold css={{ fontSize: "$3" }}>
               {bean.roast}
             </Text>
 

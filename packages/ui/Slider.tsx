@@ -38,13 +38,13 @@ export const SliderThumb = styled(RadixSlider.Thumb, {
   backgroundColor: "white",
   boxShadow: `0 2px 10px $gray200`,
   borderRadius: 10,
-  "&:hover": { backgroundColor: "$pink400" },
+  "&:hover": { backgroundColor: "$lightpink" },
   "&:focus": { boxShadow: `0 0 0 5px $gray200` },
 });
 
 export const SliderRange = styled(RadixSlider.Range, {
   position: "absolute",
-  backgroundColor: "$pink400",
+  backgroundColor: "$lightpink",
   borderRadius: "9999px",
   height: "100%",
 });
