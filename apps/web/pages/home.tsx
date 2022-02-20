@@ -1,6 +1,8 @@
+import { format, parse } from "date-fns";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { Flex } from "ui";
+import React from "react";
+import { Flex, Text } from "ui";
 import { useJournalEntries } from "../api";
 import { JournalEntryCard } from "../ui/JournalEntryCard";
 import { Page } from "../ui/Page";
@@ -8,6 +10,7 @@ import { SetupSummary } from "../ui/SetupSummary";
 
 export default function Home() {
   const { data } = useJournalEntries();
+  console.log({ data });
 
   return (
     <Page>
@@ -22,11 +25,23 @@ export default function Home() {
       >
         <SetupSummary />
 
-        <Flex direction="column" css={{ width: "100%" }}>
-          {data?.map((entry) => {
-            return <JournalEntryCard key={entry.id} journalEntry={entry} />;
+        {data &&
+          Object.entries(data).map(([date, entriesForDate]) => {
+            const parsed = parse(date, "MMddyyyy", new Date());
+            const formatted = format(parsed, "LLL do, yy");
+            return (
+              <React.Fragment key={date}>
+                <Text variant="heading">{formatted}</Text>
+                <Flex direction="column" css={{ width: "100%", gap: "$2" }}>
+                  {entriesForDate.map((entry) => {
+                    return (
+                      <JournalEntryCard key={entry.id} journalEntry={entry} />
+                    );
+                  })}
+                </Flex>
+              </React.Fragment>
+            );
           })}
-        </Flex>
       </Flex>
     </Page>
   );

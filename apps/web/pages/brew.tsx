@@ -58,8 +58,6 @@ const EMPTY_NOTE = [{ type: "paragraph", children: [{ text: "" }] }];
 
 export default function Equipment({ timer }: Props) {
   const router = useRouter();
-  const [expandBean, setExpandBean] = React.useState(false);
-  const [expandBrewMethod, setExpandBrewMethod] = React.useState(false);
   const [expanded, expand] = React.useState<Accordions | undefined>();
 
   const { data: setup } = useSetup();
@@ -96,6 +94,9 @@ export default function Equipment({ timer }: Props) {
   const fahrenheit = watch("waterTemperatureFahrenheit");
   const note = watch("note");
 
+  const displayRoast = watch("bean.roast") || setup?.bean?.roast;
+  const displayRoaster = (watch("bean.roaster") || setup?.bean?.roaster) ?? "";
+
   const submit = async (data: JournalFormData) => {
     await createJournalEntry(data);
     router.push("/home");
@@ -120,17 +121,19 @@ export default function Equipment({ timer }: Props) {
           onValueChange={toggle}
         >
           <AccordionItem value="bean">
-            <AccordionTrigger>
-              <Text bold css={{ fontSize: "$3" }}>
-                Beans
-              </Text>
-              <Text as="p">
-                {setup?.bean?.roast}, {setup?.bean?.roaster}
-              </Text>
+            <AccordionTrigger type="button">
+              {expanded === "bean" ? (
+                <Text>Editing bean selection...</Text>
+              ) : (
+                <Text>
+                  {displayRoast
+                    ? `${displayRoast}, ${displayRoaster}`
+                    : "What beans are you brewing with?"}
+                </Text>
+              )}
             </AccordionTrigger>
             <AccordionContent>
               <Flex direction="column" css={{ gap: "$2" }}>
-                <Text>Overwrite with beans on the fly</Text>
                 <FieldGroupRow>
                   <Field>
                     <Label htmlFor="roast">Roast</Label>
@@ -160,13 +163,12 @@ export default function Equipment({ timer }: Props) {
           </AccordionItem>
 
           <AccordionItem value="method">
-            <AccordionTrigger>
-              <Text bold css={{ fontSize: "$3" }}>
-                Brew method
-              </Text>
-              <Text as="p">
-                {brewMethod && BREW_METHOD_TO_STRING[brewMethod]}
-              </Text>
+            <AccordionTrigger type="button">
+              {expanded === "method" ? (
+                <Text>Selecting brew method...</Text>
+              ) : (
+                <Text>{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
+              )}
             </AccordionTrigger>
             <AccordionContent>
               <BrewMethodFields
@@ -201,15 +203,11 @@ export default function Equipment({ timer }: Props) {
             />
           </Center>
 
-          <div>
-            <Text bold css={{ fontSize: "$3" }}>
-              How&apos;d it brew?
-            </Text>
-            <RichEditor
-              value={note}
-              setValue={(value) => setValue("note", value)}
-            />
-          </div>
+          <RichEditor
+            placeholder="✨ How did it brew?"
+            value={note}
+            setValue={(value) => setValue("note", value)}
+          />
 
           <RadioGroup
             value={rating}

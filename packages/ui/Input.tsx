@@ -1,19 +1,16 @@
 import { styled } from "./stitches.config";
 
 export const Input = styled("input", {
+  all: "unset",
+  background: "$blackDamp",
+  border: "1px solid transparent",
   borderRadius: "$medium",
-  border: "1px solid $gray100",
-  padding: "$1",
-  color: "$purple600",
+  padding: "$2",
+  color: "$paragraph",
 
-  "&:hover": {
-    border: "1px solid $purple200",
-  },
+  "&:hover": { border: "1px solid $primary" },
 
-  "&:focus": {
-    outline: "none",
-    border: "1px solid $purple400",
-  },
+  "&:focus": { border: "1px solid $primary" },
 
   '&[aria-invalid="true"]': {
     color: "red",

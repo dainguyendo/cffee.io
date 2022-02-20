@@ -44,10 +44,16 @@ const Overlay = styled(DialogOverlay, {
 });
 
 const Content = styled(DialogContent, {
-  backgroundColor: "white",
+  backgroundColor: "inherit",
   borderRadius: "$large",
-  boxShadow:
-    "hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px",
+  boxShadow: `
+    2.8px 2.8px 2.2px rgba(0, 0, 0, 0.017),
+    6.7px 6.7px 5.3px rgba(0, 0, 0, 0.022),
+    12.5px 12.5px 10px rgba(0, 0, 0, 0.026),
+    22.3px 22.3px 17.9px rgba(0, 0, 0, 0.032),
+    41.8px 41.8px 33.4px rgba(0, 0, 0, 0.041),
+    100px 100px 80px rgba(0, 0, 0, 0.07)
+  `,
   position: "fixed",
   top: "50%",
   left: "50%",
@@ -75,9 +81,6 @@ const IconButton = styled("button", {
   position: "absolute",
   top: 10,
   right: 10,
-
-  // '&:hover': { backgroundColor: violet.violet4 },
-  // '&:focus': { boxShadow: `0 0 0 2px ${violet.violet7}` },
 });
 
 interface FeedbackSchema {

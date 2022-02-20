@@ -6,7 +6,7 @@ export const EmojiRadio = styled(RadioGroupItem, {
   display: "grid",
   placeItems: "center",
   background: "transparent",
-  border: "none",
+  border: "2px solid transparent",
   borderRadius: "$large",
   width: "48px",
   height: "48px",

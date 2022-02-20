@@ -14,10 +14,16 @@ const slideUp = keyframes({
 });
 
 const StyledAccordion = styled(RadixAccordion.Root, {
-  borderRadius: 6,
-  // width: 300,
-  // backgroundColor: mauve.mauve6,
-  // boxShadow: `0 2px 10px ${blackA.blackA4}`,
+  border: "1px solid transparent",
+  borderRadius: "$medium",
+  boxShadow: `
+    2.8px 2.8px 2.2px rgba(0, 0, 0, 0.017),
+    6.7px 6.7px 5.3px rgba(0, 0, 0, 0.022),
+    12.5px 12.5px 10px rgba(0, 0, 0, 0.026),
+    22.3px 22.3px 17.9px rgba(0, 0, 0, 0.032),
+    41.8px 41.8px 33.4px rgba(0, 0, 0, 0.041),
+    100px 100px 80px rgba(0, 0, 0, 0.07)
+  `,
 });
 
 const StyledItem = styled(RadixAccordion.Item, {
@@ -38,7 +44,6 @@ const StyledItem = styled(RadixAccordion.Item, {
   "&:focus-within": {
     position: "relative",
     zIndex: 1,
-    // boxShadow: `0 0 0 2px ${mauve.mauve12}`,
   },
 });
 
@@ -49,28 +54,23 @@ const StyledHeader = styled(RadixAccordion.Header, {
 
 const StyledTrigger = styled(RadixAccordion.Trigger, {
   all: "unset",
-  fontFamily: "inherit",
-  backgroundColor: "transparent",
-  padding: "0 20px",
-  height: 45,
+  px: "$3",
+  py: 0,
   flex: 1,
+  height: 45,
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  fontSize: 15,
-  lineHeight: 1,
-  color: "$purple600",
-  // boxShadow: `0 1px 0 ${mauve.mauve6}`,
-  '&[data-state="closed"]': { backgroundColor: "white" },
-  '&[data-state="open"]': { backgroundColor: "white" },
-  "&:hover": { backgroundColor: "$gray100" },
+  color: "inherit",
+  '&[data-state="closed"]': { backgroundColor: "inherit" },
+  '&[data-state="open"]': { backgroundColor: "inherit" },
+  "&:hover": { backgroundColor: "$blackDamp" },
 });
 
 const StyledContent = styled(RadixAccordion.Content, {
   overflow: "hidden",
-  fontSize: 15,
-  // color: mauve.mauve11,
-  backgroundColor: "$gray100",
+  backgroundColor: "$blackDamp",
+  p: "$4",
 
   '&[data-state="open"]': {
     animation: `${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
@@ -80,12 +80,8 @@ const StyledContent = styled(RadixAccordion.Content, {
   },
 });
 
-const StyledContentText = styled("div", {
-  padding: "15px 20px",
-});
-
 const StyledChevron = styled(ChevronDown, {
-  color: "$purple600",
+  color: "$primary",
   transition: "transform 300ms cubic-bezier(0.87, 0, 0.13, 1)",
   "[data-state=open] &": { transform: "rotate(180deg)" },
 });
@@ -105,7 +101,7 @@ export const AccordionTrigger = React.forwardRef<HTMLButtonElement, any>(
 export const AccordionContent = React.forwardRef<HTMLDivElement, any>(
   ({ children, ...props }, forwardedRef) => (
     <StyledContent {...props} ref={forwardedRef}>
-      <StyledContentText>{children}</StyledContentText>
+      {children}
     </StyledContent>
   )
 );

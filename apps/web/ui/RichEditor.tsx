@@ -4,7 +4,7 @@ import { Bold, Code, Italic, List, Underline } from "react-feather";
 import { createEditor, Descendant, Editor } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, withReact } from "slate-react";
-import { Flex, Separator } from "ui";
+import { Flex, Separator, VerticalStack } from "ui";
 import { toggleMark } from "../utils/editor";
 import { BlockButton } from "./BlockButton";
 import { Editable } from "./Editable";
@@ -17,14 +17,15 @@ const HOTKEYS = {
   "mod+`": "code",
 };
 
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
+// const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 interface Props {
   value: Descendant[];
   setValue: (v: Descendant[]) => void;
+  placeholder?: string;
 }
 
-export const RichEditor = ({ value, setValue }: Props) => {
+export const RichEditor = ({ placeholder, value, setValue }: Props) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editorRef = React.useRef<Editor>();
@@ -34,53 +35,56 @@ export const RichEditor = ({ value, setValue }: Props) => {
   // const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   return (
     <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
-      <Flex>
-        <MarkButton label="Toggle bold" format="bold">
-          <Bold size={14} />
-        </MarkButton>
-        <MarkButton label="Toggle italic" format="italic">
-          <Italic size={14} />
-        </MarkButton>
-        <MarkButton label="Toggle underline" format="underline">
-          <Underline size={14} />
-        </MarkButton>
-        <Separator
-          orientation="vertical"
-          css={{ mx: "$2", backgroundColor: "$gray200" }}
-        />
-        <MarkButton label="Toggle code" format="code">
-          <Code size={14} />
-        </MarkButton>
-        <Separator
-          orientation="vertical"
-          css={{ mx: "$2", backgroundColor: "$gray200" }}
-        />
-        {/* <BlockButton format="heading-one" icon="looks_one" />
+      <VerticalStack size="$2">
+        <Flex css={{ gap: "$1" }}>
+          <MarkButton label="Toggle bold" format="bold">
+            <Bold size={14} />
+          </MarkButton>
+          <MarkButton label="Toggle italic" format="italic">
+            <Italic size={14} />
+          </MarkButton>
+          <MarkButton label="Toggle underline" format="underline">
+            <Underline size={14} />
+          </MarkButton>
+          <Separator
+            orientation="vertical"
+            css={{ mx: "$2", backgroundColor: "$gray200" }}
+          />
+          <MarkButton label="Toggle code" format="code">
+            <Code size={14} />
+          </MarkButton>
+          <Separator
+            orientation="vertical"
+            css={{ mx: "$2", backgroundColor: "$gray200" }}
+          />
+          {/* <BlockButton format="heading-one" icon="looks_one" />
         <BlockButton format="heading-two" icon="looks_two" />
         <BlockButton format="block-quote" icon="format_quote" /> */}
-        {/* <BlockButton format="numbered-list">
+          {/* <BlockButton format="numbered-list">
           <List />
         </BlockButton> */}
-        <BlockButton label="Toggle bullet list" format="bulleted-list">
-          <List size={14} />
-        </BlockButton>
-      </Flex>
-      <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="Taste like magic ✨"
-        spellCheck
-        autoFocus
-        onKeyDown={(event) => {
-          for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-              event.preventDefault();
-              const mark = HOTKEYS[hotkey];
-              toggleMark(editor, mark);
+          <BlockButton label="Toggle bullet list" format="bulleted-list">
+            <List size={14} />
+          </BlockButton>
+        </Flex>
+
+        <Editable
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder={placeholder}
+          spellCheck
+          autoFocus
+          onKeyDown={(event) => {
+            for (const hotkey in HOTKEYS) {
+              if (isHotkey(hotkey, event as any)) {
+                event.preventDefault();
+                const mark = HOTKEYS[hotkey];
+                toggleMark(editor, mark);
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+      </VerticalStack>
     </Slate>
   );
 };

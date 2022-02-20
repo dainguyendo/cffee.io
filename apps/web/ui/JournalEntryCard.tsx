@@ -28,7 +28,16 @@ interface Props {
 }
 
 const Card = styled(Collapsible, {
+  background: "$blackDamp",
   borderRadius: "$medium",
+  boxShadow: `
+  1.8px 1.4px 2.7px rgba(0, 0, 0, 0.018),
+  4.4px 3.5px 6.9px rgba(0, 0, 0, 0.024),
+  9px 7.1px 14.2px rgba(0, 0, 0, 0.029),
+  18.6px 14.6px 29.2px rgba(0, 0, 0, 0.039),
+  51px 40px 80px rgba(0, 0, 0, 0.07)
+`,
+
   display: "flex",
   gap: "$4",
   padding: "$4",
@@ -103,10 +112,10 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
           </CollapsibleContent>
 
           <Flex css={{ gap: "$2", justifyContent: "flex-end" }}>
-            <Badge variant="gray">{emoji}</Badge>
-            <Badge variant="gray">{BREW_METHOD_TO_STRING[brewMethod]}</Badge>
-            <Badge variant="gray">{grinder}</Badge>
-            <Badge variant="gray">
+            <Badge>{emoji}</Badge>
+            <Badge>{BREW_METHOD_TO_STRING[brewMethod]}</Badge>
+            <Badge>{grinder}</Badge>
+            <Badge>
               {withDegreeUnit(waterTemperatureFahrenheit, "fahrenheit")}
             </Badge>
           </Flex>

@@ -50,11 +50,14 @@ export async function createJournalEntry(
 }
 
 export function useJournalEntries() {
-  return useQuery<JournalEntryData[]>("use-journal-entries", async () => {
-    const response = await get("/api/get-journal-entries");
-    const data = await response.json();
-    return data;
-  });
+  return useQuery<{ [key: string]: JournalEntryData[] }>(
+    "use-journal-entries",
+    async () => {
+      const response = await get("/api/get-journal-entries");
+      const data = await response.json();
+      return data;
+    }
+  );
 }
 
 export async function postFeedback(data: FeedbackFormData) {

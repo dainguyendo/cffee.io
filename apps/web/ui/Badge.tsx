@@ -11,22 +11,14 @@ export const Badge = styled("div", {
 
   variants: {
     variant: {
-      purple: {
-        background: "$purple100",
-        color: "$purple600",
-      },
-      gray: {
-        background: "$gray100",
-        color: "$gray600",
-      },
-      ghost: {
-        background: "inherit",
-        color: "$gray500",
+      primary: {
+        background: "$secondary",
+        color: "$primary",
       },
     },
   },
 
   defaultVariants: {
-    variant: "purple",
+    variant: "primary",
   },
 });
