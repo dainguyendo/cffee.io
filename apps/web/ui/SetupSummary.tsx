@@ -41,7 +41,24 @@ const SetupAvatar = ({ name }: { name: string }) => (
 );
 
 export const SetupSummary = () => {
-  const { data } = useSetup();
+  const { data, status } = useSetup();
+
+  if (status === "loading") {
+    return (
+      <Box
+        gradiant
+        boxShadow="medium"
+        css={{
+          borderRadius: "$large",
+          width: "100%",
+          minHeight: 150,
+          "@bp1": {
+            minHeight: 45,
+          },
+        }}
+      />
+    );
+  }
 
   return (
     <Box
