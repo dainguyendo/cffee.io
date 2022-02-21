@@ -1,5 +1,5 @@
 import type { Bean, Journal, Setup } from "db";
-import { useQuery } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 import {
   BeanFormData,
   BrewMethodFormData,
@@ -7,6 +7,7 @@ import {
   GrinderFormData,
   JournalEntryData,
 } from "types";
+import { PaginatedResponse } from "./types/api";
 import { get, post } from "./utils/fetch";
 
 export async function createBean(data: BeanFormData): Promise<Bean> {
@@ -49,13 +50,28 @@ export async function createJournalEntry(
   return response.json();
 }
 
-export function useJournalEntries() {
-  return useQuery<{ [key: string]: JournalEntryData[] }>(
-    "use-journal-entries",
+export async function getJournalEntries(
+  page: number
+): Promise<PaginatedResponse<{ [key: string]: JournalEntryData[] }>> {
+  const response = await get("/api/get-journal-entries?page=" + page);
+  const data = await response.json();
+  return data;
+}
+
+export function useJournalEntries(
+  page: number,
+  options?: UseQueryOptions<
+    PaginatedResponse<{ [key: string]: JournalEntryData[] }>
+  >
+) {
+  return useQuery<PaginatedResponse<{ [key: string]: JournalEntryData[] }>>(
+    ["use-journal-entries", page],
     async () => {
-      const response = await get("/api/get-journal-entries");
-      const data = await response.json();
-      return data;
+      return getJournalEntries(page);
+    },
+    {
+      keepPreviousData: true,
+      ...options,
     }
   );
 }
@@ -63,4 +79,8 @@ export function useJournalEntries() {
 export async function postFeedback(data: FeedbackFormData) {
   const response = await post("/api/feedback", data);
   return response.json();
+}
+
+export async function deleteAccount(confirm: string) {
+  await post("/api/delete-account", { confirm });
 }

@@ -3,10 +3,26 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../db";
 import { authenticated } from "../../middleware";
 
+const DEFAULT_LIMIT = 4;
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { user } = await authenticated(req, res);
 
+  const page = isNaN(Number(req.query.page)) ? 0 : Number(req.query.page);
+  const limit: number = isNaN(Number(req.query.limit))
+    ? DEFAULT_LIMIT
+    : Number(req.query.limit);
+
+  const userJournalCount = await db.journal.count({
+    where: {
+      userId: user?.id,
+    },
+  });
+
   const entries = await db.journal.findMany({
+    skip: limit * page,
+    take: limit,
+
     select: {
       id: true,
       updatedAt: true,
@@ -48,7 +64,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return prev;
   }, {});
 
-  res.status(200).json(grouped);
+  res.status(200).json({
+    data: grouped,
+    pagination: {
+      total: userJournalCount,
+      pageCount: Math.ceil(userJournalCount / limit),
+      currentPage: page,
+      perPage: limit,
+      from: page * limit + 1,
+      to: page * limit + entries.length,
+    },
+  });
 };
 
 export default handler;

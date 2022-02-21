@@ -1,107 +1,46 @@
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { BookOpen, Plus, Tool, Watch } from "react-feather";
-import { Box, Flex, List, styled } from "ui";
-import { UserDropdownMenu } from "../ui/UserDropdownMenu";
+import { Box, Flex, styled } from "ui";
 import { Cffee } from "./Cffee";
-import { FullBleedLayout } from "./FullBleedLayout";
 import { MenuNavigation } from "./MenuNavigation";
-import { NavigationAnchor } from "./NavigationAnchor";
-import { usePathnameMatch } from "./usePathnameMatch";
+import { SidebarLayout } from "./SidebarLayout";
+import { SidebarNavigation } from "./SidebarNavigation";
 
-const ListItem = styled("li", {
-  display: "flex",
-  gap: "$2",
-  alignItems: "center",
+const MainContent = styled("div", {
+  maxWidth: "105ch",
+  margin: "0 auto",
 });
 
-const SideNavigation = styled("nav", {
-  display: "none",
-  "@bp1": {
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
+const Container = styled(Box, {
+  padding: "$2",
+  "@bp2": {
+    padding: "$4",
+  },
+  bp3: {
+    padding: "$7",
   },
 });
 
 export const Page: React.FC = ({ children }) => {
-  const { data: session } = useSession();
-
-  const { isHomeActive, isEquipmentActive, isTimerActive } = usePathnameMatch();
-
   return (
-    <>
-      <FullBleedLayout css={{ minHeight: "100vh" }}>
-        <Flex css={{ gap: "$5" }}>
-          <SideNavigation
+    <SidebarLayout>
+      <SidebarNavigation />
+      <Container>
+        <MainContent>
+          <Flex
             css={{
-              p: "$4",
-              flex: "0 99999 200px",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+              "@bp1": {
+                display: "none",
+              },
             }}
           >
             <Cffee />
+            <MenuNavigation />
+          </Flex>
 
-            <Link href="/brew" passHref>
-              <NavigationAnchor active={true} css={{ width: "fit-content" }}>
-                <Plus size={24} />
-                {/* New log */}
-              </NavigationAnchor>
-            </Link>
-
-            <List
-              css={{
-                display: "flex",
-                fd: "column",
-                gap: "$2",
-              }}
-            >
-              <ListItem>
-                <Link href="/home" passHref>
-                  <NavigationAnchor active={isHomeActive}>
-                    <BookOpen size={24} />
-                    {/* Journal */}
-                  </NavigationAnchor>
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link href="/equipment" passHref>
-                  <NavigationAnchor active={isEquipmentActive}>
-                    <Tool size={24} />
-                    {/* Equipment */}
-                  </NavigationAnchor>
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link href="/timer" passHref>
-                  <NavigationAnchor active={isTimerActive}>
-                    <Watch size={24} />
-                    {/* Timer */}
-                  </NavigationAnchor>
-                </Link>
-              </ListItem>
-            </List>
-
-            <UserDropdownMenu user={session!.user!} />
-          </SideNavigation>
-          <Box css={{ flexGrow: 1, px: "$2", "@bp1": { px: 0 } }}>
-            <Flex
-              css={{
-                alignItems: "baseline",
-                justifyContent: "space-between",
-                "@bp1": {
-                  display: "none",
-                },
-              }}
-            >
-              <Cffee />
-              <MenuNavigation />
-            </Flex>
-
-            {children}
-          </Box>
-        </Flex>
-      </FullBleedLayout>
-    </>
+          {children}
+        </MainContent>
+      </Container>
+    </SidebarLayout>
   );
 };

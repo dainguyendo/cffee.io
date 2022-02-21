@@ -15,13 +15,11 @@ import {
   keyframes,
   Spacer,
   styled,
-  Textarea,
   VerticalStack,
   VisuallyHidden,
 } from "ui";
-import { postFeedback } from "../api";
+import { deleteAccount } from "../api";
 import { Field } from "../form/Field";
-import { FieldInput } from "../form/FieldInput";
 import { FieldLabel } from "../form/FieldLabel";
 
 const overlayShow = keyframes({
@@ -69,20 +67,19 @@ const Content = styled(DialogContent, {
   "&:focus": { outline: "none" },
 });
 
-interface FeedbackSchema {
-  description: string;
+interface DeleteAccountSchema {
+  confirm: string;
 }
 
-export const FeedbackDialog: React.FC = ({ children }) => {
-  const { register, handleSubmit, reset } = useForm<FeedbackSchema>({
+export const DeleteAccountDialog: React.FC = ({ children }) => {
+  const { register, handleSubmit, reset } = useForm<DeleteAccountSchema>({
     defaultValues: {
-      description: "",
+      confirm: "",
     },
   });
 
-  const submit = async (data: FeedbackSchema) => {
-    await postFeedback(data);
-    reset();
+  const submit = async (data: DeleteAccountSchema) => {
+    await deleteAccount(data.confirm.toUpperCase());
   };
 
   return (
@@ -93,10 +90,10 @@ export const FeedbackDialog: React.FC = ({ children }) => {
         <Overlay />
         <Content>
           <VerticalStack size="$2">
-            <DialogTitle>🙏 Leave feedback</DialogTitle>
+            <DialogTitle>Are you sure?</DialogTitle>
             <DialogDescription>
-              Thank you for using cffee! Cffee welcomes your feedback regarding
-              your experience. Click submit when complete!
+              Thank you for using Cffee! Once ready, type &quot;delete&quot; and
+              submit.
             </DialogDescription>
           </VerticalStack>
 
@@ -106,11 +103,15 @@ export const FeedbackDialog: React.FC = ({ children }) => {
             <VerticalStack size="$2">
               <Field>
                 <FieldLabel htmlFor="app-feedback">
-                  <VisuallyHidden>Feedback</VisuallyHidden>
+                  <VisuallyHidden>Confirm account delete</VisuallyHidden>
                 </FieldLabel>
-                <Textarea
+                <Input
                   id="app-feedback"
-                  {...register("description", { required: true })}
+                  placeholder='Type "delete"'
+                  {...register("confirm", {
+                    required: true,
+                    validate: (v) => v.toUpperCase() === "DELETE",
+                  })}
                 />
               </Field>
 

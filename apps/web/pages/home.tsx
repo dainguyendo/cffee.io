@@ -1,16 +1,23 @@
-import { format, parse } from "date-fns";
+import { formatDistanceToNow, parse } from "date-fns";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import React from "react";
-import { Flex, Text } from "ui";
+import { ChevronLeft, ChevronRight } from "react-feather";
+import { Flex, IconButton, Text } from "ui";
 import { useJournalEntries } from "../api";
+import { Center } from "../ui/Center";
 import { JournalEntryCard } from "../ui/JournalEntryCard";
+import { LoaderBoxes } from "../ui/LoaderBoxes";
 import { Page } from "../ui/Page";
 import { SetupSummary } from "../ui/SetupSummary";
 
 export default function Home() {
-  const { data } = useJournalEntries();
-  console.log({ data });
+  const [page, setPage] = React.useState(0);
+  const { data, status, isFetching, isPreviousData } = useJournalEntries(page);
+
+  const hasMore =
+    (data?.pagination?.currentPage ?? false) <
+    (data?.pagination?.pageCount ?? false);
 
   return (
     <Page>
@@ -18,20 +25,49 @@ export default function Home() {
         css={{
           fd: "column",
           alignItems: "center",
-          justifyContent: "center",
           gap: "$6",
           height: "100%",
+          pt: "$6",
         }}
       >
         <SetupSummary />
 
-        {data &&
-          Object.entries(data).map(([date, entriesForDate]) => {
+        <Flex css={{ alignSelf: "flex-end", gap: "$1" }}>
+          <IconButton
+            type="button"
+            raised
+            onClick={() => setPage((old) => Math.max(old - 1, 0))}
+            disabled={page === 0 || isFetching}
+          >
+            <ChevronLeft />
+          </IconButton>
+          <IconButton
+            type="button"
+            raised
+            onClick={() => setPage((old) => (hasMore ? old + 1 : old))}
+            disabled={isPreviousData || !hasMore || isFetching}
+          >
+            <ChevronRight />
+          </IconButton>
+        </Flex>
+
+        {status === "loading" && (
+          <Center css={{ size: 300 }}>
+            <LoaderBoxes />
+          </Center>
+        )}
+
+        {status === "success" &&
+          data &&
+          data.data &&
+          Object.entries(data.data).map(([date, entriesForDate]) => {
             const parsed = parse(date, "MMddyyyy", new Date());
-            const formatted = format(parsed, "LLL do, yy");
+            const distance = formatDistanceToNow(parsed, { addSuffix: true });
             return (
               <React.Fragment key={date}>
-                <Text variant="heading">{formatted}</Text>
+                <Text variant="paragraph" bold css={{ alignSelf: "flex-end" }}>
+                  {distance}
+                </Text>
                 <Flex direction="column" css={{ width: "100%", gap: "$2" }}>
                   {entriesForDate.map((entry) => {
                     return (

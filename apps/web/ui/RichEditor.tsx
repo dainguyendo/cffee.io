@@ -46,17 +46,11 @@ export const RichEditor = ({ placeholder, value, setValue }: Props) => {
           <MarkButton label="Toggle underline" format="underline">
             <Underline size={14} />
           </MarkButton>
-          <Separator
-            orientation="vertical"
-            css={{ mx: "$2", backgroundColor: "$gray200" }}
-          />
+          <Separator orientation="vertical" css={{ mx: "$2" }} />
           <MarkButton label="Toggle code" format="code">
             <Code size={14} />
           </MarkButton>
-          <Separator
-            orientation="vertical"
-            css={{ mx: "$2", backgroundColor: "$gray200" }}
-          />
+          <Separator orientation="vertical" css={{ mx: "$2" }} />
           {/* <BlockButton format="heading-one" icon="looks_one" />
         <BlockButton format="heading-two" icon="looks_two" />
         <BlockButton format="block-quote" icon="format_quote" /> */}

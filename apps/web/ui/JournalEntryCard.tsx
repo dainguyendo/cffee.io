@@ -1,6 +1,6 @@
 import Avatar from "boring-avatars";
 import React from "react";
-import { Calendar } from "react-feather";
+import { Calendar, Maximize2, Minimize2 } from "react-feather";
 import { JournalEntryData } from "types";
 import {
   Box,
@@ -8,6 +8,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
   Flex,
+  IconButton,
   Input,
   Label,
   styled,
@@ -31,12 +32,12 @@ const Card = styled(Collapsible, {
   background: "$blackDamp",
   borderRadius: "$medium",
   boxShadow: `
-  1.8px 1.4px 2.7px rgba(0, 0, 0, 0.018),
-  4.4px 3.5px 6.9px rgba(0, 0, 0, 0.024),
-  9px 7.1px 14.2px rgba(0, 0, 0, 0.029),
-  18.6px 14.6px 29.2px rgba(0, 0, 0, 0.039),
-  51px 40px 80px rgba(0, 0, 0, 0.07)
-`,
+    1.8px 1.4px 2.7px rgba(0, 0, 0, 0.018),
+    4.4px 3.5px 6.9px rgba(0, 0, 0, 0.024),
+    9px 7.1px 14.2px rgba(0, 0, 0, 0.029),
+    18.6px 14.6px 29.2px rgba(0, 0, 0, 0.039),
+    51px 40px 80px rgba(0, 0, 0, 0.07)
+  `,
 
   display: "flex",
   gap: "$4",
@@ -86,41 +87,48 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
         />
       </Box>
 
-      <CollapsibleTrigger asChild>
-        <Flex role="button" direction="column" css={{ gap: "$3" }}>
-          <Box css={{ flexGrow: 1 }}>
+      <Flex direction="column" css={{ gap: "$3", width: "100%" }}>
+        <Flex css={{ flexGrow: 1, jc: "space-between" }}>
+          <div>
             <Text variant="heading" bold css={{ fontSize: "$3" }}>
               {bean.roast}
             </Text>
 
             <Flex css={{ ai: "center", gap: "$1" }}>
-              <Calendar size={15} color={theme.colors["gray400"].value} />
-              <Text bold css={{ fontSize: "$1", color: "$gray400" }}>
+              <Calendar size={15} color={theme.colors["palepurple"].value} />
+              <Text variant="caption">
                 {date}, {time}
               </Text>
             </Flex>
-          </Box>
+          </div>
 
-          <CollapsibleContent>
-            {note && <ReadonlyEditor value={note} />}
-            {grindDescription && (
-              <Field>
-                <Label htmlFor={`${id}-gd`}>Grind description</Label>
-                <Input id={`${id}-gd`} readOnly value={grindDescription} />
-              </Field>
-            )}
-          </CollapsibleContent>
-
-          <Flex css={{ gap: "$2", justifyContent: "flex-end" }}>
-            <Badge>{emoji}</Badge>
-            <Badge>{BREW_METHOD_TO_STRING[brewMethod]}</Badge>
-            <Badge>{grinder}</Badge>
-            <Badge>
-              {withDegreeUnit(waterTemperatureFahrenheit, "fahrenheit")}
-            </Badge>
-          </Flex>
+          <CollapsibleTrigger asChild>
+            <IconButton type="button" raised>
+              {open ? <Minimize2 /> : <Maximize2 />}
+            </IconButton>
+          </CollapsibleTrigger>
         </Flex>
-      </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          {note && <ReadonlyEditor value={note} />}
+          {grindDescription && (
+            <Field>
+              <Label htmlFor={`${id}-gd`}>Grind description</Label>
+              <Input id={`${id}-gd`} readOnly value={grindDescription} />
+            </Field>
+          )}
+        </CollapsibleContent>
+
+        <Badge css={{ alignSelf: "flex-end" }}>{grinder}</Badge>
+        <Flex css={{ gap: "$2", justifyContent: "flex-end" }}>
+          <Badge>{emoji}</Badge>
+          <Badge>{BREW_METHOD_TO_STRING[brewMethod]}</Badge>
+
+          <Badge>
+            {withDegreeUnit(waterTemperatureFahrenheit, "fahrenheit")}
+          </Badge>
+        </Flex>
+      </Flex>
     </Card>
   );
 };

@@ -1,7 +1,9 @@
 import { Flex, styled } from "ui";
 
 export const FieldGroupRow = styled(Flex, {
-  "& > * + *": {
-    marginLeft: "$4",
+  flexWrap: "wrap",
+  gap: "$4",
+  "& > *": {
+    flex: "1 1 200px",
   },
 });

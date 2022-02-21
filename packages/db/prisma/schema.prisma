@@ -121,7 +121,7 @@ model Setup {
   beanId     String?
   default    Boolean?    @default(false)
   bean       Bean?       @relation(fields: [beanId], references: [id])
-  user       User        @relation(fields: [userId], references: [id])
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Feedback {

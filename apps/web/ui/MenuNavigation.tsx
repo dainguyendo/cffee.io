@@ -9,29 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  IconButton,
   Separator,
   styled,
 } from "ui";
 import { FeedbackDialog } from "./FeedbackDialog";
 
-const IconButton = styled("button", {
-  all: "unset",
-  fontFamily: "inherit",
-  borderRadius: "100%",
-  height: 35,
-  width: 35,
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "white",
-  "&:focus": { boxShadow: `0 0 0 2px black` },
-});
-
 export const MenuNavigation = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <IconButton aria-label="Customise options">
+        <IconButton type="button" aria-label="Customise options">
           <Menu />
         </IconButton>
       </DropdownMenuTrigger>
@@ -62,15 +50,17 @@ export const MenuNavigation = () => {
         </DropdownMenuItem>
 
         <DropdownMenuSeparator asChild>
-          <Separator css={{ backgroundColor: "$gray200", my: "$2" }} />
+          <Separator css={{ my: "$1" }} />
         </DropdownMenuSeparator>
 
         <FeedbackDialog>
-          <Button variant="outline">Feedback</Button>
+          <Button type="button" variant="secondary">
+            Feedback
+          </Button>
         </FeedbackDialog>
 
         <DropdownMenuSeparator asChild>
-          <Separator css={{ backgroundColor: "$gray200", my: "$2" }} />
+          <Separator css={{ my: "$1" }} />
         </DropdownMenuSeparator>
 
         <DropdownMenuItem>

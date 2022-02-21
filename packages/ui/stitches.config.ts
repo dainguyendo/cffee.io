@@ -13,13 +13,6 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      gray100: "hsla(0, 0%, 93%, 1)",
-      gray200: "hsla(0, 0%, 80%, 1)",
-      gray300: "hsla(0, 0%, 60%, 1)",
-      gray400: "hsla(0, 0%, 40%, 1)",
-      gray500: "hsla(0, 0%, 20%, 1)",
-      gray600: "hsla(0, 0%, 0%, 1)",
-
       black: "hsl(230, 33%, 21%)",
       blackDamp: "hsl(230, 32%, 17%)",
 
@@ -85,20 +78,6 @@ export const {
     light: "(prefers-color-scheme: light)",
   },
   utils: {
-    hs: (value: Stitches.PropertyValue<"marginLeft">) => ({
-      display: "flex",
-      flexDirection: "row",
-      "& > * + *": {
-        marginLeft: value,
-      },
-    }),
-    vs: (value: Stitches.PropertyValue<"marginLeft">) => ({
-      display: "flex",
-      flexDirection: "column",
-      "& > * + *": {
-        marginTop: value,
-      },
-    }),
     p: (value: Stitches.PropertyValue<"padding">) => ({
       padding: value,
     }),

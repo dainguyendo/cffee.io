@@ -8,12 +8,14 @@ export const Badge = styled("div", {
 
   fontWeight: "$bold",
   fontSize: ".75rem",
+  whiteSpace: "nowrap",
+  width: "fit-content",
 
   variants: {
     variant: {
       primary: {
-        background: "$secondary",
-        color: "$primary",
+        background: "$background",
+        color: "$paragraph",
       },
     },
   },

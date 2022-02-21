@@ -21,7 +21,6 @@ export const Slider = styled(RadixSlider.Root, {
 });
 
 export const SliderTrack = styled(RadixSlider.Track, {
-  backgroundColor: "$gray100",
   position: "relative",
   flexGrow: 1,
   borderRadius: "$pill",
@@ -36,10 +35,9 @@ export const SliderThumb = styled(RadixSlider.Thumb, {
   width: 20,
   height: 20,
   backgroundColor: "white",
-  boxShadow: `0 2px 10px $gray200`,
   borderRadius: 10,
   "&:hover": { backgroundColor: "$lightpink" },
-  "&:focus": { boxShadow: `0 0 0 5px $gray200` },
+  "&:focus": { boxShadow: `0 0 0 5px $primary` },
 });
 
 export const SliderRange = styled(RadixSlider.Range, {

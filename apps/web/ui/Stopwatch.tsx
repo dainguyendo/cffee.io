@@ -13,7 +13,6 @@ import {
   Text,
 } from "ui";
 import { msToTime } from "../utils/time";
-import { Caption } from "./Caption";
 import { useCycle } from "./useCycle";
 
 type TimerState = "idle" | "active";
@@ -69,9 +68,7 @@ export const Stopwatch = () => {
         <Text bold css={{ fontSize: "$7" }}>
           {seconds}
         </Text>
-        <Text bold css={{ fontSize: "$5", color: "$gray400" }}>
-          {milliseconds}
-        </Text>
+        <Text css={{ fontSize: "$5" }}>{milliseconds}</Text>
       </Grid>
 
       <Box css={{ justifySelf: "center", p: "$5", width: "100%" }}>
@@ -88,13 +85,13 @@ export const Stopwatch = () => {
                         gridTemplateColumns: "repeat(3, minmax(50px, 1fr))",
                       }}
                     >
-                      <Caption>#{i}</Caption>
-                      <Caption>{display}</Caption>
-                      <Caption>
+                      <Text>#{i}</Text>
+                      <Text>{display}</Text>
+                      <Text>
                         {i === 0
                           ? display
                           : millisecondsToTime(l - laps[i - 1])}
-                      </Caption>
+                      </Text>
                     </Grid>
                   );
                 })

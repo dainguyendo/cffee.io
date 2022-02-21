@@ -2,7 +2,7 @@ import { styled, css } from "ui";
 
 export const FullBleedLayout = styled("div", {
   display: "grid",
-  gridTemplateColumns: "1fr min(120ch, 100%) 1fr",
+  gridTemplateColumns: "1fr min(105ch, 100%) 1fr",
 
   "& > .full-bleed": {
     width: "100%",
@@ -11,10 +11,6 @@ export const FullBleedLayout = styled("div", {
 
   "& > *": {
     gridColumn: 2,
-  },
-
-  bp1: {
-    padding: 0,
   },
 });
 

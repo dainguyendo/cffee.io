@@ -29,7 +29,7 @@ export default function SignIn({
     <Page>
       <Main>
         <div>
-          <Text bold css={{ fontSize: "$3", color: "$gray400" }}>
+          <Text bold css={{ fontSize: "$3" }}>
             Let&apos;s brew
           </Text>
           <Cffee />

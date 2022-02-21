@@ -33,7 +33,7 @@ const Container = styled("div", {
     width: 170,
     content: "attr(data-content)",
     color: "$linkpink",
-    background: "white",
+    background: "$blackDamp",
     fontWeight: "$bold",
     fontSize: "$7",
   },
@@ -50,8 +50,9 @@ const Container = styled("div", {
 });
 
 const TemperatureThumb = styled(SliderThumb, {
-  width: 45,
-  height: 45,
+  width: 32,
+  height: 32,
+  background: "$primary",
   borderRadius: "$circle",
   border: "2px solid $primary",
   display: "flex",
@@ -67,9 +68,9 @@ const UnitToggle = styled(Toggle, {
   position: "absolute",
   right: 0,
   top: 0,
-  background: "white",
   border: "none",
   borderRadius: "$small",
+  background: "$blackDamp",
 });
 
 const TemperatureRange = styled(SliderRange, {
@@ -99,9 +100,7 @@ export const TemperatureSlider = ({
       data-after={unit}
     >
       <UnitToggle pressed={isFahrenheit} onPressedChange={() => nextUnit()}>
-        <Text variant="heading">
-          {appendDegree(isFahrenheit ? "F" : "C", "pre")}
-        </Text>
+        <Text>{appendDegree(isFahrenheit ? "F" : "C", "pre")}</Text>
         <VisuallyHidden>
           Toggle to {isFahrenheit ? "Fahrenheit" : "Celsius"} unit
         </VisuallyHidden>

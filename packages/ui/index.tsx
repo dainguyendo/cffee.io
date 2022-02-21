@@ -8,6 +8,7 @@ export * from "./Dialog";
 export * from "./DropdownMenu";
 export * from "./Flex";
 export * from "./Grid";
+export * from "./IconButton";
 export * from "./Input";
 export * from "./Label";
 export * from "./List";
