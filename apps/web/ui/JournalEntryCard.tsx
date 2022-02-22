@@ -1,4 +1,5 @@
 import Avatar from "boring-avatars";
+import isEqual from "lodash.isequal";
 import React from "react";
 import { Calendar, Maximize2, Minimize2 } from "react-feather";
 import { JournalEntryData } from "types";
@@ -21,6 +22,7 @@ import {
   RATING_TO_EMOJI,
   withDegreeUnit,
 } from "../utils/copy";
+import { INITIAL_EDITOR_CONTENT } from "../utils/editor";
 import { Badge } from "./Badge";
 import { ReadonlyEditor } from "./ReadonlyEditor";
 
@@ -43,6 +45,14 @@ const Card = styled(Collapsible, {
   gap: "$4",
   padding: "$4",
   position: "relative",
+
+  variants: {
+    span: {
+      true: {
+        gridColumnEnd: "span 2",
+      },
+    },
+  },
 });
 
 export const JournalEntryCard = ({ journalEntry }: Props) => {
@@ -60,6 +70,10 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
 
   const [open, setOpen] = React.useState(false);
 
+  const hasNote = React.useMemo(() => {
+    return note && !isEqual(INITIAL_EDITOR_CONTENT, note);
+  }, [note]);
+
   const emoji = RATING_TO_EMOJI[rating];
   const date = new Intl.DateTimeFormat("en-US", {
     dateStyle: "short",
@@ -69,7 +83,7 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
   }).format(new Date(updatedAt));
 
   return (
-    <Card open={open} onOpenChange={setOpen}>
+    <Card span={hasNote} open={open} onOpenChange={setOpen}>
       <Box css={{ flex: "0 0 48px" }}>
         <Avatar
           name={id}
@@ -102,23 +116,27 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
             </Flex>
           </div>
 
-          <CollapsibleTrigger asChild>
-            <IconButton type="button" raised>
-              {open ? <Minimize2 /> : <Maximize2 />}
-            </IconButton>
-          </CollapsibleTrigger>
+          {hasNote && (
+            <CollapsibleTrigger asChild>
+              <IconButton type="button" raised>
+                {open ? <Minimize2 /> : <Maximize2 />}
+              </IconButton>
+            </CollapsibleTrigger>
+          )}
         </Flex>
 
-        <CollapsibleContent>
-          {note && <ReadonlyEditor value={note} />}
-          {grindDescription && (
-            <Field>
-              <Label htmlFor={`${id}-gd`}>Grind description</Label>
-              <Input id={`${id}-gd`} readOnly value={grindDescription} />
-            </Field>
-          )}
-        </CollapsibleContent>
+        {hasNote && (
+          <CollapsibleContent>
+            <ReadonlyEditor value={note} />
+          </CollapsibleContent>
+        )}
 
+        {grindDescription && (
+          <Field>
+            <Label htmlFor={`${id}-gd`}>Grind description</Label>
+            <Input id={`${id}-gd`} readOnly value={grindDescription} />
+          </Field>
+        )}
         <Badge css={{ alignSelf: "flex-end" }}>{grinder}</Badge>
         <Flex css={{ gap: "$2", justifyContent: "flex-end" }}>
           <Badge>{emoji}</Badge>

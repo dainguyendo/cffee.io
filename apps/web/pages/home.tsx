@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import React from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { Flex, IconButton, Text } from "ui";
+import { Box, Flex, IconButton, Text } from "ui";
 import { useJournalEntries } from "../api";
 import { Center } from "../ui/Center";
 import { JournalEntryCard } from "../ui/JournalEntryCard";
@@ -68,13 +68,20 @@ export default function Home() {
                 <Text variant="paragraph" bold css={{ alignSelf: "flex-end" }}>
                   {distance}
                 </Text>
-                <Flex direction="column" css={{ width: "100%", gap: "$2" }}>
+                <Box
+                  css={{
+                    display: "grid",
+                    width: "100%",
+                    gap: "$2",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                  }}
+                >
                   {entriesForDate.map((entry) => {
                     return (
                       <JournalEntryCard key={entry.id} journalEntry={entry} />
                     );
                   })}
-                </Flex>
+                </Box>
               </React.Fragment>
             );
           })}

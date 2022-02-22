@@ -4,6 +4,10 @@ import { msToDuration } from "./copy";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
+export const INITIAL_EDITOR_CONTENT = [
+  { type: "paragraph", children: [{ text: "" }] },
+];
+
 export const isMarkActive = (editor: Editor, format: Format) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;

@@ -30,7 +30,8 @@ import { RichEditor } from "../ui/RichEditor";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
-import { toTimerBlocks } from "../utils/editor";
+import { INITIAL_EDITOR_CONTENT, toTimerBlocks } from "../utils/editor";
+import isEqual from "lodash.isequal";
 
 type Accordions = "method" | "bean";
 interface JournalFormData {
@@ -54,8 +55,6 @@ interface Props {
   } | null;
 }
 
-const EMPTY_NOTE = [{ type: "paragraph", children: [{ text: "" }] }];
-
 export default function Equipment({ timer }: Props) {
   const router = useRouter();
   const [expanded, expand] = React.useState<Accordions | undefined>();
@@ -71,7 +70,7 @@ export default function Equipment({ timer }: Props) {
         grinder: "",
         grindDescription: "",
         waterTemperatureFahrenheit: INITIAL_FAHRENHEIT,
-        note: timer ? toTimerBlocks(timer) : EMPTY_NOTE,
+        note: timer ? toTimerBlocks(timer) : INITIAL_EDITOR_CONTENT,
       },
     });
 
@@ -98,17 +97,16 @@ export default function Equipment({ timer }: Props) {
   const displayRoaster = (watch("bean.roaster") || setup?.bean?.roaster) ?? "";
 
   const submit = async (data: JournalFormData) => {
-    await createJournalEntry(data);
+    const isEmptyNote = isEqual(INITIAL_EDITOR_CONTENT, data.note);
+    await createJournalEntry({
+      ...data,
+      note: isEmptyNote ? undefined : data.note,
+    });
     router.push("/home");
   };
 
   const toggle = (accordion: Accordions) => {
-    if (accordion === expanded) {
-      expand(undefined);
-      return;
-    }
-
-    expand(accordion);
+    expand(accordion === expanded ? undefined : accordion);
   };
 
   return (
