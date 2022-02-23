@@ -5,14 +5,15 @@ export const Button = styled(
   {
     border: "none",
     borderRadius: "$medium",
-    px: "$2",
-    py: "$1",
+    px: "$3",
+    py: "$2",
 
     variants: {
       variant: {
         primary: {
           backgroundColor: "$primary",
-          color: "$paragraph",
+          color: "$stroke",
+          fontWeight: "$bold",
 
           "&:focus": {
             outlineOffset: 2,
@@ -20,8 +21,9 @@ export const Button = styled(
           },
         },
         secondary: {
-          backgroundColor: "hsl(230, 32%, 17%)",
-          color: "$paragraph",
+          backgroundColor: "$secondary",
+          color: "$stroke",
+          fontWeight: "$bold",
 
           "&:focus": {
             outlineOffset: 2,

@@ -11,7 +11,7 @@ export const IconToggle = styled(Toggle, {
   alignItems: "center",
   justifyContent: "center",
 
-  "& svg": { stroke: "$paragraph" },
+  "& svg": { stroke: "$stroke" },
   "&:hover": { backgroundColor: "$background" },
 
   '&[data-state="on"]': {

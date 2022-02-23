@@ -18,8 +18,7 @@ export const EmojiRadio = styled(RadioGroupItem, {
 export const EmojiIndicator = styled(RadioGroupIndicator, {
   display: "grid",
   placeItems: "center",
-  background:
-    "linear-gradient(62deg, #f37286 0%, #ef81ae 16%, #ec90cc 33%, #ea9ee2 50%, #d6b5e8 66%, #d0c5e8 83%, #d2d2e9 100%)",
+  background: "$gradient",
   border: "none",
   borderRadius: "$large",
   width: "48px",

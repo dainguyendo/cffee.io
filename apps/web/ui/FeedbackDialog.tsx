@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
   IconButton,
-  Input,
   keyframes,
   Spacer,
   styled,
@@ -21,7 +20,6 @@ import {
 } from "ui";
 import { postFeedback } from "../api";
 import { Field } from "../form/Field";
-import { FieldInput } from "../form/FieldInput";
 import { FieldLabel } from "../form/FieldLabel";
 
 const overlayShow = keyframes({
@@ -45,7 +43,7 @@ const Overlay = styled(DialogOverlay, {
 });
 
 const Content = styled(DialogContent, {
-  backgroundColor: "inherit",
+  backgroundColor: "$background",
   borderRadius: "$large",
   boxShadow: `
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.017),

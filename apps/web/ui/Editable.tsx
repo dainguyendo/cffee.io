@@ -4,7 +4,7 @@ import { styled } from "ui";
 export const Editable = styled(SlateEditable, {
   borderRadius: "$medium",
   padding: "$4",
-  color: "$paragraph",
+  color: "$stroke",
   background: "$blackDamp",
 
   boxShadow: `

@@ -15,7 +15,7 @@ export const Badge = styled("div", {
     variant: {
       primary: {
         background: "$background",
-        color: "$paragraph",
+        color: "$stroke",
       },
     },
   },

@@ -9,14 +9,14 @@ const BrewMethodRadioItem = styled(RadioGroupItem, {
   background: "inherit",
   border: "1px solid transparent",
   borderRadius: "$small",
-  color: "$paragraph",
+  color: "$stroke",
   display: "flex",
   gap: "$1",
   p: "$2",
   position: "relative",
 
   "& svg": {
-    stroke: "$paragraph",
+    stroke: "$stroke",
   },
 
   "&:hover": { background: "$background" },
@@ -32,8 +32,7 @@ const Indicator = styled(RadioGroupIndicator, {
   position: "absolute",
   top: 0,
   left: 0,
-  background:
-    "linear-gradient(62deg, #f37286 0%, #ef81ae 16%, #ec90cc 33%, #ea9ee2 50%, #d6b5e8 66%, #d0c5e8 83%, #d2d2e9 100%)",
+  background: "$gradient",
 });
 
 const BrewMethodItemIcon = () => <Coffee size={24} />;

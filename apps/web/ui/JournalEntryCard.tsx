@@ -109,7 +109,7 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
             </Text>
 
             <Flex css={{ ai: "center", gap: "$1" }}>
-              <Calendar size={15} color={theme.colors["palepurple"].value} />
+              <Calendar size={15} color={theme.colors["tertiary"].value} />
               <Text variant="caption">
                 {date}, {time}
               </Text>

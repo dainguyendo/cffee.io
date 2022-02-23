@@ -6,7 +6,7 @@ export const Textarea = styled("textarea", {
   border: "1px solid transparent",
   borderRadius: "$medium",
   padding: "$2",
-  color: "$paragraph",
+  color: "$stroke",
 
   "&:hover": { border: "1px solid $primary" },
   "&:focus": { border: "1px solid $primary" },

@@ -6,14 +6,13 @@ export const Text = styled("span", {
   variants: {
     variant: {
       heading: {
-        fontWeight: "$bold",
-        color: "$heading",
+        color: "$headline",
       },
       paragraph: {
         color: "$paragraph",
       },
       caption: {
-        color: "$caption",
+        color: "$paragraph",
       },
     },
 

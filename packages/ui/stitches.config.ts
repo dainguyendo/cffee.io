@@ -13,22 +13,33 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      black: "hsl(230, 33%, 21%)",
-      blackDamp: "hsl(230, 32%, 17%)",
+      stroke: "hsl(345, 13%, 18%)",
+      main: "hsl(60, 100%, 100%)",
+      primary: "hsl(346, 100%, 77%)",
+      secondary: "hsl(359, 100%, 89%)",
+      tertiary: "hsl(281, 60%, 85%)",
 
-      whitesmoke: "hsl(0, 0%, 96%)",
-      hotpink: "hsl(330, 72%, 67%)",
-      lightpink: "hsl(351, 100%, 86%)",
-      palepurple: "hsl(230, 58%, 82%)",
+      background: "hsl(22, 66%, 94%)",
+      headline: "hsl(345, 13%, 18%)",
+      paragraph: "hsl(344, 9%, 32%)",
 
-      background: "$black",
-
-      heading: "$hotpink",
-      paragraph: "$whitesmoke",
-      caption: "$palepurple",
-
-      primary: "$hotpink",
-      secondary: "$lightpink",
+      gradient: `
+        linear-gradient(
+          35deg,
+          hsl(60deg 100% 100%) 0%,
+          hsl(44deg 46% 98%) 9%,
+          hsl(34deg 53% 96%) 18%,
+          hsl(27deg 61% 95%) 27%,
+          hsl(20deg 72% 94%) 36%,
+          hsl(15deg 86% 92%) 45%,
+          hsl(9deg 95% 90%) 55%,
+          hsl(2deg 100% 89%) 64%,
+          hsl(357deg 100% 87%) 73%,
+          hsl(353deg 100% 84%) 82%,
+          hsl(349deg 100% 81%) 91%,
+          hsl(346deg 100% 77%) 100%
+        )
+      `,
     },
     fonts: {
       inter: '"Inter", sans-serif',
@@ -43,10 +54,8 @@ export const {
       7: "4rem",
     },
     fontWeights: {
-      thin: 200,
-      normal: 400,
-      semiBold: 500,
-      bold: 600,
+      normal: 500,
+      bold: 700,
     },
     space: {
       1: "4px",

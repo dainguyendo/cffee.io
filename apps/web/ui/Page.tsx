@@ -23,7 +23,7 @@ export const Page: React.FC = ({ children }) => {
   return (
     <SidebarLayout>
       <SidebarNavigation />
-      <Container>
+      <Container css={{ background: "$background" }}>
         <MainContent>
           <Flex
             css={{

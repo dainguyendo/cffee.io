@@ -6,7 +6,7 @@ export const Input = styled("input", {
   border: "1px solid $secondary",
   borderRadius: "$medium",
   padding: "$2",
-  color: "$paragraph",
+  color: "$stroke",
 
   "&:hover": { border: "1px solid $primary" },
   "&:focus": { border: "1px solid $primary" },

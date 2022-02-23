@@ -46,7 +46,7 @@ export const SetupSummary = () => {
   if (status === "loading") {
     return (
       <Box
-        gradiant
+        gradient
         boxShadow="medium"
         css={{
           borderRadius: "$large",
@@ -62,7 +62,7 @@ export const SetupSummary = () => {
 
   return (
     <Box
-      gradiant
+      gradient
       boxShadow="medium"
       css={{
         p: "$4",
