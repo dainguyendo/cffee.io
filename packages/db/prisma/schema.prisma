@@ -109,6 +109,8 @@ model Journal {
   note                       Json?
   bean                       Bean       @relation(fields: [beanId], references: [id])
   user                       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([beanId, userId])
 }
 
 model Setup {
@@ -122,6 +124,8 @@ model Setup {
   default    Boolean?    @default(false)
   bean       Bean?       @relation(fields: [beanId], references: [id])
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([beanId])
 }
 
 model Feedback {
@@ -130,4 +134,6 @@ model Feedback {
   description String
   userId      String
   user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
