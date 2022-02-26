@@ -1,5 +1,6 @@
-import { signIn, useSession } from "next-auth/react";
-import { Box, Button, styled } from "ui";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Anchor, Box, Button, styled } from "ui";
 import { UserDropdownMenu } from "./UserDropdownMenu";
 
 const Nav = styled("nav", {
@@ -25,14 +26,9 @@ export const LoadingNavigation = () => {
       <Nav>
         <Box css={{ flexGrow: 1 }} />
         <div>
-          <Button
-            type="button"
-            onClick={() => {
-              signIn();
-            }}
-          >
-            Sign in
-          </Button>
+          <Link href="/auth/signin" passHref>
+            <Anchor>Sign in</Anchor>
+          </Link>
         </div>
       </Nav>
     );
