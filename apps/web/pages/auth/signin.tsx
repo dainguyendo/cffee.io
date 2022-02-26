@@ -39,14 +39,7 @@ export default function SignIn({
           <Flex direction="column" css={{ gap: "$2" }}>
             {Object.values(providers).map((provider) => (
               <div key={provider.name}>
-                <Button
-                  type="button"
-                  onClick={() =>
-                    signIn(provider.id, {
-                      callbackUrl: location.origin + "/home",
-                    })
-                  }
-                >
+                <Button type="button" onClick={() => signIn(provider.id)}>
                   {provider.name}
                 </Button>
               </div>
