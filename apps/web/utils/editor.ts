@@ -1,16 +1,16 @@
 import { Descendant, Editor, Element as SlateElement, Transforms } from "slate";
-import { Format } from "../types/slate";
+import { CustomElement, Format } from "../types/slate";
 import { msToDuration } from "./copy";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
-export const INITIAL_EDITOR_CONTENT = [
+export const INITIAL_EDITOR_CONTENT: CustomElement[] = [
   { type: "paragraph", children: [{ text: "" }] },
 ];
 
 export const isMarkActive = (editor: Editor, format: Format) => {
   const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
+  return marks ? (marks as any)[format] === true : false;
 };
 
 const isBlockActive = (editor: Editor, format: Format) => {
@@ -21,7 +21,9 @@ const isBlockActive = (editor: Editor, format: Format) => {
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
       match: (n) =>
-        !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+        !Editor.isEditor(n) &&
+        SlateElement.isElement(n) &&
+        (n.type as any) === format,
     })
   );
 
@@ -50,13 +52,13 @@ export const toggleBlock = (editor: Editor, format: Format) => {
     split: true,
   });
   const newProperties: Partial<SlateElement> = {
-    type: isActive ? "paragraph" : isList ? "list-item" : format,
+    type: (isActive ? "paragraph" : isList ? "list-item" : format) as any,
   };
   Transforms.setNodes<SlateElement>(editor, newProperties);
 
   if (!isActive && isList) {
     const block = { type: format, children: [] };
-    Transforms.wrapNodes(editor, block);
+    Transforms.wrapNodes(editor, block as any);
   }
 };
 
@@ -73,7 +75,7 @@ export function toTimerBlocks(data: {
   });
 
   if (data.laps.length) {
-    const listBlock = { type: "bulleted-list", children: [] };
+    const listBlock: any = { type: "bulleted-list", children: [] };
 
     data.laps.forEach((lap, idx) => {
       const listItem = { type: "list-item", children: [] };
@@ -85,7 +87,7 @@ export function toTimerBlocks(data: {
         }`;
       }
 
-      listItem.children.push({ text: lapText });
+      (listItem.children as any).push({ text: lapText });
       listBlock.children.push(listItem);
     });
 

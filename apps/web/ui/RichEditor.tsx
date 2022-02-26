@@ -5,12 +5,13 @@ import { createEditor, Descendant, Editor } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, withReact } from "slate-react";
 import { Flex, Separator, VerticalStack } from "ui";
+import { Format } from "../types/slate";
 import { toggleMark } from "../utils/editor";
 import { BlockButton } from "./BlockButton";
 import { Editable } from "./Editable";
 import { MarkButton } from "./MarkButton";
 
-const HOTKEYS = {
+const HOTKEYS: Record<string, Format> = {
   "mod+b": "bold",
   "mod+i": "italic",
   "mod+u": "underline",
@@ -83,7 +84,7 @@ export const RichEditor = ({ placeholder, value, setValue }: Props) => {
   );
 };
 
-const Element = ({ attributes, children, element }) => {
+const Element = ({ attributes, children, element }: any) => {
   switch (element.type) {
     case "block-quote":
       return <blockquote {...attributes}>{children}</blockquote>;
@@ -102,7 +103,7 @@ const Element = ({ attributes, children, element }) => {
   }
 };
 
-const Leaf = ({ attributes, children, leaf }) => {
+const Leaf = ({ attributes, children, leaf }: any) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }

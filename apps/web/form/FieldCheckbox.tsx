@@ -12,16 +12,14 @@ export function FieldCheckbox<FormValues extends FieldValues = object>(
   const { control, rules, shouldUnregister, defaultValue, name, ...rest } =
     props;
 
-  const { isIndeterminate, ...checkboxProps } = rest;
+  const { ...checkboxProps } = rest;
 
   const ref = React.useRef(null);
   const [checked, setChecked] = React.useState<boolean>(
     control && typeof defaultValue === "boolean" ? defaultValue : false
   );
   const [indeterminate, setIndeterminate] = React.useState<boolean | undefined>(
-    control &&
-      isIndeterminate &&
-      (defaultValue === undefined || defaultValue === null)
+    control && (defaultValue === undefined || defaultValue === null)
       ? true
       : false
   );
@@ -43,26 +41,8 @@ export function FieldCheckbox<FormValues extends FieldValues = object>(
       aria-describedby={`${name}-field-error`}
       checked={Boolean(field.value)}
       onChange={() => {
-        if (isIndeterminate) {
-          // Handle change steps:
-          // true => null (indeterminate) => false => true
-          if (checked) {
-            setChecked(false);
-            setIndeterminate(true);
-            field.onChange(null);
-          } else if (indeterminate) {
-            setChecked(false);
-            setIndeterminate(false);
-            field.onChange(false);
-          } else {
-            setChecked(true);
-            setIndeterminate(false);
-            field.onChange(true);
-          }
-        } else {
-          setChecked(!checked);
-          field.onChange(!checked);
-        }
+        setChecked(!checked);
+        field.onChange(!checked);
       }}
     />
   );
