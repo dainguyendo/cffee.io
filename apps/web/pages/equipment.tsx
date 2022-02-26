@@ -163,20 +163,6 @@ export default function Equipment() {
                   <Label htmlFor="roaster">Roaster</Label>
                   <Input {...register("roaster")} />
                 </Field>
-                <Field variant="row">
-                  <Input type="checkbox" {...register("singleOrigin")} />
-                  <Label htmlFor="roast">Single origin?</Label>
-                </Field>
-                <FieldGroupRow>
-                  <Field>
-                    <Label htmlFor="roast">State</Label>
-                    <Input {...register("state")} />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="roast">Country</Label>
-                    <Input {...register("countryCode")} />
-                  </Field>
-                </FieldGroupRow>
 
                 <Button
                   type="submit"

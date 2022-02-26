@@ -132,30 +132,14 @@ export default function Equipment({ timer }: Props) {
             </AccordionTrigger>
             <AccordionContent>
               <Flex direction="column" css={{ gap: "$2" }}>
-                <FieldGroupRow>
-                  <Field>
-                    <Label htmlFor="roast">Roast</Label>
-                    <Input {...register("bean.roast")} />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="roaster">Roaster</Label>
-                    <Input {...register("bean.roaster")} />
-                  </Field>
-                </FieldGroupRow>
-                <Field variant="row">
-                  <Input type="checkbox" {...register("bean.singleOrigin")} />
-                  <Label htmlFor="roast">Single origin?</Label>
+                <Field>
+                  <Label htmlFor="roast">Roast</Label>
+                  <Input {...register("bean.roast")} />
                 </Field>
-                <FieldGroupRow>
-                  <Field>
-                    <Label htmlFor="roast">State</Label>
-                    <Input {...register("bean.state")} />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="roast">Country</Label>
-                    <Input {...register("bean.countryCode")} />
-                  </Field>
-                </FieldGroupRow>
+                <Field>
+                  <Label htmlFor="roaster">Roaster</Label>
+                  <Input {...register("bean.roaster")} />
+                </Field>
               </Flex>
             </AccordionContent>
           </AccordionItem>
@@ -177,6 +161,8 @@ export default function Equipment({ timer }: Props) {
           </AccordionItem>
         </Accordion>
 
+        <Spacer size="5" />
+
         <VerticalStack size="$3">
           <Field>
             <Label htmlFor="grinder">Grinder</Label>
@@ -192,6 +178,8 @@ export default function Equipment({ timer }: Props) {
             />
           </Field>
 
+          <Spacer size="3" />
+
           <Center css={{ width: "100%" }}>
             <TemperatureSlider
               fahrenheit={fahrenheit}
@@ -201,11 +189,15 @@ export default function Equipment({ timer }: Props) {
             />
           </Center>
 
+          <Spacer size="3" />
+
           <RichEditor
             placeholder="✨ How did it brew?"
             value={note}
             setValue={(value) => setValue("note", value)}
           />
+
+          <Spacer size="3" />
 
           <RadioGroup
             value={rating}

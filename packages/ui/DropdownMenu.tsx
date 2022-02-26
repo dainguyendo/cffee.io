@@ -5,7 +5,7 @@ export const DropdownMenu = RadixDropdownMenu.Root;
 export const DropdownMenuTrigger = RadixDropdownMenu.Trigger;
 
 export const DropdownMenuContent = styled(RadixDropdownMenu.Content, {
-  background: "$blackDamp",
+  background: "$background",
   minWidth: "20ch",
   borderRadius: "$large",
   padding: "$3 $2",

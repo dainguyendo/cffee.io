@@ -74,28 +74,36 @@ export const Stopwatch = () => {
       <Box css={{ justifySelf: "center", p: "$5", width: "100%" }}>
         <ScrollArea css={{ overflow: "hidden", height: 225 }}>
           <ScrollAreaViewport>
-            {laps && laps.length
-              ? laps.map((l, i) => {
-                  const display = millisecondsToTime(l);
-                  return (
-                    <Grid
-                      key={i}
-                      css={{
-                        gap: "$2",
-                        gridTemplateColumns: "repeat(3, minmax(50px, 1fr))",
-                      }}
-                    >
-                      <Text>#{i}</Text>
-                      <Text>{display}</Text>
-                      <Text>
-                        {i === 0
-                          ? display
-                          : millisecondsToTime(l - laps[i - 1])}
-                      </Text>
-                    </Grid>
-                  );
-                })
-              : null}
+            <Grid
+              css={{
+                gridTemplateColumns: "1fr",
+                placeItems: "center",
+              }}
+            >
+              {laps && laps.length
+                ? laps.map((l, i) => {
+                    const display = millisecondsToTime(l);
+                    return (
+                      <Grid
+                        key={i}
+                        css={{
+                          gridTemplateColumns: "repeat(3, 1fr)",
+                          placeItems: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <Text>#{i}</Text>
+                        <Text>{display}</Text>
+                        <Text>
+                          {i === 0
+                            ? display
+                            : millisecondsToTime(l - laps[i - 1])}
+                        </Text>
+                      </Grid>
+                    );
+                  })
+                : null}
+            </Grid>
           </ScrollAreaViewport>
           <ScrollAreaScrollBar orientation="vertical">
             <ScrollAreaThumb />
@@ -141,22 +149,22 @@ export const Stopwatch = () => {
               Lap
             </Button>
           )}
-          {!isActive && hasTime && (
-            <Link
-              passHref
-              href={{
-                pathname: "/brew",
-                query: {
-                  time,
-                  laps,
-                },
-              }}
-            >
-              <Anchor variant="primaryButton">Create brew entry</Anchor>
-            </Link>
-          )}
         </div>
       </Grid>
+      {!isActive && hasTime && (
+        <Link
+          passHref
+          href={{
+            pathname: "/brew",
+            query: {
+              time,
+              laps,
+            },
+          }}
+        >
+          <Anchor variant="primaryButton">Create brew entry</Anchor>
+        </Link>
+      )}
     </Grid>
   );
 };

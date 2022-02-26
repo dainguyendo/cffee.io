@@ -1,12 +1,23 @@
-import { AppHeader } from "../ui/AppHeader";
+import { Text } from "ui";
 import { FullBleedLayout } from "../ui/FullBleedLayout";
-import { Hero } from "../ui/Hero";
+import { LoadingNavigation } from "../ui/LandingNavigation";
 
 export default function Web() {
   return (
-    <FullBleedLayout css={{ height: "100vh", background: "$background" }}>
-      <AppHeader />
-      <Hero className="full-bleed" />
+    <FullBleedLayout
+      css={{
+        height: "100vh",
+        background: "$background",
+        px: "$3",
+        "@bp1": { px: 0 },
+      }}
+    >
+      <LoadingNavigation />
+      <main>
+        <Text bold css={{ fontSize: "$7" }}>
+          Cffee
+        </Text>
+      </main>
     </FullBleedLayout>
   );
 }

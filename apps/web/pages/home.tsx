@@ -73,7 +73,7 @@ export default function Home() {
                     display: "grid",
                     width: "100%",
                     gap: "$2",
-                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
                   }}
                 >
                   {entriesForDate.map((entry) => {

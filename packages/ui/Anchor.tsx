@@ -17,6 +17,11 @@ export const Anchor = styled("a", {
         all: "unset",
         border: "none",
         borderRadius: "$medium",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+
         px: "$3",
         py: "$2",
         backgroundColor: "$primary",

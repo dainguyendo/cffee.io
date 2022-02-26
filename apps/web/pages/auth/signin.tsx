@@ -16,6 +16,7 @@ const Main = styled("main", {
   alignItems: "center",
   justifyContent: "center",
   padding: "$7",
+  background: "$background",
 });
 
 export default function SignIn({
@@ -29,11 +30,12 @@ export default function SignIn({
     <Page>
       <Main>
         <div>
-          <Text bold css={{ fontSize: "$3" }}>
+          <Text as="p" bold css={{ fontSize: "$3" }}>
             Let&apos;s brew
           </Text>
           <Cffee />
           <Spacer direction="vertical" size="4" />
+          <Text>Continue with:</Text>
           <Flex direction="column" css={{ gap: "$2" }}>
             {Object.values(providers).map((provider) => (
               <div key={provider.name}>
@@ -45,7 +47,7 @@ export default function SignIn({
                     })
                   }
                 >
-                  Sign in with {provider.name}
+                  {provider.name}
                 </Button>
               </div>
             ))}

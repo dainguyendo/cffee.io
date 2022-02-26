@@ -87,9 +87,9 @@ model Bean {
   updatedAt    DateTime  @updatedAt
   roaster      String
   roast        String
-  singleOrigin Boolean
+  singleOrigin Boolean?
   state        String?
-  countryCode  String
+  countryCode  String?
   rating       Rating?
   Journal      Journal[]
   Setup        Setup[]

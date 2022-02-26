@@ -10,6 +10,7 @@ const MainContent = styled("div", {
 });
 
 const Container = styled(Box, {
+  minHeight: "100vh",
   padding: "$2",
   "@bp2": {
     padding: "$4",
