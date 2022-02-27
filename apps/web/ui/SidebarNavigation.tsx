@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { BookOpen, Plus, Tool, Watch } from "react-feather";
-import { List, Spacer, styled } from "ui";
+import { Box, List, Spacer, styled } from "ui";
 import { UserDropdownMenu } from "../ui/UserDropdownMenu";
 import { Cffee } from "./Cffee";
 import { NavigationAnchor } from "./NavigationAnchor";
@@ -15,11 +15,11 @@ const ListItem = styled("li", {
 
 const SideNavigation = styled("nav", {
   display: "none",
+  background: "$background",
   "@bp1": {
     display: "flex",
     flexDirection: "column",
     padding: "$6",
-    background: "$blackDamp",
     position: "sticky",
     top: 0,
     height: "100vh",
@@ -31,8 +31,9 @@ export const SidebarNavigation = () => {
   const { isHomeActive, isEquipmentActive, isTimerActive } = usePathnameMatch();
   return (
     <SideNavigation>
-      <Cffee />
-
+      <Box css={{ flexGrow: 1 }}>
+        <Cffee />
+      </Box>
       <Spacer size="6" />
 
       <Link href="/brew" passHref>

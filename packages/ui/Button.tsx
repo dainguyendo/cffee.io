@@ -33,7 +33,7 @@ export const Button = styled(
         link: {
           all: "unset",
           padding: "unset",
-          color: "$primary",
+          color: "$headline",
           textDecoration: "underline",
           textDecorationThickness: "2px",
           textUnderlineOffset: "2px",

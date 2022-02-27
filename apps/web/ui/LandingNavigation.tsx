@@ -8,6 +8,7 @@ const Nav = styled("nav", {
   maxHeight: 100,
   py: "$4",
   display: "flex",
+  ai: "center",
 });
 
 export const LandingNavigation = () => {

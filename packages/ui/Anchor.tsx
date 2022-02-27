@@ -4,7 +4,7 @@ export const Anchor = styled("a", {
   variants: {
     variant: {
       default: {
-        color: "$primary",
+        color: "$headline",
         textDecoration: "underline",
         textDecorationThickness: "2px",
         textUnderlineOffset: "2px",

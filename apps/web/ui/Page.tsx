@@ -1,4 +1,5 @@
 import { Box, Flex, styled } from "ui";
+import { Blur } from "./Blur";
 import { Cffee } from "./Cffee";
 import { MenuNavigation } from "./MenuNavigation";
 import { SidebarLayout } from "./SidebarLayout";
@@ -24,7 +25,7 @@ export const Page: React.FC = ({ children }) => {
   return (
     <SidebarLayout>
       <SidebarNavigation />
-      <Container css={{ background: "$background" }}>
+      <Container css={{ position: "relative" }}>
         <MainContent>
           <Flex
             css={{
@@ -40,6 +41,20 @@ export const Page: React.FC = ({ children }) => {
           </Flex>
 
           {children}
+
+          <Box
+            aria-hidden
+            css={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              pointerEvents: "none",
+              width: "100%",
+              height: "100vh",
+            }}
+          >
+            <Blur />
+          </Box>
         </MainContent>
       </Container>
     </SidebarLayout>

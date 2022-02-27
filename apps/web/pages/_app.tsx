@@ -1,4 +1,4 @@
-import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -26,10 +26,8 @@ export default function App({
       </Head>
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          <AnimatePresence>
-            <AnimateSharedLayout>
-              <Component {...pageProps} />
-            </AnimateSharedLayout>
+          <AnimatePresence exitBeforeEnter>
+            <Component {...pageProps} />
           </AnimatePresence>
         </QueryClientProvider>
       </SessionProvider>

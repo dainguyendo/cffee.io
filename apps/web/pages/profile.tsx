@@ -31,7 +31,7 @@ export default function Profile() {
         </VerticalStack>
       </section>
 
-      <Separator css={{ backgroundColor: "$tertiary", my: "$6" }} />
+      <Separator css={{ backgroundColor: "$secondary", my: "$6" }} />
 
       <section>
         <VerticalStack size="$4">

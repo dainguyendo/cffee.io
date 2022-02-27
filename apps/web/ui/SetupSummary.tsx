@@ -62,12 +62,13 @@ export const SetupSummary = () => {
       boxShadow="medium"
       css={{
         p: "$4",
-        width: "100%",
+        width: "fit-content",
         borderRadius: "$large",
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "space-around",
         gap: "$2",
+        alignSelf: "flex-start",
       }}
     >
       {data?.grinder && (

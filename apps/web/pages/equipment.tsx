@@ -6,14 +6,14 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { BeanFormData } from "types";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   Button,
   Flex,
   Input,
   Label,
+  Select,
+  Separator,
+  Text,
+  VerticalStack,
 } from "ui";
 import {
   createBean,
@@ -23,18 +23,15 @@ import {
   UseSetupData,
 } from "../api";
 import { Field } from "../form/Field";
-import { FieldGroupRow } from "../form/FieldGroupRow";
-import { BrewMethodFields } from "../ui/BrewMethodFields";
 import { Page } from "../ui/Page";
 import { useDebounce } from "../ui/useDebounce";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 
 type Accordions = "method" | "grinder" | "bean";
 
 export default function Equipment() {
   const queryClient = useQueryClient();
   const { data } = useSetup();
-
-  const [expanded, expand] = React.useState<Accordions | undefined>();
 
   const [grinder, setGrinder] = React.useState<string>(data?.grinder ?? "");
   const debouncedGrinder: string = useDebounce<string>(grinder, 500);
@@ -72,24 +69,17 @@ export default function Equipment() {
     }
   );
 
-  const {
-    register,
-    reset,
-    watch,
-    setValue,
-    getValues,
-    handleSubmit,
-    formState,
-  } = useForm<BeanFormData>({
-    defaultValues: {
-      roast: "",
-      roaster: "",
-      singleOrigin: false,
-      state: "",
-      countryCode: "",
-      rating: null,
-    },
-  });
+  const { register, reset, getValues, handleSubmit, formState } =
+    useForm<BeanFormData>({
+      defaultValues: {
+        roast: "",
+        roaster: "",
+        singleOrigin: false,
+        state: "",
+        countryCode: "",
+        rating: null,
+      },
+    });
 
   React.useEffect(() => {
     if (data) {
@@ -108,73 +98,81 @@ export default function Equipment() {
     await createBean(data);
   };
 
-  const toggle = (accordion: Accordions) => {
-    if (accordion === expanded) {
-      expand(undefined);
-      return;
-    }
-
-    expand(accordion);
-  };
-
   return (
     <Page>
-      <Accordion
-        type="single"
-        value={expanded}
-        onValueChange={toggle}
-        collapsible
-      >
-        <AccordionItem value="method">
-          <AccordionTrigger>Brew method</AccordionTrigger>
-          <AccordionContent>
-            <BrewMethodFields
-              selected={data?.brewMethod ?? null}
-              onBrewMethodChanged={mutate}
+      <Text as="h1" variant="heading">
+        Equipment
+      </Text>
+      <Separator css={{ my: "$4" }} />
+      <section>
+        <VerticalStack size="$4">
+          <Text id="brew-method-label" as="h2" variant="heading">
+            Brew method
+          </Text>
+
+          <Field>
+            <Select
+              aria-labelledby="brew-method-label"
+              defaultValue={data?.brewMethod ?? undefined}
+              onChange={(evt) => {
+                mutate(evt.currentTarget.value as BrewMethod);
+              }}
+            >
+              {Object.values(BrewMethod).map((value) => {
+                return (
+                  <option key={value} value={value}>
+                    {BREW_METHOD_TO_STRING[value]}
+                  </option>
+                );
+              })}
+            </Select>
+          </Field>
+        </VerticalStack>
+      </section>
+      <Separator css={{ backgroundColor: "$secondary", my: "$6" }} />
+      <section>
+        <VerticalStack size="$4">
+          <Text id="grinder-label" as="h2" variant="heading">
+            Coffee grinder
+          </Text>
+          <Field>
+            <Input
+              id="equipment-grinder"
+              aria-labelledby="grinder-label"
+              placeholder="LAGOM mini"
+              defaultValue={data?.grinder ?? undefined}
+              onChange={(evt) => setGrinder(evt.currentTarget.value)}
             />
-          </AccordionContent>
-        </AccordionItem>
+          </Field>
+        </VerticalStack>
+      </section>
+      <Separator css={{ backgroundColor: "$secondary", my: "$6" }} />
+      <section>
+        <VerticalStack size="$4">
+          <Text as="h2" variant="heading">
+            Coffee beans
+          </Text>
+          <form onSubmit={handleSubmit(submit)}>
+            <Flex direction="column" css={{ gap: "$4" }}>
+              <Field>
+                <Label htmlFor="roast">Roast</Label>
+                <Input {...register("roast")} />
+              </Field>
+              <Field>
+                <Label htmlFor="roaster">Roaster</Label>
+                <Input {...register("roaster")} />
+              </Field>
 
-        <AccordionItem value="grinder">
-          <AccordionTrigger>Grinder</AccordionTrigger>
-          <AccordionContent>
-            <Field>
-              <Label htmlFor="equipment-grinder">Grinder</Label>
-              <Input
-                id="equipment-grinder"
-                placeholder="LAGOM mini"
-                defaultValue={data?.grinder ?? undefined}
-                onChange={(evt) => setGrinder(evt.currentTarget.value)}
-              />
-            </Field>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="bean">
-          <AccordionTrigger>Coffee beans</AccordionTrigger>
-          <AccordionContent>
-            <form onSubmit={handleSubmit(submit)}>
-              <Flex direction="column" css={{ gap: "$4" }}>
-                <Field>
-                  <Label htmlFor="roast">Roast</Label>
-                  <Input {...register("roast")} />
-                </Field>
-                <Field>
-                  <Label htmlFor="roaster">Roaster</Label>
-                  <Input {...register("roaster")} />
-                </Field>
-
-                <Button
-                  type="submit"
-                  disabled={!formState.isDirty || formState.isSubmitting}
-                >
-                  Update
-                </Button>
-              </Flex>
-            </form>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+              <Button
+                type="submit"
+                disabled={!formState.isDirty || formState.isSubmitting}
+              >
+                Update
+              </Button>
+            </Flex>
+          </form>
+        </VerticalStack>
+      </section>
     </Page>
   );
 }

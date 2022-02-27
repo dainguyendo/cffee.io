@@ -9,6 +9,7 @@ import { Format } from "../types/slate";
 import { toggleMark } from "../utils/editor";
 import { BlockButton } from "./BlockButton";
 import { Editable } from "./Editable";
+import { ParagraphBlock } from "./EditorBlocks/ParagraphBlock";
 import { MarkButton } from "./MarkButton";
 
 const HOTKEYS: Record<string, Format> = {
@@ -99,7 +100,7 @@ const Element = ({ attributes, children, element }: any) => {
     case "numbered-list":
       return <ol {...attributes}>{children}</ol>;
     default:
-      return <p {...attributes}>{children}</p>;
+      return <ParagraphBlock {...attributes}>{children}</ParagraphBlock>;
   }
 };
 

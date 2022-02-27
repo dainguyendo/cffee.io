@@ -15,14 +15,13 @@ import {
   Input,
   Label,
   RadioGroup,
+  Select,
   Spacer,
   Text,
   VerticalStack,
 } from "ui";
 import { createJournalEntry, useSetup } from "../api";
 import { Field } from "../form/Field";
-import { FieldGroupRow } from "../form/FieldGroupRow";
-import { BrewMethodFields } from "../ui/BrewMethodFields";
 import { Center } from "../ui/Center";
 import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
@@ -111,6 +110,9 @@ export default function Equipment({ timer }: Props) {
 
   return (
     <Page>
+      <Text as="h1" variant="heading">
+        Create journal entry
+      </Text>
       <form onSubmit={handleSubmit(submit)}>
         <Accordion
           type="single"
@@ -153,15 +155,23 @@ export default function Equipment({ timer }: Props) {
               )}
             </AccordionTrigger>
             <AccordionContent>
-              <BrewMethodFields
-                selected={brewMethod}
-                onBrewMethodChanged={(method) => setValue("brewMethod", method)}
-              />
+              <Field>
+                <Label htmlFor="brewMethod">Brew method</Label>
+                <Select id="brewMethod" {...register("brewMethod")}>
+                  {Object.values(BrewMethod).map((value) => {
+                    return (
+                      <option key={value} value={value}>
+                        {BREW_METHOD_TO_STRING[value]}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </Field>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
 
-        <Spacer size="5" />
+        <Spacer size="6" />
 
         <VerticalStack size="$3">
           <Field>
