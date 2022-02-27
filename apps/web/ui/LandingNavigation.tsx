@@ -4,12 +4,13 @@ import { Anchor, Box, Button, styled } from "ui";
 import { UserDropdownMenu } from "./UserDropdownMenu";
 
 const Nav = styled("nav", {
-  minHeight: "60px",
+  minHeight: 60,
+  maxHeight: 100,
   py: "$4",
   display: "flex",
 });
 
-export const LoadingNavigation = () => {
+export const LandingNavigation = () => {
   const { data: session, status } = useSession();
 
   if (status === "authenticated") {
