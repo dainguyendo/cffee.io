@@ -1,7 +1,7 @@
-$color: hsl(330, 72%, 67%);
-$colorRight: hsl(330, 72%, 67%);
-$colorLeft: hsl(330, 72%, 67%);
-$shadow: hsl(230, 32%, 17%);
+$color: var(--colors-primary);
+$colorRight: var(--colors-secondary);
+$colorLeft: var(--colors-primary);
+$shadow: var(--colors-paragraph);
 
 .boxes {
   --size: 32px;

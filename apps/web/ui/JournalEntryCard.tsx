@@ -91,12 +91,10 @@ export const JournalEntryCard = ({ journalEntry }: Props) => {
           variant="marble"
           square={false}
           colors={[
-            "hsla(338, 24%, 91%, 1)",
-            "hsla(340, 33%, 88%, 1)",
-            "hsla(345, 52%, 86%, 1)",
-            "hsla(348, 74%, 84%, 1)",
-            "hsla(351, 81%, 82%, 1)",
-            "hsla(351, 84%, 70%, 1)",
+            theme.colors.primary.value,
+            theme.colors.secondary.value,
+            theme.colors.tertiary.value,
+            theme.colors.background.value,
           ]}
         />
       </Box>

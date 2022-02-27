@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  res.status(200).json(setup);
+  res.status(200).json({ setup });
 };
 
 export default handler;

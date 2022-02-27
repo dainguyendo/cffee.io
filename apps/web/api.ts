@@ -38,8 +38,8 @@ export type UseSetupData =
 export function useSetup() {
   return useQuery<UseSetupData>("use-setup", async () => {
     const response = await get("/api/get-setup");
-    const data = await response.json();
-    return data;
+    const { setup } = await response.json();
+    return setup;
   });
 }
 

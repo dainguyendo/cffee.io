@@ -213,6 +213,14 @@ export const {
       WebkitBackgroundClip: value,
       backgroundClip: value,
     }),
+
+    vs: (value: Stitches.PropertyValue<"marginLeft">) => ({
+      display: "flex",
+      flexDirection: "column",
+      "& > * + *": {
+        marginTop: value,
+      },
+    }),
   },
 });
 

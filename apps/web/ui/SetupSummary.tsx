@@ -1,4 +1,4 @@
-import { Box, Flex, styled, Text } from "ui";
+import { Box, Flex, styled, Text, theme } from "ui";
 import { useSetup } from "../api";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import Avatar from "boring-avatars";
@@ -23,18 +23,10 @@ const SetupAvatar = ({ name }: { name: string }) => (
       variant="marble"
       name={name}
       colors={[
-        "hsla(240, 35%, 87%, 1)",
-        "hsla(240, 35%, 75%, 1)",
-        "hsla(240, 50%, 68%, 1)",
-        "hsla(240, 60%, 65%, 1)",
-        "hsla(250, 65%, 60%, 1)",
-        "hsla(250, 80%, 60%, 1)",
-        "hsla(338, 24%, 91%, 1)",
-        "hsla(340, 33%, 88%, 1)",
-        "hsla(345, 52%, 86%, 1)",
-        "hsla(348, 74%, 84%, 1)",
-        "hsla(351, 81%, 82%, 1)",
-        "hsla(351, 84%, 70%, 1)",
+        theme.colors.primary.value,
+        theme.colors.secondary.value,
+        theme.colors.tertiary.value,
+        theme.colors.background.value,
       ]}
     />
   </div>
@@ -60,6 +52,10 @@ export const SetupSummary = () => {
     );
   }
 
+  if (status === "success" && !data) {
+    return null;
+  }
+
   return (
     <Box
       gradient
@@ -74,13 +70,15 @@ export const SetupSummary = () => {
         gap: "$2",
       }}
     >
-      <Cell>
-        <SetupAvatar name={data?.grinder ?? "Grinder"} />
-        <Flex direction="column">
-          <Value>{data?.grinder}</Value>
-          <SectionTitle>Grinder</SectionTitle>
-        </Flex>
-      </Cell>
+      {data?.grinder && (
+        <Cell>
+          <SetupAvatar name={data?.grinder ?? "Grinder"} />
+          <Flex direction="column">
+            <Value>{data?.grinder}</Value>
+            <SectionTitle>Grinder</SectionTitle>
+          </Flex>
+        </Cell>
+      )}
       {data?.brewMethod && (
         <Cell>
           <SetupAvatar name={BREW_METHOD_TO_STRING[data?.brewMethod]} />
@@ -90,15 +88,17 @@ export const SetupSummary = () => {
           </Flex>
         </Cell>
       )}
-      <Cell>
-        <SetupAvatar name={data?.bean?.roast ?? "Beans"} />
-        <Flex direction="column">
-          <Value>
-            {data?.bean?.roast}, {data?.bean?.roaster}
-          </Value>
-          <SectionTitle>Beans</SectionTitle>
-        </Flex>
-      </Cell>
+      {data?.bean && (
+        <Cell>
+          <SetupAvatar name={data?.bean?.roast ?? "Beans"} />
+          <Flex direction="column">
+            <Value>
+              {data?.bean?.roast}, {data?.bean?.roaster}
+            </Value>
+            <SectionTitle>Beans</SectionTitle>
+          </Flex>
+        </Cell>
+      )}
     </Box>
   );
 };

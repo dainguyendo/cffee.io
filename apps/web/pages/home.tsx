@@ -19,6 +19,9 @@ export default function Home() {
     (data?.pagination?.currentPage ?? false) <
     (data?.pagination?.pageCount ?? false);
 
+  const hasPages = !!data?.pagination.pageCount;
+  const showNoEntries = !!(data?.pagination.total === 0);
+
   return (
     <Page>
       <Flex
@@ -32,24 +35,26 @@ export default function Home() {
       >
         <SetupSummary />
 
-        <Flex css={{ alignSelf: "flex-end", gap: "$1" }}>
-          <IconButton
-            type="button"
-            raised
-            onClick={() => setPage((old) => Math.max(old - 1, 0))}
-            disabled={page === 0 || isFetching}
-          >
-            <ChevronLeft />
-          </IconButton>
-          <IconButton
-            type="button"
-            raised
-            onClick={() => setPage((old) => (hasMore ? old + 1 : old))}
-            disabled={isPreviousData || !hasMore || isFetching}
-          >
-            <ChevronRight />
-          </IconButton>
-        </Flex>
+        {hasPages && (
+          <Flex css={{ alignSelf: "flex-end", gap: "$1" }}>
+            <IconButton
+              type="button"
+              raised
+              onClick={() => setPage((old) => Math.max(old - 1, 0))}
+              disabled={page === 0 || isFetching}
+            >
+              <ChevronLeft />
+            </IconButton>
+            <IconButton
+              type="button"
+              raised
+              onClick={() => setPage((old) => (hasMore ? old + 1 : old))}
+              disabled={isPreviousData || !hasMore || isFetching}
+            >
+              <ChevronRight />
+            </IconButton>
+          </Flex>
+        )}
 
         {status === "loading" && (
           <Center css={{ size: 300 }}>
@@ -57,10 +62,34 @@ export default function Home() {
           </Center>
         )}
 
+        {status === "success" && showNoEntries && (
+          <Flex
+            direction="column"
+            css={{ ai: "center", vs: "$3", maxWidth: "60ch" }}
+          >
+            <Text as="h1" variant="heading" bold>
+              📝 No journal entries
+            </Text>
+            <Flex direction="column" css={{ vs: "$2" }}>
+              <Text as="p">
+                Create your first entry! Future journals will appear here.
+              </Text>
+              <Text as="p">
+                If you time your brews, use Cffee&apos;s <b>Timer</b> feature
+                will help link your timing data to your journal entry.
+              </Text>
+              <Text as="p">
+                Use Cffee&apos;s <b>Equipment</b> feature to save frequently
+                used equipment for efficient journal entries.
+              </Text>
+            </Flex>
+          </Flex>
+        )}
+
         {status === "success" &&
           data &&
-          data.data &&
-          Object.entries(data.data).map(([date, entriesForDate]) => {
+          data.page &&
+          Object.entries(data.page).map(([date, entriesForDate]) => {
             const parsed = parse(date, "MMddyyyy", new Date());
             const distance = formatDistanceToNow(parsed, { addSuffix: true });
             return (

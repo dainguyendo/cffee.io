@@ -65,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }, {});
 
   res.status(200).json({
-    data: grouped,
+    page: grouped,
     pagination: {
       total: userJournalCount,
       pageCount: Math.ceil(userJournalCount / limit),
