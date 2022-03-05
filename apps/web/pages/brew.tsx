@@ -1,23 +1,23 @@
 import { Bean, BrewMethod, Rating } from "db";
+import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { PlusSquare } from "react-feather";
 import { useForm } from "react-hook-form";
 import { Descendant } from "slate";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Flex,
   Input,
   Label,
   RadioGroup,
   Select,
   Spacer,
-  Text,
   VerticalStack,
 } from "ui";
 import { createJournalEntry, useSetup } from "../api";
@@ -26,13 +26,11 @@ import { Center } from "../ui/Center";
 import { EmojiIndicator, EmojiRadio } from "../ui/EmojiRadio";
 import { Page } from "../ui/Page";
 import { RichEditor } from "../ui/RichEditor";
+import { SetupSummary } from "../ui/SetupSummary";
 import { TemperatureSlider } from "../ui/TemperatureSlider";
 import { INITIAL_FAHRENHEIT } from "../utils/constants";
 import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import { INITIAL_EDITOR_CONTENT, toTimerBlocks } from "../utils/editor";
-import isEqual from "lodash.isequal";
-
-type Accordions = "method" | "bean";
 interface JournalFormData {
   beanId: string | null;
   bean: Pick<
@@ -56,7 +54,6 @@ interface Props {
 
 export default function Equipment({ timer }: Props) {
   const router = useRouter();
-  const [expanded, expand] = React.useState<Accordions | undefined>();
 
   const { data: setup } = useSetup();
 
@@ -91,9 +88,14 @@ export default function Equipment({ timer }: Props) {
   const rating = watch("rating");
   const fahrenheit = watch("waterTemperatureFahrenheit");
   const note = watch("note");
+  const overrideRoast = watch("bean.roast");
+  const overrideRoaster = watch("bean.roaster");
+  const grinder = watch("grinder");
 
-  const displayRoast = watch("bean.roast") || setup?.bean?.roast;
-  const displayRoaster = (watch("bean.roaster") || setup?.bean?.roaster) ?? "";
+  const displayRoast = overrideRoast || setup?.bean?.roast;
+  const displayRoaster = (overrideRoaster || setup?.bean?.roaster) ?? "";
+
+  const overrideSetupBean = !!(overrideRoast || overrideRoaster);
 
   const submit = async (data: JournalFormData) => {
     const isEmptyNote = isEqual(INITIAL_EDITOR_CONTENT, data.note);
@@ -104,35 +106,39 @@ export default function Equipment({ timer }: Props) {
     router.push("/home");
   };
 
-  const toggle = (accordion: Accordions) => {
-    expand(accordion === expanded ? undefined : accordion);
-  };
-
   return (
     <Page>
-      <Text as="h1" variant="heading">
+      {/* <Text as="h1" variant="heading">
         Create journal entry
-      </Text>
+      </Text> */}
+
       <form onSubmit={handleSubmit(submit)}>
-        <Accordion
-          type="single"
-          collapsible
-          value={expanded}
-          onValueChange={toggle}
-        >
-          <AccordionItem value="bean">
-            <AccordionTrigger type="button">
-              {expanded === "bean" ? (
-                <Text>Editing bean selection...</Text>
-              ) : (
-                <Text>
-                  {displayRoast
-                    ? `${displayRoast}, ${displayRoaster}`
-                    : "What beans are you brewing with?"}
-                </Text>
-              )}
-            </AccordionTrigger>
-            <AccordionContent>
+        <VerticalStack size="$3">
+          <Collapsible>
+            <SetupSummary
+              grinder={grinder}
+              brewMethod={brewMethod ?? undefined}
+              bean={
+                overrideSetupBean
+                  ? { roast: displayRoast ?? "", roaster: displayRoaster ?? "" }
+                  : setup?.bean
+                  ? setup.bean
+                  : undefined
+              }
+            />
+
+            <Spacer size="3" />
+            <Flex css={{ ai: "center" }}>
+              <CollapsibleTrigger asChild>
+                <Button variant="secondary" type="button">
+                  <PlusSquare />
+                  Using a different set up?
+                </Button>
+              </CollapsibleTrigger>
+            </Flex>
+            <Spacer size="1" />
+
+            <CollapsibleContent>
               <Flex direction="column" css={{ gap: "$2" }}>
                 <Field>
                   <Label htmlFor="roast">Roast</Label>
@@ -142,42 +148,26 @@ export default function Equipment({ timer }: Props) {
                   <Label htmlFor="roaster">Roaster</Label>
                   <Input {...register("bean.roaster")} />
                 </Field>
+                <Field>
+                  <Label htmlFor="brewMethod">Brew method</Label>
+                  <Select id="brewMethod" {...register("brewMethod")}>
+                    {Object.values(BrewMethod).map((value) => {
+                      return (
+                        <option key={value} value={value}>
+                          {BREW_METHOD_TO_STRING[value]}
+                        </option>
+                      );
+                    })}
+                  </Select>
+                </Field>
+                <Field>
+                  <Label htmlFor="grinder">Grinder</Label>
+                  <Input {...register("grinder")} />
+                </Field>
               </Flex>
-            </AccordionContent>
-          </AccordionItem>
+            </CollapsibleContent>
+          </Collapsible>
 
-          <AccordionItem value="method">
-            <AccordionTrigger type="button">
-              {expanded === "method" ? (
-                <Text>Selecting brew method...</Text>
-              ) : (
-                <Text>{brewMethod && BREW_METHOD_TO_STRING[brewMethod]}</Text>
-              )}
-            </AccordionTrigger>
-            <AccordionContent>
-              <Field>
-                <Label htmlFor="brewMethod">Brew method</Label>
-                <Select id="brewMethod" {...register("brewMethod")}>
-                  {Object.values(BrewMethod).map((value) => {
-                    return (
-                      <option key={value} value={value}>
-                        {BREW_METHOD_TO_STRING[value]}
-                      </option>
-                    );
-                  })}
-                </Select>
-              </Field>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        <Spacer size="6" />
-
-        <VerticalStack size="$3">
-          <Field>
-            <Label htmlFor="grinder">Grinder</Label>
-            <Input {...register("grinder")} />
-          </Field>
           <Field>
             <Label htmlFor="grindDescription">Grind description</Label>
             <Input

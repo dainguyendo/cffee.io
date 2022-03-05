@@ -3,7 +3,6 @@ import { Blur } from "./Blur";
 import { Cffee } from "./Cffee";
 import { MenuNavigation } from "./MenuNavigation";
 import { SidebarLayout } from "./SidebarLayout";
-import { SidebarNavigation } from "./SidebarNavigation";
 
 const MainContent = styled("div", {
   maxWidth: "105ch",
@@ -24,16 +23,12 @@ const Container = styled(Box, {
 export const Page: React.FC = ({ children }) => {
   return (
     <SidebarLayout>
-      <SidebarNavigation />
       <Container css={{ position: "relative" }}>
         <MainContent>
           <Flex
             css={{
               alignItems: "baseline",
               justifyContent: "space-between",
-              "@bp1": {
-                display: "none",
-              },
             }}
           >
             <Cffee />

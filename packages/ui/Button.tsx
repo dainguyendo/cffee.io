@@ -3,6 +3,10 @@ import { styled } from "./stitches.config";
 export const Button = styled(
   "button",
   {
+    display: "inline-flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "$1",
     border: "none",
     borderRadius: "$medium",
     px: "$3",

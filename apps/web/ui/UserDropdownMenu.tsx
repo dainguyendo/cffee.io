@@ -41,20 +41,62 @@ export const UserDropdownMenu = ({
         </Flex>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent sideOffset={4} side={side} align={align}>
+      <DropdownMenuContent side="left" sideOffset={4}>
         <DropdownMenuItem>
-          <Link href="/profile" passHref>
-            <Anchor>View profile</Anchor>
+          <Link href="/brew" passHref>
+            <Anchor>New brew</Anchor>
           </Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator asChild>
+          <Separator css={{ my: "$1" }} />
+        </DropdownMenuSeparator>
+
+        <DropdownMenuItem>
+          <Link href="/home" passHref>
+            <Anchor>Journal</Anchor>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem>
+          <Link href="/equipment" passHref>
+            <Anchor>Equipment</Anchor>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem>
+          <Link href="/timer" passHref>
+            <Anchor>Timer</Anchor>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator asChild>
+          <Separator css={{ my: "$1" }} />
+        </DropdownMenuSeparator>
+
         <FeedbackDialog>
-          <Button type="button" variant="secondary">
+          <Button type="button" variant="secondary" css={{ width: "100%" }}>
             Feedback
           </Button>
         </FeedbackDialog>
+
         <DropdownMenuSeparator asChild>
           <Separator css={{ my: "$2" }} />
         </DropdownMenuSeparator>
+
+        {/* <Flex css={{ alignItems: "center", gap: "$2" }}>
+          <div>
+            <UserAvatar size="xsmall" />
+          </div>
+          {getFirstName(session?.user?.name ?? "")}
+        </Flex> */}
+
+        <DropdownMenuItem>
+          <Link href="/profile" passHref>
+            <Anchor>Profile</Anchor>
+          </Link>
+        </DropdownMenuItem>
+
         <DropdownMenuItem>
           <Button type="button" variant="link" onClick={() => signOut()}>
             Sign out

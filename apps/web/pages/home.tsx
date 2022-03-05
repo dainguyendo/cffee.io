@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import React from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { Box, Flex, IconButton, Text } from "ui";
-import { useJournalEntries } from "../api";
+import { useJournalEntries, useSetup } from "../api";
 import { Center } from "../ui/Center";
 import { JournalEntryCard } from "../ui/JournalEntryCard";
 import { LoaderBoxes } from "../ui/LoaderBoxes";
@@ -13,6 +13,7 @@ import { SetupSummary } from "../ui/SetupSummary";
 
 export default function Home() {
   const [page, setPage] = React.useState(0);
+  const { data: setup } = useSetup();
   const { data, status, isFetching, isPreviousData } = useJournalEntries(page);
 
   const hasMore =
@@ -33,7 +34,11 @@ export default function Home() {
           pt: "$6",
         }}
       >
-        <SetupSummary />
+        <SetupSummary
+          bean={setup?.bean ?? undefined}
+          grinder={setup?.grinder ?? undefined}
+          brewMethod={setup?.brewMethod ?? undefined}
+        />
 
         {hasPages && (
           <Flex css={{ alignSelf: "flex-end", gap: "$1" }}>

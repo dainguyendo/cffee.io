@@ -1,4 +1,4 @@
-import { styled, theme } from "ui";
+import { styled } from "ui";
 
 export const SidebarLayout = styled("div", {
   display: "flex",

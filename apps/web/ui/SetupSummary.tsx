@@ -1,7 +1,7 @@
-import { Box, Flex, styled, Text, theme } from "ui";
-import { useSetup } from "../api";
-import { BREW_METHOD_TO_STRING } from "../utils/copy";
 import Avatar from "boring-avatars";
+import { Bean, BrewMethod } from "db";
+import { Box, Flex, styled, Text, theme } from "ui";
+import { BREW_METHOD_TO_STRING } from "../utils/copy";
 
 const SectionTitle = styled(Text, {
   fontSize: "$1",
@@ -32,27 +32,14 @@ const SetupAvatar = ({ name }: { name: string }) => (
   </div>
 );
 
-export const SetupSummary = () => {
-  const { data, status } = useSetup();
+interface Props {
+  bean?: Pick<Bean, "roast" | "roaster">;
+  brewMethod?: BrewMethod;
+  grinder?: string;
+}
 
-  if (status === "loading") {
-    return (
-      <Box
-        gradient
-        boxShadow="medium"
-        css={{
-          borderRadius: "$large",
-          width: "100%",
-          minHeight: 150,
-          "@bp1": {
-            minHeight: 45,
-          },
-        }}
-      />
-    );
-  }
-
-  if (status === "success" && !data) {
+export const SetupSummary = ({ bean, brewMethod, grinder }: Props) => {
+  if (!bean && !brewMethod && !grinder) {
     return null;
   }
 
@@ -71,30 +58,30 @@ export const SetupSummary = () => {
         alignSelf: "flex-start",
       }}
     >
-      {data?.grinder && (
+      {grinder && (
         <Cell>
-          <SetupAvatar name={data?.grinder ?? "Grinder"} />
+          <SetupAvatar name={grinder ?? "Grinder"} />
           <Flex direction="column">
-            <Value>{data?.grinder}</Value>
+            <Value>{grinder}</Value>
             <SectionTitle>Grinder</SectionTitle>
           </Flex>
         </Cell>
       )}
-      {data?.brewMethod && (
+      {brewMethod && (
         <Cell>
-          <SetupAvatar name={BREW_METHOD_TO_STRING[data?.brewMethod]} />
+          <SetupAvatar name={BREW_METHOD_TO_STRING[brewMethod]} />
           <Flex direction="column">
-            <Value>{BREW_METHOD_TO_STRING[data?.brewMethod]}</Value>
+            <Value>{BREW_METHOD_TO_STRING[brewMethod]}</Value>
             <SectionTitle>Brew method</SectionTitle>
           </Flex>
         </Cell>
       )}
-      {data?.bean && (
+      {bean && (
         <Cell>
-          <SetupAvatar name={data?.bean?.roast ?? "Beans"} />
+          <SetupAvatar name={bean.roast ?? "Beans"} />
           <Flex direction="column">
             <Value>
-              {data?.bean?.roast}, {data?.bean?.roaster}
+              {bean.roast}, {bean.roaster}
             </Value>
             <SectionTitle>Beans</SectionTitle>
           </Flex>
