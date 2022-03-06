@@ -9,7 +9,8 @@ import { Format } from "../types/slate";
 import { toggleMark } from "../utils/editor";
 import { BlockButton } from "./BlockButton";
 import { Editable } from "./Editable";
-import { ParagraphBlock } from "./EditorBlocks/ParagraphBlock";
+import { Element } from "./EditorBlocks/Element";
+import { Leaf } from "./EditorBlocks/Leaf";
 import { MarkButton } from "./MarkButton";
 
 const HOTKEYS: Record<string, Format> = {
@@ -35,6 +36,7 @@ export const RichEditor = ({ placeholder, value, setValue }: Props) => {
     editorRef.current = withHistory(withReact(createEditor()));
   const editor = editorRef.current;
   // const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+
   return (
     <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
       <VerticalStack size="$2">
@@ -83,43 +85,4 @@ export const RichEditor = ({ placeholder, value, setValue }: Props) => {
       </VerticalStack>
     </Slate>
   );
-};
-
-const Element = ({ attributes, children, element }: any) => {
-  switch (element.type) {
-    case "block-quote":
-      return <blockquote {...attributes}>{children}</blockquote>;
-    case "bulleted-list":
-      return <ul {...attributes}>{children}</ul>;
-    case "heading-one":
-      return <h1 {...attributes}>{children}</h1>;
-    case "heading-two":
-      return <h2 {...attributes}>{children}</h2>;
-    case "list-item":
-      return <li {...attributes}>{children}</li>;
-    case "numbered-list":
-      return <ol {...attributes}>{children}</ol>;
-    default:
-      return <ParagraphBlock {...attributes}>{children}</ParagraphBlock>;
-  }
-};
-
-const Leaf = ({ attributes, children, leaf }: any) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>;
-  }
-
-  if (leaf.code) {
-    children = <code>{children}</code>;
-  }
-
-  if (leaf.italic) {
-    children = <em>{children}</em>;
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
-
-  return <span {...attributes}>{children}</span>;
 };

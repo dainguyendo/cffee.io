@@ -3,6 +3,7 @@ import { styled } from "ui";
 export const SidebarLayout = styled("div", {
   display: "flex",
   flexWrap: "wrap",
+  background: "$background",
 
   gap: "$1",
   "@bp2": {

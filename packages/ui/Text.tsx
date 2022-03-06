@@ -21,10 +21,17 @@ export const Text = styled("span", {
         fontWeight: "$bold",
       },
     },
+
+    inline: {
+      false: {
+        display: "block",
+      },
+    },
   },
 
   defaultVariants: {
     variant: "paragraph",
     bold: false,
+    inline: true,
   },
 });

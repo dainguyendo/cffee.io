@@ -24,6 +24,16 @@ interface BlockQuoteElement {
   children: CustomText[];
 }
 
+interface ListElement {
+  type: "bulleted-list";
+  children: ListItemElement[];
+}
+
+interface ListItemElement {
+  type: "list-item";
+  children: CustomText[];
+}
+
 export type Format =
   | "bold"
   | "italic"
@@ -31,5 +41,5 @@ export type Format =
   | "code"
   | "bulleted-list"
   | "numbered-list";
-export type CustomElement = ParagraphElement | BlockQuoteElement;
+export type CustomElement = ParagraphElement | BlockQuoteElement | ListElement;
 export type CustomText = PlainText | BoldText | ItalicText | CodeText;

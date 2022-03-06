@@ -6,7 +6,7 @@ import { UserDropdownMenu } from "./UserDropdownMenu";
 const Nav = styled("nav", {
   minHeight: 60,
   maxHeight: 100,
-  py: "$4",
+  py: "$8",
   display: "flex",
   ai: "center",
 });

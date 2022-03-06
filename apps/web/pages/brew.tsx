@@ -194,7 +194,9 @@ export default function Equipment({ timer }: Props) {
           <RichEditor
             placeholder="✨ How did it brew?"
             value={note}
-            setValue={(value) => setValue("note", value)}
+            setValue={(value) => {
+              setValue("note", value);
+            }}
           />
 
           <Spacer size="3" />

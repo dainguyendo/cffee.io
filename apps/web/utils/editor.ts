@@ -8,6 +8,21 @@ export const INITIAL_EDITOR_CONTENT: CustomElement[] = [
   { type: "paragraph", children: [{ text: "" }] },
 ];
 
+export const SAMPLE_EDITOR_CONTENT: CustomElement[] = [
+  {
+    type: "paragraph",
+    children: [{ text: "Tea-like", bold: true }, { text: " body..." }],
+  },
+  { type: "paragraph", children: [{ text: "Tastes of fruit, maybe" }] },
+  {
+    type: "bulleted-list",
+    children: [
+      { type: "list-item", children: [{ text: "🍎 Apple" }] },
+      { type: "list-item", children: [{ text: "Blue berries" }] },
+    ],
+  },
+];
+
 export const isMarkActive = (editor: Editor, format: Format) => {
   const marks = Editor.marks(editor);
   return marks ? (marks as any)[format] === true : false;
